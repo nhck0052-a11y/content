@@ -49,9 +49,9 @@ const translations = {
         future_career_label: "Future Career"
     },
     ko: {
-        app_title: "AI 공존 적성 검사기",
-        main_title: "AI 공존 적성 검사기",
-        tagline: "인류가 2150년 어떤 AI 분야를 선택해 성장시켜야 할지 분석해주는 검사기입니다.",
+        app_title: "2150 AI 생존 시뮬레이션",
+        main_title: "[2150년 생존 시뮬레이션] 당신의 AI 파트너를 찾아드립니다.",
+        tagline: "AI가 지배하는 세상, 당신은 지배할 것인가, 공존할 것인가? 당신의 성향을 분석해 22세기 최적의 직업과 파트너(AI)를 매칭해 드립니다.",
         name_input_placeholder: "이름을 입력하세요",
         interest_select_placeholder: "관심 분야 선택",
         extract_button_text: "운명 추출",

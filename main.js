@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        characterStates.forEach(charState => {
+        characterStates.forEach((charState, i) => {
             // 위치 업데이트
             charState.x += charState.vx;
             charState.y += charState.vy;
@@ -207,11 +207,43 @@ document.addEventListener('DOMContentLoaded', () => {
             // 경계 충돌 감지 및 방향 전환
             if (charState.x + charState.width > window.innerWidth || charState.x < 0) {
                 charState.vx *= -1; // X 방향 반전
+                // 경계에 부딪혔을 때 이미지가 화면 밖으로 나가지 않도록 조정
+                if (charState.x < 0) charState.x = 0;
+                if (charState.x + charState.width > window.innerWidth) charState.x = window.innerWidth - charState.width;
                 applyGlitchEffect(charState.element);
             }
             if (charState.y + charState.height > window.innerHeight || charState.y < 0) {
                 charState.vy *= -1; // Y 방향 반전
+                // 경계에 부딪혔을 때 이미지가 화면 밖으로 나가지 않도록 조정
+                if (charState.y < 0) charState.y = 0;
+                if (charState.y + charState.height > window.innerHeight) charState.y = window.innerHeight - charState.height;
                 applyGlitchEffect(charState.element);
+            }
+
+            // 캐릭터-캐릭터 간 충돌 감지
+            for (let j = i + 1; j < characterStates.length; j++) {
+                const otherCharState = characterStates[j];
+
+                // AABB 충돌 감지
+                if (charState.x < otherCharState.x + otherCharState.width &&
+                    charState.x + charState.width > otherCharState.x &&
+                    charState.y < otherCharState.y + otherCharState.height &&
+                    charState.y + charState.height > otherCharState.y) {
+
+                    // 충돌 발생!
+                    // 각 캐릭터의 방향 반전
+                    charState.vx *= -1;
+                    charState.vy *= -1;
+                    otherCharState.vx *= -1;
+                    otherCharState.vy *= -1;
+
+                    // Glitch Effect 적용
+                    applyGlitchEffect(charState.element);
+                    applyGlitchEffect(otherCharState.element);
+
+                    // 겹침 방지를 위해 약간 밀어내기 (간단한 처리)
+                    // 실제 물리 엔진처럼 정확하게 처리하려면 복잡해지므로, 여기서는 단순히 방향 전환만으로 충분
+                }
             }
 
             // 새로운 위치 적용

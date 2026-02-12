@@ -134,6 +134,22 @@ class FateResult extends HTMLElement {
                 margin-top: 1rem;
                 font-weight: bold;
             }
+            .home-button-result {
+                background-color: var(--button-bg);
+                border: 1px solid var(--border-color);
+                color: var(--text-color);
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+                margin-top: 1rem;
+            }
+            .home-button-result:hover {
+                background-color: var(--button-hover-bg);
+                color: var(--button-hover-color);
+                box-shadow: 0 0 15px var(--box-shadow-color);
+            }
         `;
         this.shadowRoot.appendChild(style);
     }
@@ -147,10 +163,7 @@ class FateResult extends HTMLElement {
         const synergyLabelP = document.createElement('p');
         const synergyBarContainer = document.createElement('div');
         const synergyBar = document.createElement('div');
-
-        // fateP.textContent = fate; // 초기 내용 할당 제거
-        // partnerP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${optimal_ai_partner}`; // 초기 내용 할당 제거
-        // careerP.textContent = `미래 직업: ${future_career}`; // 초기 내용 할당 제거
+        const homeButtonResult = document.createElement('button'); // New home button for results
 
         synergyLabelP.classList.add('synergy-score-label');
 
@@ -160,6 +173,12 @@ class FateResult extends HTMLElement {
         synergyBar.textContent = `0%`; // 초기 텍스트 0%
 
         synergyBarContainer.appendChild(synergyBar);
+
+        homeButtonResult.classList.add('home-button-result');
+        homeButtonResult.textContent = translations[localStorage.getItem('language') || 'ko'].home_button_text;
+        homeButtonResult.addEventListener('click', () => {
+            location.reload();
+        });
 
         this.shadowRoot.appendChild(fateP);
         this.shadowRoot.appendChild(partnerP);
@@ -206,6 +225,7 @@ class FateResult extends HTMLElement {
                             clearInterval(interval);
                             synergyBar.textContent = `${synergy_score}%`; // 최종 값으로 한 번 더 설정하여 오차 방지
                             synergyLabelP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}`;
+                            this.shadowRoot.appendChild(homeButtonResult); // Append home button after animation
                         }
                     }, 50); // 50ms 간격으로 점수 증가
                 }
@@ -276,6 +296,11 @@ function setLanguage(lang) {
         });
     }
 
+    const homeButton = document.getElementById('home-button');
+    if (homeButton) {
+        homeButton.textContent = translations[lang].home_button_text;
+    }
+
     if (lang === 'ko') {
         langToggle.textContent = '🇺🇸';
     } else {
@@ -325,11 +350,13 @@ if (homeButton) {
 }
 
 // Initial setup for home button text
-const initialLang = localStorage.getItem('language') || 'ko';
 document.addEventListener('DOMContentLoaded', () => {
+    // This block is now mostly redundant as setLanguage is called above
+    // and handles the homeButton text. Keeping it for other potential DOMContentLoaded logic.
+    const currentLang = localStorage.getItem('language') || 'ko'; // Get current language again for safety
     const homeButton = document.getElementById('home-button');
     if (homeButton) {
-        homeButton.textContent = translations[initialLang].home_button_text;
+        homeButton.textContent = translations[currentLang].home_button_text;
     }
 });
 

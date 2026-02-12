@@ -166,7 +166,8 @@ document.getElementById('extract-button').addEventListener('click', () => {
     const currentLang = localStorage.getItem('language') || 'en';
     const fates = translations[currentLang].fates;
     const randomIndex = Math.floor(Math.random() * fates.length);
-    const fateText = translations[currentLang].fate_prefix(name) + fate; // 타이핑할 전체 텍스트
+    const selectedFate = fates[randomIndex];
+    const fateText = translations[currentLang].fate_prefix(name) + selectedFate; // 타이핑할 전체 텍스트
 
     let resultContainer = document.getElementById('result-container');
     resultContainer.innerHTML = '';

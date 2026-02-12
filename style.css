@@ -112,6 +112,7 @@ p {
     z-index: -1; /* 다른 콘텐츠 뒤에 표시 */
     display: block; /* 기본적으로 보이도록 (다크 모드에서) */
     transition: transform 0.3s ease; /* 호버 애니메이션 */
+    pointer-events: none;
 }
 
 /* 각 캐릭터 위치 지정 */
@@ -310,6 +311,7 @@ fate-result::part(fate-border) {
     z-index: -1;
     display: none;
     transition: transform 0.3s ease;
+    pointer-events: none;
 }
 
 .light-mode .light-pixel-character {

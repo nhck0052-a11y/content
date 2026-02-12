@@ -174,7 +174,12 @@ const translations = {
                     future_career: "AI Literacy Educator"
                 }
             ]
-        }
+        },
+        analysis_messages: [
+            "Scanning Quantum Brain Structure...",
+            "Initiating AI Optimization Simulation...",
+            "Analyzing Coexistence Parameters..."
+        ]
     },
     'ko': {
         app_title: "AI 공존 적성 검사기",
@@ -245,7 +250,12 @@ const translations = {
                     future_career: "AI 리터러시 교육자"
                 }
             ]
-        }
+        },
+        analysis_messages: [
+            "양자 뇌 구조 스캐닝 중...",
+            "AI 최적화 시뮬레이션 가동...",
+            "공존 매개변수 분석 중..."
+        ]
     }
 };
 
@@ -277,9 +287,9 @@ function setLanguage(lang) {
 // Load language preference from localStorage
 const savedLanguage = localStorage.getItem('language');
 if (savedLanguage) {
-    setLanguage(savedLanguage);
+    setTheme(savedLanguage);
 } else {
-    setLanguage('en'); // Default to English
+    setTheme('en'); // Default to English
 }
 
 langToggle.addEventListener('click', () => {
@@ -293,16 +303,31 @@ document.getElementById('extract-button').addEventListener('click', () => {
     const name = document.getElementById('name-input').value;
     const interest = document.getElementById('interest-select').value; // Get selected interest
     const extractButton = document.getElementById('extract-button');
+    const analysisStatus = document.getElementById('analysis-status'); // Get reference to analysis status div
 
     if (!name || !interest) { // Validate both name and interest
         alert("이름과 관심 분야를 모두 입력/선택해주세요!");
         return;
     }
 
-    // 버튼 비활성화
+    // Disable button
     extractButton.disabled = true;
 
+    // Show analysis status and start animation
+    analysisStatus.style.display = 'block';
+    analysisStatus.classList.add('flow-text');
+
     const currentLang = localStorage.getItem('language') || 'en';
+    const messages = translations[currentLang].analysis_messages;
+    let messageIndex = 0;
+
+    // Start cycling through analysis messages
+    const analysisMessageInterval = setInterval(() => {
+        analysisStatus.textContent = messages[messageIndex];
+        messageIndex = (messageIndex + 1) % messages.length;
+    }, 1500); // Change message every 1.5 seconds
+
+
     const interestFates = translations[currentLang].fates[interest] || translations[currentLang].fates["default"];
     const randomIndex = Math.floor(Math.random() * interestFates.length);
     const selectedFateData = interestFates[randomIndex]; // This will be an object
@@ -319,13 +344,17 @@ document.getElementById('extract-button').addEventListener('click', () => {
         future_career: selectedFateData.future_career
     });
 
-    // 타이핑 효과가 끝나는 시간 계산
-    const typingDuration = (formattedFate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + 50) * 50; // Estimate based on total text length
+    // Calculate typing effect duration
+    const totalTextLength = formattedFate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length;
+    const typingDuration = (totalTextLength * 50) + (2 * 500); // 50ms per char + 2 pauses for new lines
 
-    // 타이핑 효과 완료 후 버튼 활성화
+    // After typing effect is done, enable button and hide analysis status
     setTimeout(() => {
         extractButton.disabled = false;
-    }, typingDuration + 100); // 100ms 여유 시간 추가
+        clearInterval(analysisMessageInterval); // Stop cycling messages
+        analysisStatus.style.display = 'none';
+        analysisStatus.classList.remove('flow-text');
+    }, typingDuration + 100); // 100ms extra buffer
 });
 
 document.addEventListener('DOMContentLoaded', () => {

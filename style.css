@@ -238,3 +238,36 @@ fate-result::part(fate-border) {
         filter: hue-rotate(0deg);
     }
 }
+
+#global-home-button-container {
+    position: fixed;
+    bottom: 2rem; /* Distance from the bottom */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    z-index: 1000;
+    display: flex; /* Use flexbox to center the button inside */
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Take full width to ensure centering works */
+    padding: 1rem 0;
+}
+
+.home-button-global {
+    background-color: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.8rem 1.5rem; /* Larger padding for a more substantial button */
+    font-size: 1.2rem; /* Slightly larger font */
+    cursor: pointer;
+    border-radius: 8px; /* Slightly more rounded corners */
+    transition: all 0.3s ease;
+    text-transform: uppercase; /* Make text uppercase for a stronger look */
+    letter-spacing: 1px; /* Add some letter spacing */
+}
+
+.home-button-global:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-color);
+    box-shadow: 0 0 18px var(--box-shadow-color); /* Stronger shadow on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}

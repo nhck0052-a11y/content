@@ -151,7 +151,6 @@ class FateResult extends HTMLElement {
         // careerP.textContent = `미래 직업: ${future_career}`; // 초기 내용 할당 제거
 
         synergyLabelP.classList.add('synergy-score-label');
-        synergyLabelP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}`;
 
         synergyBarContainer.classList.add('synergy-bar-container');
         synergyBar.classList.add('synergy-bar');

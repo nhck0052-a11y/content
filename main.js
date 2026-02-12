@@ -204,15 +204,12 @@ function setTheme(theme) {
         body.classList.remove('glitch-effect');
     }, 300);
 
-    const pixelArtContainer = document.getElementById('pixel-art-container');
     if (theme === 'light') {
         body.classList.add('light-mode');
         themeToggle.textContent = '🌙';
-        if (pixelArtContainer) pixelArtContainer.style.display = 'none';
     } else {
         body.classList.remove('light-mode');
         themeToggle.textContent = '🌞';
-        if (pixelArtContainer) pixelArtContainer.style.display = 'flex';
     }
     localStorage.setItem('theme', theme);
 }
@@ -344,44 +341,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
     }, typingDuration + 100);
 });
 
-function createPixelArt() {
-    const pixelArtContainer = document.getElementById('pixel-art-container');
-    const art = [
-        "              g g g",
-        "             g g g g",
-        "            g g g g g",
-        "           g g g g g g",
-        "          g g g g g g g",
-        "         g g g g g g g g",
-        "        g g g g g g g g g",
-        "       g g g g g g g g g g",
-        "      g g g g g g g g g g g",
-        "     g g g g g g g g g g g g",
-        "    g g g g g g g g g g g g g",
-        "           g g g",
-        "           g g g",
-        "           g g g",
-        " ggggggggggggggggggggggggggggggggggggggggg",
-        "g g g g g g g g g g g g g g g g g g g g g",
-    ];
-
-    art.forEach(rowStr => {
-        const row = document.createElement('div');
-        row.classList.add('pixel-row');
-        for (const char of rowStr) {
-            const pixel = document.createElement('div');
-            pixel.classList.add('pixel');
-            if (char === 'g') {
-                pixel.classList.add('g');
-            }
-            row.appendChild(pixel);
-        }
-        pixelArtContainer.appendChild(row);
-    });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    createPixelArt();
     const analysisStatus = document.getElementById('analysis-status');
     analysisStatus.style.display = 'none';
 

@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2150 Quantum Data Fate Extractor</title>
+    <title data-key="app_title">2150 Quantum Data Fate Extractor</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>2150 Quantum Data Fate Extractor</h1>
-        <p>Enter your name to extract your fate from the quantum realm.</p>
+        <button id="theme-toggle" aria-label="Toggle theme">🌞</button>
+        <button id="lang-toggle" aria-label="Toggle language">🇰🇷</button>
+        <h1 data-key="main_title">2150 Quantum Data Fate Extractor</h1>
+        <p data-key="tagline">Enter your name to extract your fate from the quantum realm.</p>
         <div class="input-container">
-            <input type="text" id="name-input" placeholder="Enter your name">
-            <button id="extract-button">Extract Fate</button>
+            <input type="text" id="name-input" placeholder="Enter your name" data-key="name_input_placeholder">
+            <button id="extract-button" data-key="extract_button_text">Extract Fate</button>
         </div>
         <div id="result-container"></div>
     </div>

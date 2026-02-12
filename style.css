@@ -1,28 +1,78 @@
 
+:root {
+    --bg-color: #000;
+    --text-color: #0f0;
+    --border-color: #0f0;
+    --box-shadow-color: #0f0;
+    --container-bg: rgba(0, 0, 0, 0.5);
+    --input-bg: #010;
+    --button-bg: #030;
+    --button-hover-bg: #0f0;
+    --button-hover-color: #000;
+}
+
+.light-mode {
+    --bg-color: #fff;
+    --text-color: #000;
+    --border-color: #00f;
+    --box-shadow-color: #00f;
+    --container-bg: rgba(255, 255, 255, 0.8);
+    --input-bg: #eee;
+    --button-bg: #00f;
+    --button-hover-bg: #00a;
+    --button-hover-color: #fff;
+}
+
 body {
-    background-color: #000;
-    color: #0f0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-image: radial-gradient(circle, #003, #000 70%);
+    background-image: radial-gradient(circle, var(--bg-color) 70%, var(--bg-color));
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
     text-align: center;
     padding: 2rem;
-    border: 1px solid #0f0;
+    border: 1px solid var(--border-color);
     border-radius: 15px;
-    box-shadow: 0 0 20px #0f0;
-    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px var(--box-shadow-color);
+    background-color: var(--container-bg);
+    position: relative; /* Added for button positioning */
+}
+
+#theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 3.5rem; /* Adjusted position to make space for lang toggle */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+#lang-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color); /* Use text-color for consistency */
+    transition: color 0.3s ease;
 }
 
 h1 {
     font-size: 2.5rem;
-    text-shadow: 0 0 10px #0f0;
+    text-shadow: 0 0 10px var(--box-shadow-color);
 }
 
 p {
@@ -38,18 +88,18 @@ p {
 }
 
 #name-input {
-    background-color: #010;
-    border: 1px solid #0f0;
-    color: #0f0;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
     padding: 0.5rem;
     font-size: 1rem;
     border-radius: 5px;
 }
 
 #extract-button {
-    background-color: #030;
-    border: 1px solid #0f0;
-    color: #0f0;
+    background-color: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
     padding: 0.5rem 1rem;
     font-size: 1rem;
     cursor: pointer;
@@ -58,9 +108,9 @@ p {
 }
 
 #extract-button:hover {
-    background-color: #0f0;
-    color: #000;
-    box-shadow: 0 0 15px #0f0;
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-color);
+    box-shadow: 0 0 15px var(--box-shadow-color);
 }
 
 #result-container {
@@ -73,3 +123,12 @@ fate-result {
     display: block;
     margin-top: 2rem;
 }
+
+fate-result::part(fate-text) {
+    color: var(--text-color);
+}
+
+fate-result::part(fate-border) {
+    border-color: var(--border-color);
+}
+

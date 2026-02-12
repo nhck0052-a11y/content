@@ -250,11 +250,6 @@ themeToggle.addEventListener('click', () => {
 });
 
 function setLanguage(lang) {
-    body.classList.add('glitch-effect');
-    setTimeout(() => {
-        body.classList.remove('glitch-effect');
-    }, 300);
-
     localStorage.setItem('language', lang);
 
     document.querySelectorAll('[data-key]').forEach(element => {

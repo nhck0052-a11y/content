@@ -35,7 +35,7 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'DungGeunMo', 'Courier New', Courier, monospace; /* 폰트 변경 및 폴백 */
+    font-family: 'DungGeunMo', 'Noto Color Emoji', 'Courier New', Courier, monospace; /* 폰트 변경 및 폴백, 이모티콘 지원 추가 */
     display: flex;
     justify-content: center;
     align-items: center;

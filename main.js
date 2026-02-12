@@ -259,9 +259,9 @@ function setLanguage(lang) {
 
 
     if (lang === 'ko') {
-        langToggle.textContent = '🇺🇸';
+        langToggle.textContent = '[ EN ]';
     } else {
-        langToggle.textContent = '🇰🇷';
+        langToggle.textContent = '[ KO ]';
     }
 }
 

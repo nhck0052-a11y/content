@@ -145,6 +145,7 @@ body.light-mode .pixel-character {
     font-size: 1rem;
     border-radius: 5px;
     cursor: pointer;
+    z-index: 10; /* 드롭다운 목록이 다른 요소 위에 표시되도록 */
 }
 
 /* Prediction Graph 스타일 */

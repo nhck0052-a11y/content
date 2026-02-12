@@ -115,32 +115,6 @@ class FateResult extends HTMLElement {
                 text-align: center;
                 color: var(--text-color); /* Use CSS variable */
             }
-            .synergy-bar-container {
-                width: 100%;
-                background-color: #f0f0f0;
-                border: 1px solid #ccc;
-                margin-top: 1rem;
-                height: 20px; /* Fixed height for the bar */
-                position: relative;
-                font-size: 1.2em; /* Adjusted font size for percentage text */
-            }
-            .synergy-bar {
-                height: 100%;
-                background-image: repeating-linear-gradient(
-                    -45deg,
-                    #4CAF50,
-                    #4CAF50 5px,
-                    #5cb85c 5px,
-                    #5cb85c 10px
-                );
-                width: 0%; /* Initial width */
-            }
-            .synergy-score-text {
-                margin-top: 1rem;
-                font-weight: bold;
-                font-size: 1.2em;
-            }
-            /* Removed .home-button-result as it's no longer used */
         `;
         this.shadowRoot.appendChild(style);
     }
@@ -151,24 +125,10 @@ class FateResult extends HTMLElement {
         const fateP = document.createElement('p');
         const partnerP = document.createElement('p');
         const careerP = document.createElement('p');
-        const synergyScoreText = document.createElement('div');
-        const synergyBarContainer = document.createElement('div');
-        const synergyBar = document.createElement('div');
-
-        synergyScoreText.classList.add('synergy-score-text');
-        synergyScoreText.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} 0%`; // Initial text
-
-        synergyBarContainer.classList.add('synergy-bar-container');
-        synergyBar.classList.add('synergy-bar');
-        synergyBar.style.width = `0%`; // 초기 너비 0%
-
-        synergyBarContainer.appendChild(synergyBar);
 
         this.shadowRoot.appendChild(fateP);
         this.shadowRoot.appendChild(partnerP);
         this.shadowRoot.appendChild(careerP);
-        this.shadowRoot.appendChild(synergyScoreText); // Append synergy score text
-        this.shadowRoot.appendChild(synergyBarContainer);
 
         let fullText = [
             fate,
@@ -195,19 +155,22 @@ class FateResult extends HTMLElement {
                     setTimeout(typeWriter, 500); // Pause before typing next section
                 }
             } else {
-                const synergyBar = this.shadowRoot.querySelector('.synergy-bar');
-                const synergyScoreText = this.shadowRoot.querySelector('.synergy-score-text');
-                if (synergyBar && synergyScoreText) {
+                const synergyContainer = document.getElementById('synergy-container');
+                const synergyScoreEl = document.getElementById('synergy-score');
+                const healthBar = document.querySelector('.health-bar');
+
+                if (synergyContainer && synergyScoreEl && healthBar) {
+                    synergyContainer.style.display = 'block';
                     let currentScore = 0;
                     const interval = setInterval(() => {
                         if (currentScore < synergy_score) {
                             currentScore++;
-                            synergyBar.style.width = `${currentScore}%`;
-                            synergyScoreText.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${currentScore}%`;
+                            healthBar.style.width = `${currentScore}%`;
+                            synergyScoreEl.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${currentScore}%`;
                         } else {
                             clearInterval(interval);
-                            synergyBar.style.width = `${synergy_score}%`;
-                            synergyScoreText.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}%`;
+                            healthBar.style.width = `${synergy_score}%`;
+                            synergyScoreEl.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}%`;
                             
                             const globalHomeButtonContainer = document.getElementById('global-home-button-container');
                             if (globalHomeButtonContainer) {
@@ -333,6 +296,11 @@ langToggle.addEventListener('click', () => {
 });
 
 document.getElementById('extract-button').addEventListener('click', () => {
+    const synergyContainer = document.getElementById('synergy-container');
+    if(synergyContainer) {
+        synergyContainer.style.display = 'none';
+    }
+
     const name = document.getElementById('name-input').value;
     const interest = document.getElementById('interest-select').value;
     const extractButton = document.getElementById('extract-button');

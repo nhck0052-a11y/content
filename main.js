@@ -24,21 +24,16 @@ class FateResult extends HTMLElement {
         }
 
         const p = document.createElement('p');
-        // p.textContent += fate.charAt(i); 대신 innerHTML 사용
-        p.innerHTML = fate; // HTML 문자열을 직접 렌더링
-
         this.shadowRoot.appendChild(p);
-        /*
         let i = 0;
         const typeWriter = () => {
             if (i < fate.length) {
                 p.textContent += fate.charAt(i);
                 i++;
-                setTimeout(typeWriter, 50);
+                setTimeout(typeWriter, 50); // 글자당 50ms 지연
             }
         };
         typeWriter();
-        */
     }
 }
 
@@ -158,17 +153,34 @@ langToggle.addEventListener('click', () => {
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const name = document.getElementById('name-input').value;
-    if (name) {
-        const currentLang = localStorage.getItem('language') || 'en';
-        const fates = translations[currentLang].fates;
-        const randomIndex = Math.floor(Math.random() * fates.length);
-        const fate = fates[randomIndex];
-        let resultContainer = document.getElementById('result-container');
-        resultContainer.innerHTML = '';
-        const fateResult = document.createElement('fate-result');
-        resultContainer.appendChild(fateResult);
-        fateResult.displayFate(translations[currentLang].fate_prefix(name) + fate);
+    const extractButton = document.getElementById('extract-button'); // 버튼 참조 추가
+
+    if (!name) { // 이름 입력값 유효성 검사
+        alert("이름을 입력해주세요!");
+        return;
     }
+
+    // 버튼 비활성화
+    extractButton.disabled = true;
+
+    const currentLang = localStorage.getItem('language') || 'en';
+    const fates = translations[currentLang].fates;
+    const randomIndex = Math.floor(Math.random() * fates.length);
+    const fateText = translations[currentLang].fate_prefix(name) + fate; // 타이핑할 전체 텍스트
+
+    let resultContainer = document.getElementById('result-container');
+    resultContainer.innerHTML = '';
+    const fateResult = document.createElement('fate-result');
+    resultContainer.appendChild(fateResult);
+    fateResult.displayFate(fateText);
+
+    // 타이핑 효과가 끝나는 시간 계산
+    const typingDuration = fateText.length * 50; // 글자당 50ms
+
+    // 타이핑 효과 완료 후 버튼 활성화
+    setTimeout(() => {
+        extractButton.disabled = false;
+    }, typingDuration + 100); // 100ms 여유 시간 추가
 });
 
 document.addEventListener('DOMContentLoaded', () => {

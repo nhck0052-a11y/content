@@ -19,6 +19,19 @@ const translations = {
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
         gender_n: "Non-Binary Code",
+        age_10: "10s (Generation Beta)",
+        age_20: "20s (Neural Pioneers)",
+        age_30: "30s (Cyber Settlers)",
+        age_40: "40s (Legacy Humans)",
+        age_50: "50+ (Ancient Data)",
+        blood_a: "Type A (Stable)",
+        blood_b: "Type B (Flux)",
+        blood_ab: "Type AB (Dual)",
+        blood_o: "Type O (Radiant)",
+        interest_art: "Art",
+        interest_engineering: "Engineering",
+        interest_business: "Business",
+        interest_psychology: "Psychology",
         labels: {
             analysis: "Field Analysis",
             job: "Recommended Class",
@@ -45,6 +58,19 @@ const translations = {
         gender_m: "XY (남자)",
         gender_f: "XX (여자)",
         gender_n: "논바이너리 코드",
+        age_10: "10대 (베타 세대)",
+        age_20: "20대 (뉴럴 개척자)",
+        age_30: "30대 (사이버 정착민)",
+        age_40: "40대 (레거시 휴먼)",
+        age_50: "50대 이상 (고대 데이터)",
+        blood_a: "A형 (안정형)",
+        blood_b: "B형 (변동형)",
+        blood_ab: "AB형 (이중형)",
+        blood_o: "O형 (방사형)",
+        interest_art: "예술",
+        interest_engineering: "공학",
+        interest_business: "경영",
+        interest_psychology: "심리",
         labels: {
             analysis: "필드 분석",
             job: "권장 직업 클래스",
@@ -181,16 +207,19 @@ function setLanguage(lang) {
             else el.textContent = translations[lang][key];
         }
     });
+    
+    // Select options translation
     const selects = ['interest-select', 'mbti-select', 'age-select', 'gender-select', 'blood-select'];
     selects.forEach(id => {
         const select = document.getElementById(id);
         if (select) {
             Array.from(select.options).forEach(opt => {
-                if (opt.value === '') {
+                const key = opt.dataset.key;
+                if (key && translations[lang][key]) {
+                    opt.textContent = translations[lang][key];
+                } else if (opt.value === '') {
                     const pk = id.replace('-', '_') + '_placeholder';
                     if (translations[lang][pk]) opt.textContent = translations[lang][pk];
-                } else if (opt.dataset.key && translations[lang][opt.dataset.key]) {
-                    opt.textContent = translations[lang][opt.dataset.key];
                 }
             });
         }
@@ -225,6 +254,8 @@ function generateFate(mbtiStr, blood, gender) {
             'NF+B+F': '멸종 위기 외계 생물 심리 치료사',
             'SP+AB+M': '안드로이드 암시장 수리공',
             'SJ+O+F': '은하 연합 데이터 보안 아카이브 부국장',
+            'NT+B+M': '테라포밍 엔진 최적화 아키텍트',
+            'NF+A+F': '뉴럴 링크 공감 프로토콜 개발자',
             'default': '차원 간 자원 관리 전문가'
         },
         en: {
@@ -334,6 +365,9 @@ window.addEventListener('load', initCharacters);
 function updateTime() {
     const now = new Date();
     const f = new Date(now.getFullYear() + 126, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
-    document.getElementById('future-time').textContent = `2150 CYBERNETIC ERA - ${f.getFullYear()}-${String(f.getMonth()+1).padStart(2,'0')}-${String(f.getDate()).padStart(2,'0')} ${String(f.getHours()).padStart(2,'0')}:${String(f.getMinutes()).padStart(2,'0')}:${String(f.getSeconds()).padStart(2,'0')}`;
+    const futureTimeElement = document.getElementById('future-time');
+    if (futureTimeElement) {
+        futureTimeElement.textContent = `2150 CYBERNETIC ERA - ${f.getFullYear()}-${String(f.getMonth()+1).padStart(2,'0')}-${String(f.getDate()).padStart(2,'0')} ${String(f.getHours()).padStart(2,'0')}:${String(f.getMinutes()).padStart(2,'0')}:${String(f.getSeconds()).padStart(2,'0')}`;
+    }
 }
 setInterval(updateTime, 1000); updateTime();

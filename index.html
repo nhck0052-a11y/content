@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-key="app_title">AI 공존 적성 검사기</title>
+    <title data-key="app_title">2150 AI 생존 시뮬레이션</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 </head>
@@ -12,8 +12,8 @@
     <button id="lang-toggle" aria-label="Toggle language">🇰🇷</button>
     <span id="future-time"></span>
     <div class="container">
-        <h1 data-key="main_title">AI 공존 적성 검사기</h1>
-        <p data-key="tagline">인류가 2150년 어떤 AI 분야를 선택해 성장시켜야 할지 분석해주는 검사기입니다.</p>
+        <h1 data-key="main_title">[2150년 생존 시뮬레이션] 당신의 AI 파트너를 찾아드립니다.</h1>
+        <p data-key="tagline">AI가 지배하는 세상, 당신은 지배할 것인가, 공존할 것인가? 당신의 성향을 분석해 22세기 최적의 직업과 파트너(AI)를 매칭해 드립니다.</p>
         <div class="input-container">
             <input type="text" id="name-input" placeholder="이름을 입력하세요" data-key="name_input_placeholder">
             <div class="input-row">
@@ -26,38 +26,38 @@
                 </select>
                 <select id="age-select">
                     <option value="" disabled selected data-key="age_placeholder">가동 연한 (나이)</option>
-                    <option value="10">10s (Generation Beta)</option>
-                    <option value="20">20s (Neural Pioneers)</option>
-                    <option value="30">30s (Cyber Settlers)</option>
-                    <option value="40">40s (Legacy Humans)</option>
-                    <option value="50">50+ (Ancient Data)</option>
+                    <option value="10" data-key="age_10">10s (Generation Beta)</option>
+                    <option value="20" data-key="age_20">20s (Neural Pioneers)</option>
+                    <option value="30" data-key="age_30">30s (Cyber Settlers)</option>
+                    <option value="40" data-key="age_40">40s (Legacy Humans)</option>
+                    <option value="50" data-key="age_50">50+ (Ancient Data)</option>
                 </select>
             </div>
             <div class="input-row">
                 <select id="gender-select">
                     <option value="" disabled selected data-key="gender_placeholder">성별 프로토콜</option>
-                    <option value="M" data-key="gender_m">XY (Man)</option>
-                    <option value="F" data-key="gender_f">XX (Woman)</option>
-                    <option value="N" data-key="gender_n">Non-Binary Code</option>
+                    <option value="M" data-key="gender_m">XY (남자)</option>
+                    <option value="F" data-key="gender_f">XX (여자)</option>
+                    <option value="N" data-key="gender_n">논바이너리 코드</option>
                 </select>
                 <select id="blood-select">
                     <option value="" disabled selected data-key="blood_placeholder">에너지 유닛 (혈액형)</option>
-                    <option value="A">Type A (Stable)</option>
-                    <option value="B">Type B (Volatile)</option>
-                    <option value="AB">Type AB (Hybrid)</option>
-                    <option value="O">Type O (Universal)</option>
+                    <option value="A" data-key="blood_a">Type A (Stable)</option>
+                    <option value="B" data-key="blood_b">Type B (Flux)</option>
+                    <option value="AB" data-key="blood_ab">Type AB (Dual)</option>
+                    <option value="O" data-key="blood_o">Type O (Radiant)</option>
                 </select>
             </div>
             <select id="interest-select">
                 <option value="" disabled selected data-key="interest_select_placeholder">관심 분야 선택</option>
-                <option value="art" data-key="interest_map_art">예술</option>
-                <option value="engineering" data-key="interest_map_engineering">공학</option>
-                <option value="business" data-key="interest_map_business">경영</option>
-                <option value="psychology" data-key="interest_map_psychology">심리</option>
+                <option value="art" data-key="interest_art">예술</option>
+                <option value="engineering" data-key="interest_engineering">공학</option>
+                <option value="business" data-key="interest_business">경영</option>
+                <option value="psychology" data-key="interest_psychology">심리</option>
             </select>
             <button id="extract-button" data-key="extract_button_text">운명 추출</button>
         </div>
-        <div id="analysis-status">분석 준비 중...</div>
+        <div id="analysis-status" data-key="analysis_status_preparing">분석 준비 중...</div>
         <div id="result-container"></div>
         <div id="synergy-container">
             <div id="synergy-score"></div>

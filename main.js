@@ -165,3 +165,62 @@ document.getElementById('extract-button').addEventListener('click', () => {
         fateResult.displayFate(translations[currentLang].fate_prefix(name) + fate);
     }
 });
+
+// Pixel Character Movement Logic
+const pixelCharacters = document.querySelectorAll('.pixel-character');
+const characterStates = [];
+
+pixelCharacters.forEach((char, index) => {
+    const rect = char.getBoundingClientRect(); // 초기 위치 및 크기 계산
+    characterStates.push({
+        element: char,
+        x: Math.random() * (window.innerWidth - rect.width),
+        y: Math.random() * (window.innerHeight - rect.height),
+        vx: (Math.random() - 0.5) * 4, // -2 ~ 2 범위의 속도
+        vy: (Math.random() - 0.5) * 4, // -2 ~ 2 범위의 속도
+        width: rect.width,
+        height: rect.height,
+        originalSrc: char.src // 필요없을 수도 있지만 혹시 몰라 저장
+    });
+});
+
+function animateCharacters() {
+    if (body.classList.contains('light-mode')) {
+        // 라이트 모드일 때는 움직이지 않음
+        requestAnimationFrame(animateCharacters);
+        return;
+    }
+
+    characterStates.forEach(charState => {
+        // 위치 업데이트
+        charState.x += charState.vx;
+        charState.y += charState.vy;
+
+        // 경계 충돌 감지 및 방향 전환
+        if (charState.x + charState.width > window.innerWidth || charState.x < 0) {
+            charState.vx *= -1; // X 방향 반전
+            applyGlitchEffect(charState.element);
+        }
+        if (charState.y + charState.height > window.innerHeight || charState.y < 0) {
+            charState.vy *= -1; // Y 방향 반전
+            applyGlitchEffect(charState.element);
+        }
+
+        // 새로운 위치 적용
+        charState.element.style.left = `${charState.x}px`;
+        charState.element.style.top = `${charState.y}px`;
+    });
+
+    requestAnimationFrame(animateCharacters);
+}
+
+function applyGlitchEffect(element) {
+    element.classList.add('glitch-effect');
+    setTimeout(() => {
+        element.classList.remove('glitch-effect');
+    }, 300); // Glitch 애니메이션 지속 시간 (0.3s)
+}
+
+// 애니메이션 시작
+requestAnimationFrame(animateCharacters);
+

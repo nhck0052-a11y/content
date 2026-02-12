@@ -111,9 +111,9 @@ p {
     width: 60px; /* 캐릭터 크기 */
     height: 60px;
     z-index: -1; /* 다른 콘텐츠 뒤에 표시 */
-    display: block; /* 기본적으로 보이도록 (다크 모드에서) */
-    transition: transform 0.3s ease; /* 호버 애니메이션 */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* transition 추가 */
     pointer-events: none;
+    opacity: 1; /* 기본적으로 보임 */
 }
 
 /* 각 캐릭터 위치 지정 */
@@ -122,9 +122,10 @@ p {
 #char-3 { top: 30%; right: 20%; }
 #char-4 { bottom: 5%; left: 25%; }
 
-/* 화이트 모드일 때 픽셀 캐릭터 숨기기 */
+/* 화이트 모드일 때 다크 모드 픽셀 캐릭터 숨기기 */
 body.light-mode .pixel-character {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .pixel-character:hover {
@@ -319,17 +320,19 @@ fate-result::part(fate-border) {
     width: 60px;
     height: 60px;
     z-index: -1;
-    display: none;
-    transition: transform 0.3s ease;
+    opacity: 0; /* 기본적으로 숨김 */
     pointer-events: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .light-mode .light-pixel-character {
-    display: block;
+    opacity: 1; /* 화이트 모드에서 보임 */
+    pointer-events: none; /* 상호작용은 방지 */
 }
 
 .light-mode .pixel-character {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .light-pixel-character:hover {

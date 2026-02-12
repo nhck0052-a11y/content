@@ -397,14 +397,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const isLightMode = body.classList.contains('light-mode');
         
         characterStates.forEach((charState, i) => {
-            const isLightChar = charState.element.classList.contains('light-pixel-character');
-            const isDarkChar = charState.element.classList.contains('pixel-character');
-
-            if (isLightMode) {
-                charState.element.style.display = isLightChar ? 'block' : 'none';
-            } else {
-                charState.element.style.display = isDarkChar ? 'block' : 'none';
-            }
+            // CSS 클래스(light-mode)에 의해 opacity가 제어되므로 
+            // JS에서 display를 직접 건드리지 않아도 됩니다.
 
             charState.x += charState.vx;
             charState.y += charState.vy;

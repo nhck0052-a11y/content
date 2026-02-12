@@ -104,7 +104,7 @@ body {
 #future-time {
     position: fixed;
     top: 1.2rem; /* 버튼들과 세로 중앙 정렬 */
-    right: 7rem; /* lang-toggle 옆에 배치 */
+    left: 1rem; /* 좌측으로 이동하여 겹침 방지 */
     color: #0f0; /* 초록색 픽셀 글씨 */
     font-family: 'DungGeunMo', monospace; /* 픽셀 폰트 적용 */
     font-size: 0.8rem; /* 작게 */

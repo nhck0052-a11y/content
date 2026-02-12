@@ -136,8 +136,7 @@ body.light-mode .pixel-character {
     margin-bottom: 2rem;
 }
 
-#name-input,
-#interest-select { /* 드롭다운 메뉴 스타일 적용 */
+#name-input {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
     color: var(--text-color);
@@ -145,7 +144,15 @@ body.light-mode .pixel-character {
     font-size: 1rem;
     border-radius: 5px;
     cursor: pointer;
-    z-index: 10; /* 드롭다운 목록이 다른 요소 위에 표시되도록 */
+    z-index: 10;
+    height: 2.5rem;
+    line-height: 1.5rem;
+}
+
+#interest-select { /* 드롭다운 메뉴 스타일 적용 */
+    /* 모든 사용자 정의 스타일 제거하여 브라우저 기본값 사용 */
+    /* z-index는 유지하여 다른 요소와의 가려짐 방지 */
+    z-index: 10;
 }
 
 /* Prediction Graph 스타일 */

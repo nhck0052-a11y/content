@@ -146,6 +146,7 @@ const currentLang = localStorage.getItem('language') || 'ko'; // Default to Kore
 setLanguage(currentLang);
 
 langToggle.addEventListener('click', () => {
+    const currentLang = localStorage.getItem('language') || 'ko'; // Read current language inside the event listener
     const newLang = currentLang === 'ko' ? 'en' : 'ko';
     setLanguage(newLang);
 });

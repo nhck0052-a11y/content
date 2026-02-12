@@ -126,25 +126,20 @@ class FateResult extends HTMLElement {
             }
             .synergy-bar {
                 height: 100%;
-                background-color: #4CAF50; /* Green color for the bar */
+                background-image: repeating-linear-gradient(
+                    -45deg,
+                    #4CAF50,
+                    #4CAF50 5px,
+                    #5cb85c 5px,
+                    #5cb85c 10px
+                );
                 width: 0%; /* Initial width */
-                transition: width 1s ease-in-out;
             }
-            .synergy-text-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white; /* Text color for the percentage */
+            .synergy-score-text {
+                margin-top: 1rem;
                 font-weight: bold;
-                pointer-events: none; /* Allow clicks to pass through to the bar if needed */
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Add shadow for better readability */
+                font-size: 1.2em;
             }
-            /* Removed .synergy-score-label as it's no longer used */
             /* Removed .home-button-result as it's no longer used */
         `;
         this.shadowRoot.appendChild(style);
@@ -156,23 +151,23 @@ class FateResult extends HTMLElement {
         const fateP = document.createElement('p');
         const partnerP = document.createElement('p');
         const careerP = document.createElement('p');
+        const synergyScoreText = document.createElement('div');
         const synergyBarContainer = document.createElement('div');
         const synergyBar = document.createElement('div');
-        const synergyTextOverlay = document.createElement('div'); // New element for percentage text
+
+        synergyScoreText.classList.add('synergy-score-text');
+        synergyScoreText.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} 0%`; // Initial text
 
         synergyBarContainer.classList.add('synergy-bar-container');
         synergyBar.classList.add('synergy-bar');
         synergyBar.style.width = `0%`; // 초기 너비 0%
 
-        synergyTextOverlay.classList.add('synergy-text-overlay');
-        synergyTextOverlay.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} 0%`; // Initial text with label
-
         synergyBarContainer.appendChild(synergyBar);
-        synergyBarContainer.appendChild(synergyTextOverlay); // Add text overlay to container
 
         this.shadowRoot.appendChild(fateP);
         this.shadowRoot.appendChild(partnerP);
         this.shadowRoot.appendChild(careerP);
+        this.shadowRoot.appendChild(synergyScoreText); // Append synergy score text
         this.shadowRoot.appendChild(synergyBarContainer);
 
         let fullText = [
@@ -201,25 +196,24 @@ class FateResult extends HTMLElement {
                 }
             } else {
                 const synergyBar = this.shadowRoot.querySelector('.synergy-bar');
-                const synergyTextOverlay = this.shadowRoot.querySelector('.synergy-text-overlay'); // Get text overlay
-                if (synergyBar && synergyTextOverlay) {
+                const synergyScoreText = this.shadowRoot.querySelector('.synergy-score-text');
+                if (synergyBar && synergyScoreText) {
                     let currentScore = 0;
                     const interval = setInterval(() => {
                         if (currentScore < synergy_score) {
                             currentScore++;
                             synergyBar.style.width = `${currentScore}%`;
-                            synergyTextOverlay.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${currentScore}%`; // Update text overlay with label
+                            synergyScoreText.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${currentScore}%`;
                         } else {
                             clearInterval(interval);
-                            synergyBar.style.width = `${synergy_score}%`; // 최종 값으로 한 번 더 설정하여 오차 방지
-                            synergyTextOverlay.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}%`; // Final text for overlay with label
+                            synergyBar.style.width = `${synergy_score}%`;
+                            synergyScoreText.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}%`;
                             
-                            // Append global home button after animation completes
                             const globalHomeButtonContainer = document.getElementById('global-home-button-container');
                             if (globalHomeButtonContainer) {
-                                globalHomeButtonContainer.innerHTML = ''; // Clear previous if any
+                                globalHomeButtonContainer.innerHTML = '';
                                 const globalHomeButton = document.createElement('button');
-                                globalHomeButton.classList.add('home-button-global'); // New class for global button
+                                globalHomeButton.classList.add('home-button-global');
                                 globalHomeButton.textContent = translations[localStorage.getItem('language') || 'ko'].home_button_text;
                                 globalHomeButton.addEventListener('click', () => {
                                     location.reload();
@@ -227,7 +221,7 @@ class FateResult extends HTMLElement {
                                 globalHomeButtonContainer.appendChild(globalHomeButton);
                             }
                         }
-                    }, 50); // 50ms 간격으로 점수 증가
+                    }, 50);
                 }
             }
         };
@@ -286,17 +280,15 @@ function setLanguage(lang) {
         }
     });
 
-    // Update specific option texts for 'interest-select'
     const interestSelect = document.getElementById('interest-select');
     if (interestSelect) {
         Array.from(interestSelect.options).forEach(option => {
-            if (option.value !== '') { // Skip the placeholder option
+            if (option.value !== '') {
                 option.textContent = translations[lang].interest_map[option.value];
             }
         });
     }
 
-    // Update text for globally placed home button if it exists
     const globalHomeButton = document.querySelector('#global-home-button-container .home-button-global');
     if (globalHomeButton) {
         globalHomeButton.textContent = translations[lang].home_button_text;
@@ -310,18 +302,15 @@ function setLanguage(lang) {
     }
 }
 
-// Add function to update interest options dynamically
 function updateInterestOptions(lang) {
     const interestSelect = document.getElementById('interest-select');
     if (interestSelect) {
-        // Clear existing options except the disabled placeholder
         Array.from(interestSelect.options).forEach(option => {
             if (option.value !== '') {
                 option.remove();
             }
         });
 
-        // Add options based on the current language's interest_map
         const interestMap = translations[lang].interest_map;
         for (const key in interestMap) {
             const option = document.createElement('option');
@@ -332,21 +321,20 @@ function updateInterestOptions(lang) {
     }
 }
 
-// Initial setup for interest options based on current language
 const initialLang = localStorage.getItem('language') || 'ko';
 setLanguage(initialLang);
-updateInterestOptions(initialLang); // Call after setLanguage
+updateInterestOptions(initialLang);
 
 langToggle.addEventListener('click', () => {
     const currentLang = localStorage.getItem('language') || 'ko';
     const newLang = currentLang === 'ko' ? 'en' : 'ko';
     setLanguage(newLang);
-    updateInterestOptions(newLang); // Update interest options when language changes
+    updateInterestOptions(newLang);
 });
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const name = document.getElementById('name-input').value;
-    const interest = document.getElementById('interest-select').value; // Get selected interest
+    const interest = document.getElementById('interest-select').value;
     const extractButton = document.getElementById('extract-button');
     const analysisStatus = document.getElementById('analysis-status');
 
@@ -357,16 +345,9 @@ document.getElementById('extract-button').addEventListener('click', () => {
 
     extractButton.disabled = true;
     analysisStatus.style.display = 'block';
-    analysisStatus.textContent = ''; // 분석 시작 시 텍스트 비움
+    analysisStatus.textContent = '';
 
     const lang = localStorage.getItem('language') || 'ko';
-    // const messages = translations[lang].analysis_messages; // 메시지 순환 제거
-    // let messageIndex = 0;
-
-    // const analysisMessageInterval = setInterval(() => { // 메시지 순환 제거
-    //     analysisStatus.textContent = messages[messageIndex];
-    //     messageIndex = (messageIndex + 1) % messages.length;
-    // }, 1500);
 
     const interestFates = translations[lang].fates[interest] || translations[lang].fates["default"];
     const randomIndex = Math.floor(Math.random() * interestFates.length);
@@ -380,21 +361,11 @@ document.getElementById('extract-button').addEventListener('click', () => {
         fate: `${translations[lang].fate_prefix(name, interest)}${selectedFateData.fate}`,
         optimal_ai_partner: selectedFateData.optimal_ai_partner,
         future_career: selectedFateData.future_career,
-        synergy_score: selectedFateData.synergy_score // Pass synergy score
+        synergy_score: selectedFateData.synergy_score
     });
 
-    // const totalTextLength = selectedFateData.fate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + translations[lang].fate_prefix(name, interest).length;
-    // const typingDuration = (totalTextLength * 50) + (3 * 500); // 타이핑 시간 계산은 타이핑 로직 내부에서 처리
-
-    // setTimeout(() => {
-    //     extractButton.disabled = false;
-    //     // clearInterval(analysisMessageInterval); // 메시지 순환 제거
-    //     analysisStatus.style.display = 'none';
-    // }, typingDuration + 100);
-
-    // 타이핑 완료 후 버튼 활성화 및 상태 숨기기 (typeWriter 내부에서 처리)
     const totalTextLength = (selectedFateData.fate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + translations[lang].fate_prefix(name, interest).length);
-    const typingDuration = (totalTextLength * 50) + (3 * 500); // 3개의 텍스트 블록 + 2번의 딜레이
+    const typingDuration = (totalTextLength * 50) + (3 * 500);
 
     setTimeout(() => {
         extractButton.disabled = false;
@@ -404,7 +375,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const analysisStatus = document.getElementById('analysis-status');
-    analysisStatus.style.display = 'none'; // 초기 로드 시 "분석 준비 중..." 숨기기
+    analysisStatus.style.display = 'none';
 
     const pixelCharacters = document.querySelectorAll('.pixel-character');
     const characterStates = [];

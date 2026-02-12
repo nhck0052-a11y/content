@@ -16,6 +16,38 @@
         <p data-key="tagline">인류가 2150년 어떤 AI 분야를 선택해 성장시켜야 할지 분석해주는 검사기입니다.</p>
         <div class="input-container">
             <input type="text" id="name-input" placeholder="이름을 입력하세요" data-key="name_input_placeholder">
+            <div class="input-row">
+                <select id="mbti-select">
+                    <option value="" disabled selected data-key="mbti_placeholder">뉴럴 아키타입 (MBTI)</option>
+                    <option value="INTJ">INTJ</option><option value="INTP">INTP</option><option value="ENTJ">ENTJ</option><option value="ENTP">ENTP</option>
+                    <option value="INFJ">INFJ</option><option value="INFP">INFP</option><option value="ENFJ">ENFJ</option><option value="ENFP">ENFP</option>
+                    <option value="ISTJ">ISTJ</option><option value="ISFJ">ISFJ</option><option value="ESTJ">ESTJ</option><option value="ESFJ">ESFJ</option>
+                    <option value="ISTP">ISTP</option><option value="ISFP">ISFP</option><option value="ESTP">ESTP</option><option value="ESFP">ESFP</option>
+                </select>
+                <select id="age-select">
+                    <option value="" disabled selected data-key="age_placeholder">가동 연한 (나이)</option>
+                    <option value="10">10s (Generation Beta)</option>
+                    <option value="20">20s (Neural Pioneers)</option>
+                    <option value="30">30s (Cyber Settlers)</option>
+                    <option value="40">40s (Legacy Humans)</option>
+                    <option value="50">50+ (Ancient Data)</option>
+                </select>
+            </div>
+            <div class="input-row">
+                <select id="gender-select">
+                    <option value="" disabled selected data-key="gender_placeholder">성별 프로토콜</option>
+                    <option value="M" data-key="gender_m">XY Protocol</option>
+                    <option value="F" data-key="gender_f">XX Protocol</option>
+                    <option value="N" data-key="gender_n">Non-Binary Code</option>
+                </select>
+                <select id="blood-select">
+                    <option value="" disabled selected data-key="blood_placeholder">에너지 유닛 (혈액형)</option>
+                    <option value="A">Type A (Stable)</option>
+                    <option value="B">Type B (Volatile)</option>
+                    <option value="AB">Type AB (Hybrid)</option>
+                    <option value="O">Type O (Universal)</option>
+                </select>
+            </div>
             <select id="interest-select">
                 <option value="" disabled selected data-key="interest_select_placeholder">관심 분야 선택</option>
                 <option value="art" data-key="interest_map_art">예술</option>

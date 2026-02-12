@@ -34,7 +34,7 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'DungGeunMo', 'Noto Color Emoji', 'Courier New', Courier, monospace; /* 폰트 변경 및 폴백, 이모티콘 지원 추가 */
+    font-family: 'DungGeunMo', 'Noto Color Emoji', 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,6 +42,7 @@ body {
     margin: 0;
     background-image: radial-gradient(circle, var(--bg-color) 70%, var(--bg-color));
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow: hidden;
 }
 
 .container {
@@ -51,12 +52,13 @@ body {
     border-radius: 15px;
     box-shadow: 0 0 20px var(--box-shadow-color);
     background-color: var(--container-bg);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
-#theme-toggle {
+#theme-toggle, #lang-toggle {
     position: fixed;
     top: 1rem;
-    right: 6rem; /* 위치 조정: lang-toggle 왼쪽으로 */
     background: var(--container-bg);
     border: 1px solid var(--border-color);
     padding: 0.3rem 0.6rem;
@@ -70,54 +72,30 @@ body {
     box-shadow: 0 0 5px var(--box-shadow-color);
 }
 
-#theme-toggle:hover {
+#theme-toggle { right: 6rem; }
+#lang-toggle { right: 1rem; }
+
+#theme-toggle:hover, #lang-toggle:hover {
     background-color: var(--button-hover-bg);
     color: var(--button-hover-color);
     box-shadow: 0 0 10px var(--box-shadow-color);
 }
-
-#lang-toggle {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    background: var(--container-bg);
-    border: 1px solid var(--border-color);
-    padding: 0.3rem 0.6rem;
-    font-family: 'DungGeunMo', monospace;
-    font-size: 0.9rem;
-    cursor: pointer;
-    color: var(--text-color);
-    transition: all 0.3s ease;
-    z-index: 1000;
-    border-radius: 4px;
-    box-shadow: 0 0 5px var(--box-shadow-color);
-}
-
-#lang-toggle:hover {
-    background-color: var(--button-hover-bg);
-    color: var(--button-hover-color);
-    box-shadow: 0 0 10px var(--box-shadow-color);
-}
-
-
 
 #future-time {
     position: fixed;
-    top: 1.2rem; /* 버튼들과 세로 중앙 정렬 */
-    left: 1rem; /* 좌측으로 이동하여 겹침 방지 */
-    color: #0f0; /* 초록색 픽셀 글씨 */
-    font-family: 'DungGeunMo', monospace; /* 픽셀 폰트 적용 */
-    font-size: 0.8rem; /* 작게 */
-    white-space: nowrap; /* 줄바꿈 방지 */
+    top: 1.2rem;
+    left: 1rem;
+    color: #0f0;
+    font-family: 'DungGeunMo', monospace;
+    font-size: 0.8rem;
+    white-space: nowrap;
     z-index: 1000;
-    text-shadow: 0 0 5px #0f0; /* 약간의 네온 효과 */
-    display: inline; /* 기본적으로 표시 (main.js에서 다크 모드일 때만 표시하도록 제어) */
-    z-index: 1000;
+    text-shadow: 0 0 5px #0f0;
 }
 
 .light-mode #future-time {
-    color: #007BFF; /* 화이트 모드에서는 파란색 */
-    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 파란색 네온 효과 */
+    color: #007BFF;
+    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 h1 {
@@ -130,7 +108,65 @@ p {
     margin-bottom: 2rem;
 }
 
-.pixel-character {
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input-row {
+    display: flex;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+#name-input, select {
+    background-color: var(--input-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    font-family: 'DungGeunMo', monospace;
+    cursor: pointer;
+    height: 3rem;
+    box-shadow: 0 0 5px var(--box-shadow-color);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+#name-input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 15px var(--box-shadow-color);
+    border-color: var(--button-hover-bg);
+}
+
+#extract-button {
+    background-color: var(--button-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-family: 'DungGeunMo', monospace;
+    margin-top: 0.5rem;
+}
+
+#extract-button:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-color);
+    box-shadow: 0 0 15px var(--box-shadow-color);
+}
+
+.pixel-character, .light-pixel-character {
     position: absolute;
     image-rendering: pixelated;
     width: 60px;
@@ -138,65 +174,21 @@ p {
     z-index: -1;
     transition: transform 0.3s ease, opacity 0.3s ease;
     pointer-events: none;
-    opacity: 1;
-    mix-blend-mode: screen; /* 다크 모드에서 검은색 배경을 투명하게 처리 */
 }
 
-/* ... (기존 스타일 유지) ... */
+.pixel-character { opacity: 1; mix-blend-mode: screen; }
+.light-pixel-character { opacity: 0; mix-blend-mode: multiply; filter: brightness(1.05); }
 
-/* Glitch Effect - Refined to target colored pixels only */
-.glitch-effect {
-    animation: shine 0.4s ease-in-out;
-}
+.light-mode .pixel-character { opacity: 0; }
+.light-mode .light-pixel-character { opacity: 1; }
 
+.glitch-effect { animation: shine 0.4s ease-in-out; }
 @keyframes shine {
-    0%, 100% {
-        filter: hue-rotate(0deg) brightness(1);
-    }
-    50% {
-        filter: hue-rotate(180deg) brightness(1.3);
-    }
+    0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+    50% { filter: hue-rotate(180deg) brightness(1.3); }
 }
 
-/* ... (glitter 스타일 삭제) ... */
-
-.light-pixel-character {
-    position: absolute;
-    image-rendering: pixelated;
-    width: 60px;
-    height: 60px;
-    z-index: -1;
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    mix-blend-mode: multiply; /* 화이트 모드에서 흰색 배경을 투명하게 처리 */
-    filter: brightness(1.05); /* 스크린샷의 미세한 배경색을 흰색으로 보정하여 완벽히 숨김 */
-}
-
-.light-mode .light-pixel-character {
-    opacity: 1; /* 화이트 모드에서 보임 */
-    pointer-events: none; /* 상호작용은 방지 */
-}
-
-.light-mode .pixel-character {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.light-pixel-character:hover {
-    transform: scale(1.2) rotate(5deg);
-}
-
-#char-5 { top: 15%; left: 15%; }
-#char-6 { bottom: 20%; right: 5%; }
-#char-7 { top: 40%; right: 25%; }
-#char-8 { bottom: 10%; left: 30%; }
-
-#synergy-container {
-    margin-top: 2rem;
-    display: none;
-}
-
+#synergy-container { margin-top: 2rem; display: none; }
 #synergy-score {
     font-family: 'DungGeunMo', monospace;
     font-size: 1.4rem;
@@ -213,22 +205,19 @@ p {
     background-color: var(--input-bg);
     padding: 2px;
     box-sizing: content-box;
-    position: relative;
 }
 
 .health-bar {
     width: 0%;
     height: 100%;
     background-color: #0f0;
-    /* 픽셀 칸 구분 효과 */
     background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px);
     background-size: 12px 100%;
     box-shadow: 0 0 15px #0f0;
-    transition: width 0.1s linear;
 }
 
 .light-mode .health-bar {
-    background-color: #007BFF; /* 화이트 모드에서는 파란색 */
+    background-color: #007BFF;
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
 }
 
@@ -238,9 +227,6 @@ p {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .home-button-global {

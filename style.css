@@ -302,71 +302,29 @@ fate-result::part(fate-border) {
     transform: translateY(-2px); /* Slight lift effect */
 }
 
-#light-mode-characters div {
-    display: none;
+.light-pixel-character {
     position: absolute;
-    width: 5px;
-    height: 5px;
-    background: #fff;
+    image-rendering: pixelated;
+    width: 60px;
+    height: 60px;
+    z-index: -1;
+    display: none;
+    transition: transform 0.3s ease;
 }
 
-.light-mode #light-mode-characters div {
+.light-mode .light-pixel-character {
     display: block;
 }
 
-#future-drone {
-    top: 20%;
-    left: 10%;
-    box-shadow: 0 5px #007BFF, 5px 5px #007BFF, -5px 5px #007BFF, 0 10px #fff;
-    animation: float 6s ease-in-out infinite;
+.light-mode .pixel-character {
+    display: none;
 }
 
-#data-cube {
-    top: 50%;
-    left: 80%;
-    width: 10px;
-    height: 10px;
-    background: #007BFF;
-    box-shadow: 5px 5px #5CACEE, -5px -5px #B0E0E6;
-    animation: spin 10s linear infinite;
+.light-pixel-character:hover {
+    transform: scale(1.2) rotate(5deg);
 }
 
-#ai-hologram {
-    top: 80%;
-    left: 20%;
-    background: transparent;
-    box-shadow: 0 0 #B0E0E6, 5px 5px #87CEFA, -5px -5px #ADD8E6, 0 5px #5CACEE;
-    animation: pulse 2s ease-in-out infinite;
-}
-
-#solar-flyer {
-    top: 10%;
-    left: 90%;
-    background: #fff;
-    box-shadow: 5px 0 #007BFF, -5px 0 #007BFF, 10px 0 #5CACEE, -10px 0 #5CACEE;
-    animation: fly 15s linear infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0px); }
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes pulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
-}
-
-@keyframes fly {
-    0% { transform: translateX(0) rotate(0deg); }
-    25% { transform: translateX(-15px) rotate(5deg); }
-    75% { transform: translateX(15px) rotate(-5deg); }
-    100% { transform: translateX(0) rotate(0deg); }
-}
+#char-5 { top: 15%; left: 15%; }
+#char-6 { bottom: 20%; right: 5%; }
+#char-7 { top: 40%; right: 25%; }
+#char-8 { bottom: 10%; left: 30%; }

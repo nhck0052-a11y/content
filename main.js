@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const analysisStatus = document.getElementById('analysis-status');
     analysisStatus.style.display = 'none';
 
-    const pixelCharacters = document.querySelectorAll('.pixel-character');
+    const pixelCharacters = document.querySelectorAll('.pixel-character, .light-pixel-character');
     const characterStates = [];
 
     pixelCharacters.forEach((char) => {
@@ -375,12 +375,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function animateCharacters() {
-        if (body.classList.contains('light-mode')) {
-            requestAnimationFrame(animateCharacters);
-            return;
-        }
-
         characterStates.forEach((charState, i) => {
+            if (body.classList.contains('light-mode')) {
+                if (charState.element.classList.contains('pixel-character')) {
+                    charState.element.style.display = 'none';
+                } else {
+                    charState.element.style.display = 'block';
+                }
+            } else {
+                if (charState.element.classList.contains('light-pixel-character')) {
+                    charState.element.style.display = 'none';
+                } else {
+                    charState.element.style.display = 'block';
+                }
+            }
+
+
             charState.x += charState.vx;
             charState.y += charState.vy;
 

@@ -144,11 +144,6 @@ body.light-mode .pixel-character {
     padding: 0.5rem;
     font-size: 1rem;
     border-radius: 5px;
-    appearance: none; /* 기본 드롭다운 화살표 숨기기 */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%230f0%22%20d%3D%22M287%20197.3l-118.4-118.4c-6.2-6.2-16.4-6.2-22.6%200L5.3%20197.3c-9.2%209.2-3.8%2024.3%208.5%2024.3h273.6c12.3%200%2017.7-15.2%208.5-24.3z%22%2F%3E%3C%2Fsvg%3E'); /* 사용자 정의 화살표 */
-    background-repeat: no-repeat;
-    background-position: right 0.7em top 50%;
-    background-size: 0.65em auto;
     cursor: pointer;
 }
 

@@ -394,21 +394,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function animateCharacters() {
+        const isLightMode = body.classList.contains('light-mode');
+        
         characterStates.forEach((charState, i) => {
-            if (body.classList.contains('light-mode')) {
-                if (charState.element.classList.contains('pixel-character')) {
-                    charState.element.style.display = 'none';
-                } else {
-                    charState.element.style.display = 'block';
-                }
-            } else {
-                if (charState.element.classList.contains('light-pixel-character')) {
-                    charState.element.style.display = 'none';
-                } else {
-                    charState.element.style.display = 'block';
-                }
-            }
+            const isLightChar = charState.element.classList.contains('light-pixel-character');
+            const isDarkChar = charState.element.classList.contains('pixel-character');
 
+            if (isLightMode) {
+                charState.element.style.display = isLightChar ? 'block' : 'none';
+            } else {
+                charState.element.style.display = isDarkChar ? 'block' : 'none';
+            }
 
             charState.x += charState.vx;
             charState.y += charState.vy;

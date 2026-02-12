@@ -20,7 +20,7 @@
 }
 
 .light-mode {
-    --bg-color: #F8F9FA; /* 아주 밝은 회색 */
+    --bg-color: #FFFFFF; /* 아주 밝은 흰색 */
     --text-color: #343A40; /* 어두운 회색 */
     --border-color: #007BFF; /* 차분한 파란색 */
     --box-shadow-color: rgba(0, 123, 255, 0.2); /* 파란색 그림자 */

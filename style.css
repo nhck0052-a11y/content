@@ -126,16 +126,10 @@ p {
 
 @keyframes shine {
     0%, 100% {
-        filter: brightness(1) contrast(100%) hue-rotate(0deg);
-    }
-    25% {
-        filter: brightness(2) contrast(150%) hue-rotate(90deg);
+        filter: hue-rotate(0deg) brightness(1);
     }
     50% {
-        filter: brightness(2.5) contrast(200%) hue-rotate(180deg);
-    }
-    75% {
-        filter: brightness(2) contrast(150%) hue-rotate(270deg);
+        filter: hue-rotate(180deg) brightness(1.3);
     }
 }
 
@@ -151,6 +145,7 @@ p {
     pointer-events: none;
     transition: transform 0.3s ease, opacity 0.3s ease;
     mix-blend-mode: multiply; /* 화이트 모드에서 흰색 배경을 투명하게 처리 */
+    filter: brightness(1.05); /* 스크린샷의 미세한 배경색을 흰색으로 보정하여 완벽히 숨김 */
 }
 
 .light-mode .light-pixel-character {

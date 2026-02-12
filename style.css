@@ -12,15 +12,15 @@
 }
 
 .light-mode {
-    --bg-color: #fff;
-    --text-color: #000;
-    --border-color: #00f;
-    --box-shadow-color: #00f;
-    --container-bg: rgba(255, 255, 255, 0.8);
-    --input-bg: #eee;
-    --button-bg: #00f;
-    --button-hover-bg: #00a;
-    --button-hover-color: #fff;
+    --bg-color: #F8F9FA; /* 아주 밝은 회색 */
+    --text-color: #343A40; /* 어두운 회색 */
+    --border-color: #007BFF; /* 차분한 파란색 */
+    --box-shadow-color: rgba(0, 123, 255, 0.2); /* 파란색 그림자 */
+    --container-bg: rgba(255, 255, 255, 0.9); /* 거의 흰색의 반투명 배경 */
+    --input-bg: #E9ECEF; /* 밝은 회색 입력 필드 */
+    --button-bg: #007BFF; /* 파란색 버튼 */
+    --button-hover-bg: #0056B3; /* 더 진한 파란색 호버 */
+    --button-hover-color: #FFFFFF; /* 흰색 버튼 텍스트 */
 }
 
 body {

@@ -145,7 +145,7 @@ class FateResult extends HTMLElement {
                 if (charIndex < fullText[currentTextIndex].length) {
                     targetElements[currentTextIndex].textContent += fullText[currentTextIndex].charAt(charIndex);
                     charIndex++;
-                    setTimeout(typeWriter, 10);
+                    setTimeout(typeWriter, 30);
                 } else {
                     currentTextIndex++;
                     charIndex = 0;
@@ -204,12 +204,15 @@ function setTheme(theme) {
         body.classList.remove('glitch-effect');
     }, 300);
 
+    const pixelArtContainer = document.getElementById('pixel-art-container');
     if (theme === 'light') {
         body.classList.add('light-mode');
         themeToggle.textContent = '🌙';
+        if (pixelArtContainer) pixelArtContainer.style.display = 'none';
     } else {
         body.classList.remove('light-mode');
         themeToggle.textContent = '🌞';
+        if (pixelArtContainer) pixelArtContainer.style.display = 'flex';
     }
     localStorage.setItem('theme', theme);
 }
@@ -333,7 +336,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
     });
 
     const totalTextLength = (selectedFateData.fate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + translations[lang].fate_prefix(name, interest).length);
-    const typingDuration = (totalTextLength * 10) + (3 * 500);
+    const typingDuration = (totalTextLength * 30) + (3 * 500);
 
     setTimeout(() => {
         extractButton.disabled = false;
@@ -341,7 +344,44 @@ document.getElementById('extract-button').addEventListener('click', () => {
     }, typingDuration + 100);
 });
 
+function createPixelArt() {
+    const pixelArtContainer = document.getElementById('pixel-art-container');
+    const art = [
+        "              g g g",
+        "             g g g g",
+        "            g g g g g",
+        "           g g g g g g",
+        "          g g g g g g g",
+        "         g g g g g g g g",
+        "        g g g g g g g g g",
+        "       g g g g g g g g g g",
+        "      g g g g g g g g g g g",
+        "     g g g g g g g g g g g g",
+        "    g g g g g g g g g g g g g",
+        "           g g g",
+        "           g g g",
+        "           g g g",
+        " ggggggggggggggggggggggggggggggggggggggggg",
+        "g g g g g g g g g g g g g g g g g g g g g",
+    ];
+
+    art.forEach(rowStr => {
+        const row = document.createElement('div');
+        row.classList.add('pixel-row');
+        for (const char of rowStr) {
+            const pixel = document.createElement('div');
+            pixel.classList.add('pixel');
+            if (char === 'g') {
+                pixel.classList.add('g');
+            }
+            row.appendChild(pixel);
+        }
+        pixelArtContainer.appendChild(row);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    createPixelArt();
     const analysisStatus = document.getElementById('analysis-status');
     analysisStatus.style.display = 'none';
 

@@ -387,7 +387,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
 function showHomeButton() {
     const lang = localStorage.getItem('language') || 'ko';
     const container = document.getElementById('global-home-button-container');
-    container.innerHTML = `<button class="home-button-global" onclick="location.reload()">${translations[lang].home_button_text}</button>`;
+    container.innerHTML = `<button class="home-button-global" data-key="home_button_text" onclick="location.reload()">${translations[lang].home_button_text}</button>`;
 }
 
 function initCharacters() {

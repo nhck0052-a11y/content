@@ -151,8 +151,10 @@ body.light-mode .pixel-character {
 
 #interest-select { /* 드롭다운 메뉴 스타일 적용 */
     /* 모든 사용자 정의 스타일 제거하여 브라우저 기본값 사용 */
-    /* z-index는 유지하여 다른 요소와의 가려짐 방지 */
     z-index: 10;
+    appearance: menulist; /* 브라우저의 기본 드롭다운 모양을 강제 */
+    -webkit-appearance: menulist; /* 웹킷 브라우저용 접두사 */
+    -moz-appearance: menulist; /* 모질라 브라우저용 접두사 */
 }
 
 /* Prediction Graph 스타일 */

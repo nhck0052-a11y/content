@@ -168,8 +168,8 @@ class FateResult extends HTMLElement {
 
         let fullText = [
             fate,
-            `\n최적의 AI 파트너: ${optimal_ai_partner}`,
-            `\n미래 직업: ${future_career}`
+            `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${optimal_ai_partner}`,
+            `미래 직업: ${future_career}`
         ];
         let currentTextIndex = 0;
         let charIndex = 0;
@@ -193,9 +193,18 @@ class FateResult extends HTMLElement {
                     charIndex = 0;
                     setTimeout(typeWriter, 500); // Pause before typing next section
                 }
+            } else {
+                // All text has been typed, now trigger the synergy bar animation
+                const synergyBar = this.shadowRoot.querySelector('.synergy-bar');
+                if (synergyBar) {
+                    synergyBar.style.width = `${this.synergyScore}%`; // Apply final width
+                }
             }
         };
         typeWriter();
+
+        // Store synergy score to be used after typing effect
+        this.synergyScore = synergy_score;
     }
 }
 

@@ -98,13 +98,14 @@ p {
     z-index: 10; /* 다른 콘텐츠 위에 표시 */
     display: block; /* 기본적으로 보이도록 (다크 모드에서) */
     transition: transform 0.3s ease; /* 호버 애니메이션 */
+    animation: floatCharacter 5s ease-in-out infinite alternate; /* 부유 애니메이션 적용 */
 }
 
 /* 각 캐릭터 위치 지정 */
-#char-1 { top: 10%; left: 5%; }
-#char-2 { bottom: 15%; right: 10%; }
-#char-3 { top: 30%; right: 20%; }
-#char-4 { bottom: 5%; left: 25%; }
+#char-1 { top: 10%; left: 5%; animation-delay: 0s; }
+#char-2 { bottom: 15%; right: 10%; animation-delay: 1.5s; }
+#char-3 { top: 30%; right: 20%; animation-delay: 3s; }
+#char-4 { bottom: 5%; left: 25%; animation-delay: 4.5s; }
 
 /* 화이트 모드일 때 픽셀 캐릭터 숨기기 */
 body.light-mode .pixel-character {
@@ -113,6 +114,30 @@ body.light-mode .pixel-character {
 
 .pixel-character:hover {
     transform: scale(1.2) rotate(5deg); /* 호버 시 약간 확대 및 회전 */
+}
+
+/* 픽셀 캐릭터 부유 애니메이션 Keyframes */
+@keyframes floatCharacter {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    25% {
+        transform: translate(5px, -5px) rotate(2deg);
+        opacity: 0.95;
+    }
+    50% {
+        transform: translate(0, 5px) rotate(0deg);
+        opacity: 1;
+    }
+    75% {
+        transform: translate(-5px, -2px) rotate(-2deg);
+        opacity: 0.95;
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
 }
 
 .input-container {

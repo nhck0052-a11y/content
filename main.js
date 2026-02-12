@@ -191,11 +191,22 @@ class FateResult extends HTMLElement {
                     setTimeout(typeWriter, 500); // Pause before typing next section
                 }
             } else {
-                // 모든 텍스트가 타이핑되면 시너지 바 애니메이션 트리거
                 const synergyBar = this.shadowRoot.querySelector('.synergy-bar');
-                if (synergyBar) {
-                    synergyBar.style.width = `${synergy_score}%`; // 최종 너비 적용
-                    synergyBar.textContent = `${synergy_score}%`; // 최종 텍스트 적용
+                const synergyLabelP = this.shadowRoot.querySelector('.synergy-score-label'); // 시너지 라벨도 업데이트
+                if (synergyBar && synergyLabelP) {
+                    let currentScore = 0;
+                    const interval = setInterval(() => {
+                        if (currentScore < synergy_score) {
+                            currentScore++;
+                            synergyBar.style.width = `${currentScore}%`;
+                            synergyBar.textContent = `${currentScore}%`;
+                            synergyLabelP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${currentScore}`;
+                        } else {
+                            clearInterval(interval);
+                            synergyBar.textContent = `${synergy_score}%`; // 최종 값으로 한 번 더 설정하여 오차 방지
+                            synergyLabelP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}`;
+                        }
+                    }, 50); // 50ms 간격으로 점수 증가
                 }
             }
         };

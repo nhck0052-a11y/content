@@ -89,206 +89,6 @@ const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
     setTheme(savedTheme);
 } else {
-    setTheme('dark'); // Always default to dark theme if no preference is saved
-}
-
-
-themeToggle.addEventListener('click', () => {
-    if (body.classList.contains('light-mode')) {
-        setTheme('dark');
-    } else {
-        setTheme('light');
-    }
-});
-
-// Language Toggle Logic
-const langToggle = document.getElementById('lang-toggle');
-
-const translations = {
-    'en': {
-        app_title: "AI Coexistence Aptitude Test",
-        main_title: "AI Coexistence Aptitude Test",
-        tagline: "This test analyzes which AI field humanity should choose to grow with by 2150.",
-        name_input_placeholder: "Enter your name",
-        interest_select_placeholder: "Select your interest",
-        extract_button_text: "Analyze Aptitude",
-        fate_prefix: (name, interest) => `${name}, your optimal AI field for coexistence is ${interest}: `,
-        fates: {
-            "art": [
-                {
-                    fate: "You will pioneer AI-driven generative art, creating new forms of human-AI collaboration in creative fields.",
-                    optimal_ai_partner: "Creativity AI (e.g., DeepDream, DALL-E variants)",
-                    future_career: "AI-Enhanced Generative Artist"
-                },
-                {
-                    fate: "Your work will integrate AI to preserve and evolve cultural heritage, making it accessible to future generations.",
-                    optimal_ai_partner: "Cultural Preservation AI (e.g., historical data analysis, restoration AI)",
-                    future_career: "AI-Driven Cultural Archivist"
-                }
-            ],
-            "engineering": [
-                {
-                    fate: "You will lead the development of ethical AI systems, ensuring their safe and beneficial integration into society.",
-                    optimal_ai_partner: "Ethics & Compliance AI (e.g., AI bias detection, regulatory AI)",
-                    future_career: "AI Ethics Engineer"
-                },
-                {
-                    fate: "Your innovations will enable AI to solve complex global challenges, from climate change to resource management.",
-                    optimal_ai_partner: "Global Impact AI (e.g., climate modeling AI, resource optimization AI)",
-                    future_career: "AI Solutions Architect for Global Challenges"
-                }
-            ],
-            "business": [
-                {
-                    fate: "You will revolutionize industries by implementing AI-powered strategies that promote sustainable growth and human well-being.",
-                    optimal_ai_partner: "Sustainable Business AI (e.g., market trend prediction, ethical supply chain AI)",
-                    future_career: "AI-Driven Business Strategist"
-                },
-                {
-                    fate: "Your leadership will establish new economic models where AI optimizes productivity while maximizing human potential.",
-                    optimal_ai_partner: "Human Potential Optimization AI (e.g., personalized learning AI, workforce management AI)",
-                    future_career: "AI-Integrated Economic Model Designer"
-                }
-            ],
-            "psychology": [
-                {
-                    fate: "You will design AI companions that enhance human mental health and emotional well-being, fostering deeper human-AI bonds.",
-                    optimal_ai_partner: "Empathy & Wellness AI (e.g., therapeutic chatbots, emotional support AI)",
-                    future_career: "AI-Assisted Mental Health Specialist"
-                },
-                {
-                    fate: "Your research will unlock new insights into human consciousness through AI, leading to a profound understanding of ourselves.",
-                    optimal_ai_partner: "Consciousness Research AI (e.g., neurological data analysis, cognitive modeling AI)",
-                    future_career: "AI-Powered Cognitive Scientist"
-                }
-            ],
-            "default": [
-                {
-                    fate: "You will contribute to the harmonious integration of AI into daily life, making technology a true partner for humanity.",
-                    optimal_ai_partner: "General Coexistence AI (e.g., smart home AI, personal assistant AI)",
-                    future_career: "AI Integration Consultant"
-                },
-                {
-                    fate: "Your vision will guide the next generation in understanding and leveraging AI for a brighter collective future.",
-                    optimal_ai_partner: "Educational AI (e.g., personalized tutor AI, knowledge sharing AI)",
-                    future_career: "AI Literacy Educator"
-                }
-            ]
-        },
-        analysis_messages: [
-            "Scanning Quantum Brain Structure...",
-            "Initiating AI Optimization Simulation...",
-            "Analyzing Coexistence Parameters..."
-        ]
-    },
-    'ko': {
-        app_title: "AI 공존 적성 검사기",
-        main_title: "AI 공존 적성 검사기",
-        tagline: "인류가 2150년 어떤 AI 분야를 선택해 성장시켜야 할지 분석해주는 검사기입니다.",
-        name_input_placeholder: "이름을 입력하세요",
-        interest_select_placeholder: "관심 분야 선택",
-        extract_button_text: "적성 분석",
-        fate_prefix: (name, interest) => `${name}님, ${interest} 분야에서 당신의 AI 공존 최적 적성은: `,
-        fates: {
-            "art": [
-                {
-                    fate: "당신은 AI 기반 생성 예술을 개척하여 창의적인 분야에서 인간-AI 협업의 새로운 형태를 창조할 것입니다.",
-                    optimal_ai_partner: "창의성 AI (예: DeepDream, DALL-E 변형)",
-                    future_career: "AI 강화 생성 예술가"
-                },
-                {
-                    fate: "당신의 작업은 AI를 통합하여 문화 유산을 보존하고 발전시켜 미래 세대가 접근할 수 있도록 할 것입니다.",
-                    optimal_ai_partner: "문화 보존 AI (예: 역사 데이터 분석, 복원 AI)",
-                    future_career: "AI 기반 문화 기록 보관인"
-                }
-            ],
-            "engineering": [
-                {
-                    fate: "당신은 윤리적인 AI 시스템 개발을 주도하여 사회에 안전하고 유익한 통합을 보장할 것입니다.",
-                    optimal_ai_partner: "윤리 및 규정 준수 AI (예: AI 편향 감지, 규제 AI)",
-                    future_career: "AI 윤리 엔지니어"
-                },
-                {
-                    fate: "당신의 혁신은 AI가 기후 변화에서 자원 관리에 이르기까지 복잡한 글로벌 문제를 해결할 수 있도록 할 것입니다.",
-                    optimal_ai_partner: "글로벌 영향 AI (예: 기후 모델링 AI, 자원 최적화 AI)",
-                    future_career: "글로벌 과제 AI 솔루션 설계자"
-                }
-            ],
-            "business": [
-                {
-                    fate: "당신은 지속 가능한 성장과 인간 복지를 촉진하는 AI 기반 전략을 구현하여 산업을 혁신할 것입니다.",
-                    optimal_ai_partner: "지속 가능한 비즈니스 AI (예: 시장 동향 예측, 윤리적 공급망 AI)",
-                    future_career: "AI 기반 비즈니스 전략가"
-                },
-                {
-                    fate: "당신의 리더십은 AI가 생산성을 최적화하는 동시에 인간의 잠재력을 극대화하는 새로운 경제 모델을 구축할 것입니다.",
-                    optimal_ai_partner: "인간 잠재력 최적화 AI (예: 개인화된 학습 AI, 인력 관리 AI)",
-                    future_career: "AI 통합 경제 모델 디자이너"
-                }
-            ],
-            "psychology": [
-                {
-                    fate: "당신은 인간의 정신 건강과 정서적 웰빙을 향상시키는 AI 동반자를 설계하여 인간-AI 관계를 심화시킬 것입니다.",
-                    optimal_ai_partner: "공감 및 웰빙 AI (예: 치료 챗봇, 정서적 지원 AI)",
-                    future_career: "AI 보조 정신 건강 전문가"
-                },
-                {
-                    fate: "당신의 연구는 AI를 통해 인간 의식에 대한 새로운 통찰력을 열어 우리 자신에 대한 심오한 이해로 이끌 것입니다.",
-                    optimal_ai_partner: "의식 연구 AI (예: 신경학적 데이터 분석, 인지 모델링 AI)",
-                    future_career: "AI 기반 인지 과학자"
-                }
-            ],
-            "default": [
-                {
-                    fate: "당신은 AI의 일상 생활 통합에 기여하여 기술을 인류의 진정한 파트너로 만들 것입니다.",
-                    optimal_ai_partner: "일반 공존 AI (예: 스마트 홈 AI, 개인 비서 AI)",
-                    future_career: "AI 통합 컨설턴트"
-                },
-                {
-                    fate: "당신의 비전은 더 밝은 공동의 미래를 위해 AI를 이해하고 활용하는 다음 세대를 이끌 것입니다.",
-                    optimal_ai_partner: "교육 AI (예: 개인화된 튜터 AI, 지식 공유 AI)",
-                    future_career: "AI 리터러시 교육자"
-                }
-            ]
-        },
-        analysis_messages: [
-            "양자 뇌 구조 스캐닝 중...",
-            "AI 최적화 시뮬레이션 가동...",
-            "공존 매개변수 분석 중..."
-        ]
-    }
-};
-
-function setLanguage(lang) {
-    document.querySelectorAll('[data-key]').forEach(element => {
-        const key = element.getAttribute('data-key');
-        if (translations[lang][key]) {
-            if (element.tagName === 'INPUT') {
-                element.placeholder = translations[lang][key];
-            } else if (element.tagName === 'BUTTON') {
-                element.textContent = translations[lang][key];
-            } else if (element.tagName === 'SELECT' && key === 'interest_select_placeholder') {
-                 // Update the default selected option text
-                const defaultOption = element.querySelector('option[disabled][selected]');
-                if (defaultOption) {
-                    defaultOption.textContent = translations[lang][key];
-                }
-            } else {
-                element.textContent = translations[lang][key];
-            }
-        }
-    });
-    // Update title separately as it's not a direct child
-    document.title = translations[lang]['app_title'];
-    langToggle.textContent = lang === 'en' ? '🇰🇷' : '🇬🇧'; // Toggle button text
-    localStorage.setItem('language', lang);
-}
-
-// Load language preference from localStorage
-const savedLanguage = localStorage.getItem('language');
-if (savedLanguage) {
-    setTheme(savedLanguage);
-} else {
     setTheme('en'); // Default to English
 }
 
@@ -313,9 +113,9 @@ document.getElementById('extract-button').addEventListener('click', () => {
     // Disable button
     extractButton.disabled = true;
 
-    // Show analysis status and start animation
+    // Show analysis status
     analysisStatus.style.display = 'block';
-    analysisStatus.classList.add('flow-text');
+    // analysisStatus.classList.add('flow-text'); // REMOVED THIS LINE
 
     const currentLang = localStorage.getItem('language') || 'en';
     const messages = translations[currentLang].analysis_messages;
@@ -353,7 +153,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
         extractButton.disabled = false;
         clearInterval(analysisMessageInterval); // Stop cycling messages
         analysisStatus.style.display = 'none';
-        analysisStatus.classList.remove('flow-text');
+        // analysisStatus.classList.remove('flow-text'); // REMOVED THIS LINE
     }, typingDuration + 100); // 100ms extra buffer
 });
 

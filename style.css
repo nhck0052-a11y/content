@@ -92,6 +92,7 @@ body {
     z-index: 1000;
     text-shadow: 0 0 5px #0f0; /* 약간의 네온 효과 */
     display: inline; /* 기본적으로 표시 (main.js에서 다크 모드일 때만 표시하도록 제어) */
+    z-index: 1000;
 }
 
 h1 {

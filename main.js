@@ -429,3 +429,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         requestAnimationFrame(animateCharacters);
     }
+    animateCharacters();
+});
+
+function applyGlitchEffect(element) {
+    element.classList.add('glitch-effect');
+    setTimeout(() => {
+        element.classList.remove('glitch-effect');
+    }, 300);
+}
+
+// Future Time Clock
+function updateFutureTime() {
+    const futureTimeElement = document.getElementById('future-time');
+    if (futureTimeElement) {
+        const now = new Date();
+        const futureDate = new Date(now.getFullYear() + 126, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
+        
+        const year = futureDate.getFullYear();
+        const month = String(futureDate.getMonth() + 1).padStart(2, '0');
+        const day = String(futureDate.getDate()).padStart(2, '0');
+        const hours = String(futureDate.getHours()).padStart(2, '0');
+        const minutes = String(futureDate.getMinutes()).padStart(2, '0');
+        const seconds = String(futureDate.getSeconds()).padStart(2, '0');
+
+        futureTimeElement.textContent = `2150 CYBERNETIC ERA - ${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+}
+setInterval(updateFutureTime, 1000);
+updateFutureTime();

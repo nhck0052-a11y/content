@@ -368,16 +368,20 @@ function applyGlitchEffect(element) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initCharacters() {
     const analysisStatus = document.getElementById('analysis-status');
-    analysisStatus.style.display = 'none';
+    if (analysisStatus) analysisStatus.style.display = 'none';
 
     const pixelCharacters = document.querySelectorAll('.pixel-character, .light-pixel-character');
     const characterStates = [];
 
     pixelCharacters.forEach((char) => {
-        const initialX = Math.random() * (window.innerWidth - char.offsetWidth);
-        const initialY = Math.random() * (window.innerHeight - char.offsetHeight);
+        // 이미지 크기가 0이면 기본값 설정
+        const width = char.offsetWidth || 60;
+        const height = char.offsetHeight || 60;
+        
+        const initialX = Math.random() * (window.innerWidth - width);
+        const initialY = Math.random() * (window.innerHeight - height);
 
         char.style.left = `${initialX}px`;
         char.style.top = `${initialY}px`;
@@ -386,20 +390,15 @@ document.addEventListener('DOMContentLoaded', () => {
             element: char,
             x: initialX,
             y: initialY,
-            vx: (Math.random() - 0.5) * 1,
-            vy: (Math.random() - 0.5) * 1,
-            width: char.offsetWidth,
-            height: char.offsetHeight,
+            vx: (Math.random() - 0.5) * 2, // 속도 약간 상향
+            vy: (Math.random() - 0.5) * 2,
+            width: width,
+            height: height,
         });
     });
 
     function animateCharacters() {
-        const isLightMode = body.classList.contains('light-mode');
-        
         characterStates.forEach((charState, i) => {
-            // CSS 클래스(light-mode)에 의해 opacity가 제어되므로 
-            // JS에서 display를 직접 건드리지 않아도 됩니다.
-
             charState.x += charState.vx;
             charState.y += charState.vy;
 
@@ -439,7 +438,9 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animateCharacters);
     }
     animateCharacters();
-});
+}
+
+window.addEventListener('load', initCharacters);
 
 // Future Time Clock
 function updateFutureTime() {

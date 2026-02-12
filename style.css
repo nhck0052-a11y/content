@@ -79,6 +79,19 @@ body {
     z-index: 1000; /* Ensure button is on top */
 }
 
+#home-button {
+    position: fixed;
+    top: 1rem;
+    right: 8rem; /* Adjust position to be next to lang-toggle */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    z-index: 1000;
+}
+
 #future-time {
     position: fixed;
     top: 1.2rem; /* 버튼들과 세로 중앙 정렬 */

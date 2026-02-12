@@ -43,7 +43,8 @@ const translations = {
             business: "Business",
             psychology: "Psychology"
         },
-        synergy_score_label: "Synergy Score:"
+        synergy_score_label: "Synergy Score:",
+        home_button_text: "Home"
     },
     ko: {
         app_title: "AI 공존 적성 검사기",
@@ -52,6 +53,7 @@ const translations = {
         name_input_placeholder: "이름을 입력하세요",
         interest_select_placeholder: "관심 분야 선택",
         extract_button_text: "운명 추출",
+        home_button_text: "홈",
         analysis_status_preparing: "분석 준비 중...",
         analysis_messages: [
             "당신의 뉴럴 패턴을 분석 중...",
@@ -313,6 +315,22 @@ langToggle.addEventListener('click', () => {
     const newLang = currentLang === 'ko' ? 'en' : 'ko';
     setLanguage(newLang);
     updateInterestOptions(newLang); // Update interest options when language changes
+});
+
+const homeButton = document.getElementById('home-button');
+if (homeButton) {
+    homeButton.addEventListener('click', () => {
+        location.reload(); // Reloads the page, effectively returning to "home"
+    });
+}
+
+// Initial setup for home button text
+const initialLang = localStorage.getItem('language') || 'ko';
+document.addEventListener('DOMContentLoaded', () => {
+    const homeButton = document.getElementById('home-button');
+    if (homeButton) {
+        homeButton.textContent = translations[initialLang].home_button_text;
+    }
 });
 
 document.getElementById('extract-button').addEventListener('click', () => {

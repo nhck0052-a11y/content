@@ -348,6 +348,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const pixelCharacters = document.querySelectorAll('.pixel-character');
     const characterStates = [];
 
+    document.addEventListener('click', () => {
+        document.body.classList.add('glitch-effect');
+        setTimeout(() => {
+            document.body.classList.remove('glitch-effect');
+        }, 300);
+    });
+
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+            button.classList.add('glitch-effect');
+        });
+        button.addEventListener('mouseleave', () => {
+            button.classList.remove('glitch-effect');
+        });
+    });
+
     pixelCharacters.forEach((char) => {
         const initialX = Math.random() * (window.innerWidth - char.offsetWidth);
         const initialY = Math.random() * (window.innerHeight - char.offsetHeight);

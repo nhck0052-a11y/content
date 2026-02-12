@@ -271,8 +271,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 이는 페이지 새로고침 시에도 시간이 0부터 시작하지 않고 이어서 증가하도록 함
     const now = new Date();
     const diffSecondsAtLoad = Math.floor((now.getTime() - initialStartDate.getTime()) / 1000);
-    if (diffSecondsAtLoad > 0) {
+    if (diffSecondsAtLoad >= 0) { // 0초 이상이면 초기화
         elapsedSecondsFromInitial = diffSecondsAtLoad;
+    }
+    // 카운트를 1초부터 시작하기 위해, 만약 elapsedSecondsFromInitial이 0이라면 1로 시작
+    if (elapsedSecondsFromInitial === 0) {
+        elapsedSecondsFromInitial = 1;
     }
 
 
@@ -283,9 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             futureTimeSpan.style.display = 'inline'; // 다크 모드에서는 표시
         }
-
-        // elapsedSecondsFromInitial를 1초마다 증가
-        elapsedSecondsFromInitial++;
 
         // 이제 elapsedSecondsFromInitial을 기반으로 시간 계산
         const totalSeconds = elapsedSecondsFromInitial;
@@ -298,7 +299,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const days = totalDays % 365; // 대략적인 연도 계산을 위해 365일 기준으로
         const years = Math.floor(totalDays / 365);
 
-        futureTimeSpan.textContent = `2150년 ${years}년 ${days}일 ${String(hours).padStart(2, '0')}시 ${String(minutes).padStart(2, '0')}분 ${String(seconds).padStart(2, '0')}초`;
+        let timeText = `2150년 3월 1일`; // "2150년 3월 1일"은 항상 표시
+        if (years > 0) {
+            timeText += ` ${years}년`;
+        }
+        if (days > 0) {
+            timeText += ` ${days}일`;
+        }
+        timeText += ` ${String(hours).padStart(2, '0')}시 ${String(minutes).padStart(2, '0')}분 ${String(seconds).padStart(2, '0')}초`;
+
+        futureTimeSpan.textContent = timeText;
+
+        // elapsedSecondsFromInitial를 1초마다 증가 (다음 틱을 위해)
+        elapsedSecondsFromInitial++;
     }
 
     // 1초마다 업데이트

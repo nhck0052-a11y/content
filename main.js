@@ -123,12 +123,20 @@ class FateResult extends HTMLElement {
                 background-color: #4CAF50; /* Green color for the bar */
                 width: 0%; /* Initial width */
                 transition: width 1s ease-in-out;
+            }
+            .synergy-text-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: white;
+                color: white; /* Text color for the percentage */
                 font-weight: bold;
                 font-size: 0.8em;
+                pointer-events: none; /* Allow clicks to pass through to the bar if needed */
             }
             .synergy-score-label {
                 margin-top: 1rem;
@@ -163,6 +171,7 @@ class FateResult extends HTMLElement {
         const synergyLabelP = document.createElement('p');
         const synergyBarContainer = document.createElement('div');
         const synergyBar = document.createElement('div');
+        const synergyTextOverlay = document.createElement('div'); // New element for percentage text
         const homeButtonResult = document.createElement('button'); // New home button for results
 
         synergyLabelP.classList.add('synergy-score-label');
@@ -170,9 +179,12 @@ class FateResult extends HTMLElement {
         synergyBarContainer.classList.add('synergy-bar-container');
         synergyBar.classList.add('synergy-bar');
         synergyBar.style.width = `0%`; // 초기 너비 0%
-        synergyBar.textContent = `0%`; // 초기 텍스트 0%
+
+        synergyTextOverlay.classList.add('synergy-text-overlay');
+        synergyTextOverlay.textContent = `0%`; // Initial text
 
         synergyBarContainer.appendChild(synergyBar);
+        synergyBarContainer.appendChild(synergyTextOverlay); // Add text overlay to container
 
         homeButtonResult.classList.add('home-button-result');
         homeButtonResult.textContent = translations[localStorage.getItem('language') || 'ko'].home_button_text;
@@ -213,17 +225,19 @@ class FateResult extends HTMLElement {
             } else {
                 const synergyBar = this.shadowRoot.querySelector('.synergy-bar');
                 const synergyLabelP = this.shadowRoot.querySelector('.synergy-score-label'); // 시너지 라벨도 업데이트
-                if (synergyBar && synergyLabelP) {
+                const synergyTextOverlay = this.shadowRoot.querySelector('.synergy-text-overlay'); // Get text overlay
+                if (synergyBar && synergyLabelP && synergyTextOverlay) {
                     let currentScore = 0;
                     const interval = setInterval(() => {
                         if (currentScore < synergy_score) {
                             currentScore++;
                             synergyBar.style.width = `${currentScore}%`;
-                            synergyBar.textContent = `${currentScore}%`;
+                            synergyTextOverlay.textContent = `${currentScore}%`; // Update text overlay
                             synergyLabelP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${currentScore}`;
                         } else {
                             clearInterval(interval);
-                            synergyBar.textContent = `${synergy_score}%`; // 최종 값으로 한 번 더 설정하여 오차 방지
+                            synergyBar.style.width = `${synergy_score}%`; // 최종 값으로 한 번 더 설정하여 오차 방지
+                            synergyTextOverlay.textContent = `${synergy_score}%`; // Final text for overlay
                             synergyLabelP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}`;
                             this.shadowRoot.appendChild(homeButtonResult); // Append home button after animation
                         }

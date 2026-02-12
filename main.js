@@ -206,10 +206,10 @@ function setTheme(theme) {
 
     if (theme === 'light') {
         body.classList.add('light-mode');
-        themeToggle.textContent = '🌙';
+        themeToggle.textContent = '[ DARK ]'; // 다크 모드로 전환 버튼
     } else {
         body.classList.remove('light-mode');
-        themeToggle.textContent = '🌞';
+        themeToggle.textContent = '[ LIGHT ]'; // 라이트 모드로 전환 버튼
     }
     localStorage.setItem('theme', theme);
 }

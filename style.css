@@ -54,16 +54,26 @@ body {
 }
 
 #theme-toggle {
-    position: fixed; /* Fixed position relative to the viewport */
+    position: fixed;
     top: 1rem;
-    right: 4.5rem; /* Adjusted position to make space for lang toggle */
-    background: none;
-    border: none;
-    font-size: 1.5rem;
+    right: 6rem; /* 위치 조정: lang-toggle 왼쪽으로 */
+    background: var(--container-bg);
+    border: 1px solid var(--border-color);
+    padding: 0.3rem 0.6rem;
+    font-family: 'DungGeunMo', monospace;
+    font-size: 0.9rem;
     cursor: pointer;
     color: var(--text-color);
-    transition: color 0.3s ease;
-    z-index: 1000; /* Ensure button is on top */
+    transition: all 0.3s ease;
+    z-index: 1000;
+    border-radius: 4px;
+    box-shadow: 0 0 5px var(--box-shadow-color);
+}
+
+#theme-toggle:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-color);
+    box-shadow: 0 0 10px var(--box-shadow-color);
 }
 
 #lang-toggle {

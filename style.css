@@ -239,44 +239,23 @@ fate-result::part(fate-border) {
     border-color: var(--border-color);
 }
 
-/* Glitch Effect */
+/* Glitch Effect - Now a Shining Effect */
 .glitch-effect {
-    animation: glitch 0.5s linear;
+    animation: shine 0.5s ease-in-out;
 }
 
-@keyframes glitch {
-    0% {
-        transform: translate(0) skew(0);
+@keyframes shine {
+    0%, 100% {
+        filter: brightness(1) drop-shadow(0 0 0px var(--box-shadow-color));
     }
-    10% {
-        transform: translate(-5px, -5px) skew(5deg, 5deg);
-    }
-    20% {
-        transform: translate(5px, 5px) skew(-5deg, -5deg);
-    }
-    30% {
-        transform: translate(-5px, 5px) skew(5deg, -5deg);
-    }
-    40% {
-        transform: translate(5px, -5px) skew(-5deg, 5deg);
+    25% {
+        filter: brightness(1.8) drop-shadow(2px 0 10px #ff00ff);
     }
     50% {
-        transform: translate(0) skew(0);
+        filter: brightness(2) drop-shadow(0 0 20px var(--box-shadow-color));
     }
-    60% {
-        transform: translate(-5px, -5px) skew(5deg, 5deg);
-    }
-    70% {
-        transform: translate(5px, 5px) skew(-5deg, -5deg);
-    }
-    80% {
-        transform: translate(-5px, 5px) skew(5deg, -5deg);
-    }
-    90% {
-        transform: translate(5px, -5px) skew(-5deg, 5deg);
-    }
-    100% {
-        transform: translate(0) skew(0);
+    75% {
+        filter: brightness(1.8) drop-shadow(-2px 0 10px #00ffff);
     }
 }
 

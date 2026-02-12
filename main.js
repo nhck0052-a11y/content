@@ -11,6 +11,7 @@ const translations = {
         interest_select_placeholder: "Select Core Interest",
         extract_button_text: "Extract Destiny",
         analysis_status_preparing: "Synchronizing Bio-Quantum Field...",
+        please_wait: "Analyzing Data... Please wait...",
         analysis_report_title: "BIO-QUANTUM ANALYSIS REPORT",
         synergy_score_label: "Quantum Resonance Index:",
         home_button_text: "Reboot System",
@@ -37,6 +38,7 @@ const translations = {
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
+        please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "생체 양자 분석 리포트 (QH-NPM)",
         synergy_score_label: "양자 공명 지수:",
         alert_message: "모든 생체 데이터 프로토콜을 입력해주세요!",
@@ -83,19 +85,19 @@ class FateResult extends HTMLElement {
                 padding: 2rem;
                 border: 2px solid var(--border-color);
                 border-radius: 15px;
-                background: rgba(0, 20, 0, 0.8);
-                color: var(--text-color);
+                background: var(--report-bg);
+                color: var(--report-text);
                 font-family: 'DungGeunMo', monospace;
                 text-align: left;
                 box-shadow: 0 0 30px var(--box-shadow-color);
                 animation: scanline 6s linear infinite;
             }
             .report-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; text-align: center; }
-            .report-title { font-size: 1.4rem; color: #fff; text-shadow: 0 0 10px var(--box-shadow-color); }
+            .report-title { font-size: 1.4rem; color: var(--report-text); text-shadow: 0 0 10px var(--box-shadow-color); }
             .section { margin-bottom: 1.2rem; }
-            .label { color: #aaa; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
-            .content { font-size: 1.1rem; line-height: 1.5; color: var(--text-color); }
-            .job-highlight { color: #ff0; font-size: 1.3rem; font-weight: bold; }
+            .label { color: #888; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+            .content { font-size: 1.1rem; line-height: 1.5; color: var(--report-text); }
+            .job-highlight { color: var(--job-color); font-size: 1.3rem; font-weight: bold; }
             .comment { font-style: italic; border-top: 1px dashed #444; padding-top: 1rem; margin-top: 1rem; }
         `;
         this.shadowRoot.appendChild(style);
@@ -134,6 +136,7 @@ class FateResult extends HTMLElement {
 
     typeEffect(id, text, speed, callback) {
         const el = this.shadowRoot.getElementById(id);
+        if (!el) return;
         let i = 0;
         const timer = setInterval(() => {
             if (i < text.length) {
@@ -202,7 +205,6 @@ langToggle.addEventListener('click', () => {
     setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko');
 });
 
-// Algorithm Logic
 function generateFate(mbtiStr, blood, gender) {
     const lang = localStorage.getItem('language') || 'ko';
     const mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' :
@@ -217,15 +219,12 @@ function generateFate(mbtiStr, blood, gender) {
         `${bData.trait.ko}와 ${gData.trait.ko}가 ${mData.protocol.ko}에 동기화되었습니다.` :
         `${bData.trait.en} and ${gData.trait.en} are synchronized with the ${mData.protocol.en}.`;
 
-    // Job Generation Logic (Combinatorial)
     const jobs = {
         ko: {
             'NT+A+M': '행성 간 고속도로 설계 총괄자',
             'NF+B+F': '멸종 위기 외계 생물 심리 치료사',
             'SP+AB+M': '안드로이드 암시장 수리공',
             'SJ+O+F': '은하 연합 데이터 보안 아카이브 부국장',
-            'NT+B+M': '테라포밍 엔진 최적화 아키텍트',
-            'NF+A+F': '뉴럴 링크 공감 프로토콜 개발자',
             'default': '차원 간 자원 관리 전문가'
         },
         en: {
@@ -258,8 +257,9 @@ document.getElementById('extract-button').addEventListener('click', () => {
         interest: document.getElementById('interest-select').value
     };
 
+    const lang = localStorage.getItem('language') || 'ko';
     if (!Object.values(inputs).every(v => v)) {
-        alert(translations[localStorage.getItem('language') || 'ko'].alert_message);
+        alert(translations[lang].alert_message);
         return;
     }
 
@@ -269,25 +269,23 @@ document.getElementById('extract-button').addEventListener('click', () => {
     const resultContainer = document.getElementById('result-container');
 
     extractButton.disabled = true;
+    analysisStatus.textContent = translations[lang].please_wait;
     analysisStatus.style.display = 'block';
 
     setTimeout(() => {
-        inputContainer.style.display = 'none'; // 입력창 숨기기 (새로운 박스로 전환)
+        inputContainer.style.display = 'none';
         analysisStatus.style.display = 'none';
         
         const fateData = generateFate(inputs.mbti, inputs.blood, inputs.gender);
-        
         resultContainer.innerHTML = '';
         const report = document.createElement('fate-result');
         resultContainer.appendChild(report);
-        
         report.displayFate(fateData);
         
         report.addEventListener('report-finished', () => {
             const synergyContainer = document.getElementById('synergy-container');
             const synergyScoreEl = document.getElementById('synergy-score');
             const healthBar = document.querySelector('.health-bar');
-            const lang = localStorage.getItem('language') || 'ko';
 
             synergyContainer.style.display = 'block';
             let currentScore = 0;

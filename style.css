@@ -17,6 +17,9 @@
     --button-bg: #030;
     --button-hover-bg: #0f0;
     --button-hover-color: #000;
+    --report-bg: rgba(0, 20, 0, 0.9);
+    --report-text: #0f0;
+    --job-color: #ff0;
 }
 
 .light-mode {
@@ -29,6 +32,9 @@
     --button-bg: #007BFF; /* 파란색 버튼 */
     --button-hover-bg: #0056B3; /* 더 진한 파란색 호버 */
     --button-hover-color: #FFFFFF; /* 흰색 버튼 텍스트 */
+    --report-bg: #FFFFFF;
+    --report-text: #007BFF;
+    --job-color: #0056B3;
 }
 
 body {

@@ -58,11 +58,8 @@ function setTheme(theme) {
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
     setTheme(savedTheme);
-} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    // Check for system preference if no theme is saved
-    setTheme('light');
 } else {
-    setTheme('dark'); // Default to dark theme
+    setTheme('dark'); // Always default to dark theme if no preference is saved
 }
 
 

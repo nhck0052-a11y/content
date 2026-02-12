@@ -43,31 +43,32 @@ body {
     border-radius: 15px;
     box-shadow: 0 0 20px var(--box-shadow-color);
     background-color: var(--container-bg);
-    position: relative; /* Added for button positioning */
 }
 
 #theme-toggle {
-    position: absolute;
+    position: fixed; /* Fixed position relative to the viewport */
     top: 1rem;
-    right: 3.5rem; /* Adjusted position to make space for lang toggle */
+    right: 4.5rem; /* Adjusted position to make space for lang toggle */
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
     color: var(--text-color);
     transition: color 0.3s ease;
+    z-index: 1000; /* Ensure button is on top */
 }
 
 #lang-toggle {
-    position: absolute;
+    position: fixed; /* Fixed position relative to the viewport */
     top: 1rem;
     right: 1rem;
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: var(--text-color); /* Use text-color for consistency */
+    color: var(--text-color);
     transition: color 0.3s ease;
+    z-index: 1000; /* Ensure button is on top */
 }
 
 h1 {

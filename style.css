@@ -40,10 +40,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-image: url('https://loremflickr.com/1920/1080/neon,pixel,art,city,AI');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-image: radial-gradient(circle, var(--bg-color) 70%, var(--bg-color));
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 

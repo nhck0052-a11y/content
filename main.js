@@ -141,7 +141,8 @@ const translations = {
     }
 };
 
-let lastInputs = null; // 실시간 언어 전환을 위한 마지막 입력 데이터 저장
+let lastInputs = null;
+let currentResonanceScore = 0; // 실시간 번역을 위한 현재 점수 보존
 
 class FateResult extends HTMLElement {
     constructor() {
@@ -172,11 +173,10 @@ class FateResult extends HTMLElement {
         this.shadowRoot.appendChild(style);
     }
 
-    // 언어 변경 시 즉시 내용을 업데이트하는 메서드
     updateLanguage() {
         if (!lastInputs) return;
         const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
-        this.renderContent(fateData, false); // 타이핑 효과 없이 즉시 변경
+        this.renderContent(fateData, false);
     }
 
     displayFate(data) {
@@ -280,16 +280,19 @@ function setLanguage(lang) {
         }
     });
 
-    // 결과 창이 떠 있는 경우 리포트 내용도 즉시 번역
     const report = document.querySelector('fate-result');
-    if (report) {
-        report.updateLanguage();
-    }
+    if (report) report.updateLanguage();
 
-    // 분석 중인 경우 대기 메시지도 번역
     const analysisStatus = document.getElementById('analysis-status');
     if (analysisStatus && analysisStatus.style.display !== 'none') {
         analysisStatus.textContent = translations[lang].please_wait;
+    }
+
+    // 양자 공명 지수 레이블 실시간 업데이트
+    const synergyContainer = document.getElementById('synergy-container');
+    const synergyScoreEl = document.getElementById('synergy-score');
+    if (synergyContainer && synergyContainer.style.display !== 'none' && synergyScoreEl) {
+        synergyScoreEl.textContent = `${translations[lang].synergy_score_label} ${currentResonanceScore}%`;
     }
 
     langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
@@ -339,8 +342,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
         return;
     }
 
-    lastInputs = inputs; // 입력값 저장 (언어 전환 대비)
-
+    lastInputs = inputs;
     const extractButton = document.getElementById('extract-button');
     const analysisStatus = document.getElementById('analysis-status');
     const inputContainer = document.querySelector('.input-container');
@@ -364,15 +366,15 @@ document.getElementById('extract-button').addEventListener('click', () => {
             const synergyContainer = document.getElementById('synergy-container');
             const synergyScoreEl = document.getElementById('synergy-score');
             const healthBar = document.querySelector('.health-bar');
-            const curLang = localStorage.getItem('language') || 'ko';
-
+            
             synergyContainer.style.display = 'block';
-            let currentScore = 0;
+            currentResonanceScore = 0;
             const interval = setInterval(() => {
-                if (currentScore < fateData.score) {
-                    currentScore++;
-                    healthBar.style.width = `${currentScore}%`;
-                    synergyScoreEl.textContent = `${translations[curLang].synergy_score_label} ${currentScore}%`;
+                if (currentResonanceScore < fateData.score) {
+                    currentResonanceScore++;
+                    healthBar.style.width = `${currentResonanceScore}%`;
+                    const curLang = localStorage.getItem('language') || 'ko';
+                    synergyScoreEl.textContent = `${translations[curLang].synergy_score_label} ${currentResonanceScore}%`;
                 } else {
                     clearInterval(interval);
                     showHomeButton();

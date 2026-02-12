@@ -146,17 +146,17 @@ class FateResult extends HTMLElement {
         const synergyBarContainer = document.createElement('div');
         const synergyBar = document.createElement('div');
 
-        fateP.textContent = fate;
-        partnerP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${optimal_ai_partner}`;
-        careerP.textContent = `미래 직업: ${future_career}`;
+        // fateP.textContent = fate; // 초기 내용 할당 제거
+        // partnerP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${optimal_ai_partner}`; // 초기 내용 할당 제거
+        // careerP.textContent = `미래 직업: ${future_career}`; // 초기 내용 할당 제거
 
         synergyLabelP.classList.add('synergy-score-label');
         synergyLabelP.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}`;
 
         synergyBarContainer.classList.add('synergy-bar-container');
         synergyBar.classList.add('synergy-bar');
-        synergyBar.style.width = `${synergy_score}%`;
-        synergyBar.textContent = `${synergy_score}%`; // Display score inside the bar
+        synergyBar.style.width = `0%`; // 초기 너비 0%
+        synergyBar.textContent = `0%`; // 초기 텍스트 0%
 
         synergyBarContainer.appendChild(synergyBar);
 
@@ -168,43 +168,38 @@ class FateResult extends HTMLElement {
 
         let fullText = [
             fate,
-            `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${optimal_ai_partner}`,
-            `미래 직업: ${future_career}`
+            `\n${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${optimal_ai_partner}`,
+            `\n미래 직업: ${future_career}`
         ];
+        let targetElements = [fateP, partnerP, careerP]; // 각 텍스트가 들어갈 요소
+
         let currentTextIndex = 0;
         let charIndex = 0;
 
         const typeWriter = () => {
             if (currentTextIndex < fullText.length) {
                 if (charIndex < fullText[currentTextIndex].length) {
-                    let targetElement;
-                    if (currentTextIndex === 0) {
-                        targetElement = fateP;
-                    } else if (currentTextIndex === 1) {
-                        targetElement = partnerP;
-                    } else {
-                        targetElement = careerP;
-                    }
-                    targetElement.textContent += fullText[currentTextIndex].charAt(charIndex);
+                    targetElements[currentTextIndex].textContent += fullText[currentTextIndex].charAt(charIndex);
                     charIndex++;
                     setTimeout(typeWriter, 50);
                 } else {
                     currentTextIndex++;
                     charIndex = 0;
+                    if (currentTextIndex < fullText.length) { // 다음 텍스트가 있다면 줄바꿈 추가
+                         targetElements[currentTextIndex].textContent = ''; // 다음 요소 초기화
+                    }
                     setTimeout(typeWriter, 500); // Pause before typing next section
                 }
             } else {
-                // All text has been typed, now trigger the synergy bar animation
+                // 모든 텍스트가 타이핑되면 시너지 바 애니메이션 트리거
                 const synergyBar = this.shadowRoot.querySelector('.synergy-bar');
                 if (synergyBar) {
-                    synergyBar.style.width = `${this.synergyScore}%`; // Apply final width
+                    synergyBar.style.width = `${synergy_score}%`; // 최종 너비 적용
+                    synergyBar.textContent = `${synergy_score}%`; // 최종 텍스트 적용
                 }
             }
         };
         typeWriter();
-
-        // Store synergy score to be used after typing effect
-        this.synergyScore = synergy_score;
     }
 }
 
@@ -328,15 +323,16 @@ document.getElementById('extract-button').addEventListener('click', () => {
 
     extractButton.disabled = true;
     analysisStatus.style.display = 'block';
+    analysisStatus.textContent = ''; // 분석 시작 시 텍스트 비움
 
     const lang = localStorage.getItem('language') || 'ko';
-    const messages = translations[lang].analysis_messages;
-    let messageIndex = 0;
+    // const messages = translations[lang].analysis_messages; // 메시지 순환 제거
+    // let messageIndex = 0;
 
-    const analysisMessageInterval = setInterval(() => {
-        analysisStatus.textContent = messages[messageIndex];
-        messageIndex = (messageIndex + 1) % messages.length;
-    }, 1500);
+    // const analysisMessageInterval = setInterval(() => { // 메시지 순환 제거
+    //     analysisStatus.textContent = messages[messageIndex];
+    //     messageIndex = (messageIndex + 1) % messages.length;
+    // }, 1500);
 
     const interestFates = translations[lang].fates[interest] || translations[lang].fates["default"];
     const randomIndex = Math.floor(Math.random() * interestFates.length);
@@ -353,12 +349,21 @@ document.getElementById('extract-button').addEventListener('click', () => {
         synergy_score: selectedFateData.synergy_score // Pass synergy score
     });
 
-    const totalTextLength = selectedFateData.fate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + translations[lang].fate_prefix(name, interest).length;
-    const typingDuration = (totalTextLength * 50) + (2 * 500);
+    // const totalTextLength = selectedFateData.fate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + translations[lang].fate_prefix(name, interest).length;
+    // const typingDuration = (totalTextLength * 50) + (2 * 500); // 타이핑 시간 계산은 타이핑 로직 내부에서 처리
+
+    // setTimeout(() => {
+    //     extractButton.disabled = false;
+    //     // clearInterval(analysisMessageInterval); // 메시지 순환 제거
+    //     analysisStatus.style.display = 'none';
+    // }, typingDuration + 100);
+
+    // 타이핑 완료 후 버튼 활성화 및 상태 숨기기 (typeWriter 내부에서 처리)
+    const totalTextLength = (selectedFateData.fate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + translations[lang].fate_prefix(name, interest).length);
+    const typingDuration = (totalTextLength * 50) + (3 * 500); // 3개의 텍스트 블록 + 2번의 딜레이
 
     setTimeout(() => {
         extractButton.disabled = false;
-        clearInterval(analysisMessageInterval);
         analysisStatus.style.display = 'none';
     }, typingDuration + 100);
 });

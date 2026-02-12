@@ -90,6 +90,31 @@ p {
     margin-bottom: 2rem;
 }
 
+.pixel-character {
+    position: absolute;
+    image-rendering: pixelated;
+    width: 60px; /* 캐릭터 크기 */
+    height: 60px;
+    z-index: 10; /* 다른 콘텐츠 위에 표시 */
+    display: block; /* 기본적으로 보이도록 (다크 모드에서) */
+    transition: transform 0.3s ease; /* 호버 애니메이션 */
+}
+
+/* 각 캐릭터 위치 지정 */
+#char-1 { top: 10%; left: 5%; }
+#char-2 { bottom: 15%; right: 10%; }
+#char-3 { top: 30%; right: 20%; }
+#char-4 { bottom: 5%; left: 25%; }
+
+/* 화이트 모드일 때 픽셀 캐릭터 숨기기 */
+body.light-mode .pixel-character {
+    display: none;
+}
+
+.pixel-character:hover {
+    transform: scale(1.2) rotate(5deg); /* 호버 시 약간 확대 및 회전 */
+}
+
 .input-container {
     display: flex;
     justify-content: center;

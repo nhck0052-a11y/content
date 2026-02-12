@@ -143,90 +143,13 @@ body.light-mode .pixel-character {
     padding: 0.5rem;
     font-size: 1rem;
     border-radius: 5px;
-    cursor: pointer;
-    z-index: 10;
-    height: 2.5rem;
-    line-height: 1.5rem;
+    cursor: text; /* 텍스트 입력 커서 */
+    z-index: 1; /* 기본값으로 낮춤 */
+    height: 2.5rem; /* 높이 명시적으로 설정 */
+    line-height: 1.5rem; /* 텍스트 세로 중앙 정렬 */
 }
 
-#interest-select { /* 드롭다운 메뉴 스타일 적용 */
-    /* 모든 사용자 정의 스타일 제거하여 브라우저 기본값 사용 */
-    z-index: 10;
-    appearance: menulist; /* 브라우저의 기본 드롭다운 모양을 강제 */
-    -webkit-appearance: menulist; /* 웹킷 브라우저용 접두사 */
-    -moz-appearance: menulist; /* 모질라 브라우저용 접두사 */
-}
 
-/* Prediction Graph 스타일 */
-#prediction-graph {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    min-height: 100px;
-    border: 1px dashed var(--border-color);
-    border-radius: 10px;
-    padding: 1rem;
-    box-sizing: border-box;
-    color: var(--text-color); /* 그래프 텍스트 색상 */
-}
-
-.graph-bar-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 0.5rem;
-}
-
-.graph-label {
-    flex-basis: 40%; /* 라벨 영역 */
-    text-align: right;
-    padding-right: 0.5rem;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.graph-bar {
-    flex-basis: 60%; /* 바 영역 */
-    height: 1rem; /* 바 높이 */
-    background-color: var(--button-bg); /* 바 색상 */
-    border: 1px solid var(--border-color);
-    box-shadow: 0 0 5px var(--box-shadow-color);
-    border-radius: 2px;
-    image-rendering: pixelated;
-    transition: width 0.5s ease-out; /* 바 길이 변화 애니메이션 */
-}
-
-/* Analysis Status 스타일 */
-#analysis-status {
-    margin-top: 1rem;
-    padding: 1rem;
-    border: 1px dashed var(--border-color);
-    border-radius: 10px;
-    color: #0f0; /* 초록색 픽셀 글씨 */
-    font-family: 'DungGeunMo', monospace; /* 픽셀 폰트 적용 */
-    font-size: 1.2rem;
-    text-align: center;
-    overflow: hidden; /* 텍스트 흐름을 위한 오버플로우 숨김 */
-    white-space: nowrap; /* 줄바꿈 방지 */
-    width: 100%;
-    box-sizing: border-box;
-    display: none; /* 기본적으로 숨김 */
-    text-shadow: 0 0 5px #0f0; /* 네온 효과 */
-}
-
-/* 텍스트 흐름 애니메이션 */
-@keyframes flowText {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
-
-.flow-text {
-    animation: flowText 10s linear infinite; /* 텍스트 흐름 애니메이션 적용 */
-}
 
 #extract-button {
     background-color: var(--button-bg);

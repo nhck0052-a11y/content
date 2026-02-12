@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-key="app_title">2150 Quantum Data Fate Extractor</title>
+    <title data-key="app_title">AI 공존 적성 검사기</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 </head>
@@ -12,11 +12,18 @@
     <button id="lang-toggle" aria-label="Toggle language">🇰🇷</button>
     <span id="future-time"></span>
     <div class="container">
-        <h1 data-key="main_title">2150 Quantum Data Fate Extractor</h1>
-        <p data-key="tagline">Enter your name to extract your fate from the quantum realm.</p>
+        <h1 data-key="main_title">AI 공존 적성 검사기</h1>
+        <p data-key="tagline">인류가 2150년 어떤 AI 분야를 선택해 성장시켜야 할지 분석해주는 검사기입니다.</p>
         <div class="input-container">
-            <input type="text" id="name-input" placeholder="Enter your name" data-key="name_input_placeholder">
-            <button id="extract-button" data-key="extract_button_text">Extract Fate</button>
+            <input type="text" id="name-input" placeholder="이름을 입력하세요" data-key="name_input_placeholder">
+            <select id="interest-select" data-key="interest_select_placeholder">
+                <option value="" disabled selected>관심 분야 선택</option>
+                <option value="art">예술</option>
+                <option value="engineering">공학</option>
+                <option value="business">경영</option>
+                <option value="psychology">심리</option>
+            </select>
+            <button id="extract-button" data-key="extract_button_text">운명 추출</button>
         </div>
         <div id="analysis-status">분석 준비 중...</div>
         <div id="result-container"></div>

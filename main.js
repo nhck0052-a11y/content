@@ -82,38 +82,66 @@ const langToggle = document.getElementById('lang-toggle');
 
 const translations = {
     'en': {
-        app_title: "2150 Quantum Data Fate Extractor",
-        main_title: "2150 Quantum Data Fate Extractor",
-        tagline: "Enter your name to extract your fate from the quantum realm.",
+        app_title: "AI Coexistence Aptitude Test",
+        main_title: "AI Coexistence Aptitude Test",
+        tagline: "This test analyzes which AI field humanity should choose to grow with by 2150.",
         name_input_placeholder: "Enter your name",
-        extract_button_text: "Extract Fate",
-        fate_prefix: (name) => `${name}, your fate is: `,
-        fates: [
-            "You will become the first human to successfully teleport through a man-made wormhole.",
-            "Your consciousness will be uploaded to the galactic network, achieving digital immortality.",
-            "You will discover a new form of life on a distant exoplanet.",
-            "You will invent a device that can translate the thoughts of animals into human language.",
-            "You will be elected as the first ambassador to an alien civilization.",
-            "You will pioneer the use of quantum entanglement for instantaneous communication across galaxies.",
-            "You will lead the first mission to colonize a planet outside of our solar system."
-        ]
+        interest_select_placeholder: "Select your interest",
+        extract_button_text: "Analyze Aptitude",
+        fate_prefix: (name, interest) => `${name}, your optimal AI field for coexistence is ${interest}: `,
+        fates: {
+            "art": [
+                "You will pioneer AI-driven generative art, creating new forms of human-AI collaboration in creative fields.",
+                "Your work will integrate AI to preserve and evolve cultural heritage, making it accessible to future generations."
+            ],
+            "engineering": [
+                "You will lead the development of ethical AI systems, ensuring their safe and beneficial integration into society.",
+                "Your innovations will enable AI to solve complex global challenges, from climate change to resource management."
+            ],
+            "business": [
+                "You will revolutionize industries by implementing AI-powered strategies that promote sustainable growth and human well-being.",
+                "Your leadership will establish new economic models where AI optimizes productivity while maximizing human potential."
+            ],
+            "psychology": [
+                "You will design AI companions that enhance human mental health and emotional well-being, fostering deeper human-AI bonds.",
+                "Your research will unlock new insights into human consciousness through AI, leading to a profound understanding of ourselves."
+            ],
+            "default": [
+                "You will contribute to the harmonious integration of AI into daily life, making technology a true partner for humanity.",
+                "Your vision will guide the next generation in understanding and leveraging AI for a brighter collective future."
+            ]
+        }
     },
     'ko': {
-        app_title: "2150 양자 데이터 운명 추출기",
-        main_title: "2150 양자 데이터 운명 추출기",
-        tagline: "양자 영역에서 당신의 운명을 추출하려면 이름을 입력하세요.",
+        app_title: "AI 공존 적성 검사기",
+        main_title: "AI 공존 적성 검사기",
+        tagline: "인류가 2150년 어떤 AI 분야를 선택해 성장시켜야 할지 분석해주는 검사기입니다.",
         name_input_placeholder: "이름을 입력하세요",
-        extract_button_text: "운명 추출",
-        fate_prefix: (name) => `${name}님, 당신의 운명은: `,
-        fates: [
-            "당신은 인공 웜홀을 통해 순간 이동에 성공한 최초의 인간이 될 것입니다.",
-            "당신의 의식은 은하계 네트워크에 업로드되어 디지털 불멸을 얻을 것입니다.",
-            "당신은 머나먼 외계 행성에서 새로운 형태의 생명체를 발견할 것입니다.",
-            "당신은 동물의 생각을 인간의 언어로 번역할 수 있는 장치를 발명할 것입니다.",
-            "당신은 외계 문명의 첫 번째 대사로 선출될 것입니다.",
-            "당신은 은하계를 가로지르는 즉각적인 통신을 위해 양자 얽힘을 사용하는 선구자가 될 것입니다.",
-            "당신은 우리 태양계 밖의 행성을 식민지화하기 위한 첫 번째 임무를 이끌 것입니다."
-        ]
+        interest_select_placeholder: "관심 분야 선택",
+        extract_button_text: "적성 분석",
+        fate_prefix: (name, interest) => `${name}님, ${interest} 분야에서 당신의 AI 공존 최적 적성은: `,
+        fates: {
+            "art": [
+                "당신은 AI 기반 생성 예술을 개척하여 창의적인 분야에서 인간-AI 협업의 새로운 형태를 창조할 것입니다.",
+                "당신의 작업은 AI를 통합하여 문화 유산을 보존하고 발전시켜 미래 세대가 접근할 수 있도록 할 것입니다."
+            ],
+            "engineering": [
+                "당신은 윤리적인 AI 시스템 개발을 주도하여 사회에 안전하고 유익한 통합을 보장할 것입니다.",
+                "당신의 혁신은 AI가 기후 변화에서 자원 관리에 이르기까지 복잡한 글로벌 문제를 해결할 수 있도록 할 것입니다."
+            ],
+            "business": [
+                "당신은 지속 가능한 성장과 인간 복지를 촉진하는 AI 기반 전략을 구현하여 산업을 혁신할 것입니다.",
+                "당신의 리더십은 AI가 생산성을 최적화하는 동시에 인간의 잠재력을 극대화하는 새로운 경제 모델을 구축할 것입니다."
+            ],
+            "psychology": [
+                "당신은 인간의 정신 건강과 정서적 웰빙을 향상시키는 AI 동반자를 설계하여 인간-AI 관계를 심화시킬 것입니다.",
+                "당신의 연구는 AI를 통해 인간 의식에 대한 새로운 통찰력을 열어 우리 자신에 대한 심오한 이해로 이끌 것입니다."
+            ],
+            "default": [
+                "당신은 AI의 일상 생활 통합에 기여하여 기술을 인류의 진정한 파트너로 만들 것입니다.",
+                "당신의 비전은 더 밝은 공동의 미래를 위해 AI를 이해하고 활용하는 다음 세대를 이끌 것입니다."
+            ]
+        }
     }
 };
 
@@ -125,6 +153,12 @@ function setLanguage(lang) {
                 element.placeholder = translations[lang][key];
             } else if (element.tagName === 'BUTTON') {
                 element.textContent = translations[lang][key];
+            } else if (element.tagName === 'SELECT' && key === 'interest_select_placeholder') {
+                 // Update the default selected option text
+                const defaultOption = element.querySelector('option[disabled][selected]');
+                if (defaultOption) {
+                    defaultOption.textContent = translations[lang][key];
+                }
             } else {
                 element.textContent = translations[lang][key];
             }
@@ -153,10 +187,11 @@ langToggle.addEventListener('click', () => {
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const name = document.getElementById('name-input').value;
-    const extractButton = document.getElementById('extract-button'); // 버튼 참조 추가
+    const interest = document.getElementById('interest-select').value; // Get selected interest
+    const extractButton = document.getElementById('extract-button');
 
-    if (!name) { // 이름 입력값 유효성 검사
-        alert("이름을 입력해주세요!");
+    if (!name || !interest) { // Validate both name and interest
+        alert("이름과 관심 분야를 모두 입력/선택해주세요!");
         return;
     }
 
@@ -164,10 +199,10 @@ document.getElementById('extract-button').addEventListener('click', () => {
     extractButton.disabled = true;
 
     const currentLang = localStorage.getItem('language') || 'en';
-    const fates = translations[currentLang].fates;
-    const randomIndex = Math.floor(Math.random() * fates.length);
-    const selectedFate = fates[randomIndex];
-    const fateText = translations[currentLang].fate_prefix(name) + selectedFate; // 타이핑할 전체 텍스트
+    const interestFates = translations[currentLang].fates[interest] || translations[currentLang].fates["default"]; // Get fates based on interest or default
+    const randomIndex = Math.floor(Math.random() * interestFates.length);
+    const selectedFate = interestFates[randomIndex];
+    const fateText = translations[currentLang].fate_prefix(name, interest) + selectedFate; // Pass interest to fate_prefix
 
     let resultContainer = document.getElementById('result-container');
     resultContainer.innerHTML = '';
@@ -340,4 +375,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // 애니메이션 시작
     requestAnimationFrame(animateCharacters);
 });
-

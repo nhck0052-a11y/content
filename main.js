@@ -36,6 +36,37 @@ const translations = {
             analysis: "Field Analysis",
             job: "Recommended Class",
             comment: "System Prophecy"
+        },
+        quantum_logic: {
+            blood: {
+                A: "High-precision Stable Wave",
+                B: "Anomalous Creative Wave",
+                O: "Radiant Diffusion Wave",
+                AB: "Dual Resonance Analysis Wave"
+            },
+            gender: {
+                M: "Vector Breakthrough Energy",
+                F: "Matrix Connection Energy",
+                N: "Superposition Hybrid Energy"
+            },
+            mbti: {
+                NT: "Strategic Thinking Circuit",
+                NF: "Empathy Neural Net",
+                SJ: "Data Archiving Instinct",
+                SP: "Real-time Response Sensor"
+            },
+            keywords: {
+                A: "Precision", B: "Freedom", O: "Affinity", AB: "Cool-headedness",
+                M: "Power", F: "Connectivity", N: "Flexibility",
+                NT: "Command", NF: "Empathy", SJ: "Management", SP: "Adaptability"
+            },
+            jobs: {
+                'NT+A+M': 'Interstellar Highway Design Supervisor',
+                'NF+B+F': 'Endangered Alien Psychologist',
+                'SP+AB+M': 'Android Black Market Mechanic',
+                'SJ+O+F': 'Galactic Data Security Deputy Director',
+                'default': 'Inter-dimensional Resource Manager'
+            }
         }
     },
     ko: {
@@ -75,30 +106,42 @@ const translations = {
             analysis: "필드 분석",
             job: "권장 직업 클래스",
             comment: "시스템 예언"
+        },
+        quantum_logic: {
+            blood: {
+                A: "고정밀 안정 파동",
+                B: "변칙적 창의 파동",
+                O: "방사형 확산 파동",
+                AB: "이중 공명 분석 파동"
+            },
+            gender: {
+                M: "직진성 돌파 에너지",
+                F: "네트워크 연결 에너지",
+                N: "중첩 상태 하이브리드 에너지"
+            },
+            mbti: {
+                NT: "전략적 사고 회로",
+                NF: "공감각 뉴런망",
+                SJ: "데이터 보존 본능",
+                SP: "실시간 반응 센서"
+            },
+            keywords: {
+                A: "정밀함", B: "자유로움", O: "친화력", AB: "냉철함",
+                M: "돌파력", F: "연결성", N: "유연성",
+                NT: "지휘력", NF: "공감 능력", SJ: "관리력", SP: "적응력"
+            },
+            jobs: {
+                'NT+A+M': '행성 간 고속도로 설계 총괄자',
+                'NF+B+F': '멸종 위기 외계 생물 심리 치료사',
+                'SP+AB+M': '안드로이드 암시장 수리공',
+                'SJ+O+F': '은하 연합 데이터 보안 아카이브 부국장',
+                'default': '차원 간 자원 관리 전문가'
+            }
         }
     }
 };
 
-// Dr. Seo's QH-NPM Model Logic Data
-const QUANTUM_LOGIC = {
-    blood: {
-        A: { trait: { ko: "고정밀 안정 파동", en: "High-precision Stable Wave" }, keyword: { ko: "정밀함", en: "Precision" } },
-        B: { trait: { ko: "변칙적 창의 파동", en: "Anomalous Creative Wave" }, keyword: { ko: "자유로움", en: "Freedom" } },
-        O: { trait: { ko: "방사형 확산 파동", en: "Radiant Diffusion Wave" }, keyword: { ko: "친화력", en: "Affinity" } },
-        AB: { trait: { ko: "이중 공명 분석 파동", en: "Dual Resonance Analysis Wave" }, keyword: { ko: "냉철함", en: "Cool-headedness" } }
-    },
-    gender: {
-        M: { trait: { ko: "직진성 돌파 에너지", en: "Vector Breakthrough Energy" }, keyword: { ko: "돌파력", en: "Power" } },
-        F: { trait: { ko: "네트워크 연결 에너지", en: "Matrix Connection Energy" }, keyword: { ko: "연결성", en: "Connectivity" } },
-        N: { trait: { ko: "중첩 상태 하이브리드 에너지", en: "Superposition Hybrid Energy" }, keyword: { ko: "유연성", en: "Flexibility" } }
-    },
-    mbti: {
-        NT: { protocol: { ko: "전략적 사고 회로", en: "Strategic Thinking Circuit" }, keyword: { ko: "지휘력", en: "Command" } },
-        NF: { protocol: { ko: "공감각 뉴런망", en: "Empathy Neural Net" }, keyword: { ko: "공감 능력", en: "Empathy" } },
-        SJ: { protocol: { ko: "데이터 보존 본능", en: "Data Archiving Instinct" }, keyword: { ko: "관리력", en: "Management" } },
-        SP: { protocol: { ko: "실시간 반응 센서", en: "Real-time Response Sensor" }, keyword: { ko: "적응력", en: "Adaptability" } }
-    }
-};
+let lastInputs = null; // 실시간 언어 전환을 위한 마지막 입력 데이터 저장
 
 class FateResult extends HTMLElement {
     constructor() {
@@ -129,7 +172,18 @@ class FateResult extends HTMLElement {
         this.shadowRoot.appendChild(style);
     }
 
+    // 언어 변경 시 즉시 내용을 업데이트하는 메서드
+    updateLanguage() {
+        if (!lastInputs) return;
+        const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
+        this.renderContent(fateData, false); // 타이핑 효과 없이 즉시 변경
+    }
+
     displayFate(data) {
+        this.renderContent(data, true);
+    }
+
+    renderContent(data, useTypewriter) {
         const lang = localStorage.getItem('language') || 'ko';
         this.shadowRoot.innerHTML = `
             <style>${this.shadowRoot.querySelector('style').textContent}</style>
@@ -139,25 +193,27 @@ class FateResult extends HTMLElement {
             </div>
             <div class="section">
                 <span class="label">${translations[lang].labels.analysis}</span>
-                <div class="content" id="analysis-text"></div>
+                <div class="content" id="analysis-text">${useTypewriter ? '' : data.analysis}</div>
             </div>
             <div class="section">
                 <span class="label">${translations[lang].labels.job}</span>
-                <div class="content job-highlight" id="job-text"></div>
+                <div class="content job-highlight" id="job-text">${useTypewriter ? '' : data.job}</div>
             </div>
             <div class="section">
                 <span class="label">${translations[lang].labels.comment}</span>
-                <div class="content comment" id="comment-text"></div>
+                <div class="content comment" id="comment-text">${useTypewriter ? '' : data.comment}</div>
             </div>
         `;
 
-        this.typeEffect('analysis-text', data.analysis, 20, () => {
-            this.typeEffect('job-text', data.job, 40, () => {
-                this.typeEffect('comment-text', data.comment, 30, () => {
-                    this.dispatchEvent(new CustomEvent('report-finished'));
+        if (useTypewriter) {
+            this.typeEffect('analysis-text', data.analysis, 20, () => {
+                this.typeEffect('job-text', data.job, 40, () => {
+                    this.typeEffect('comment-text', data.comment, 30, () => {
+                        this.dispatchEvent(new CustomEvent('report-finished'));
+                    });
                 });
             });
-        });
+        }
     }
 
     typeEffect(id, text, speed, callback) {
@@ -208,7 +264,6 @@ function setLanguage(lang) {
         }
     });
     
-    // Select options translation
     const selects = ['interest-select', 'mbti-select', 'age-select', 'gender-select', 'blood-select'];
     selects.forEach(id => {
         const select = document.getElementById(id);
@@ -224,6 +279,19 @@ function setLanguage(lang) {
             });
         }
     });
+
+    // 결과 창이 떠 있는 경우 리포트 내용도 즉시 번역
+    const report = document.querySelector('fate-result');
+    if (report) {
+        report.updateLanguage();
+    }
+
+    // 분석 중인 경우 대기 메시지도 번역
+    const analysisStatus = document.getElementById('analysis-status');
+    if (analysisStatus && analysisStatus.style.display !== 'none') {
+        analysisStatus.textContent = translations[lang].please_wait;
+    }
+
     langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
 }
 
@@ -240,42 +308,19 @@ function generateFate(mbtiStr, blood, gender) {
                       mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' :
                       mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP';
 
-    const bData = QUANTUM_LOGIC.blood[blood];
-    const gData = QUANTUM_LOGIC.gender[gender];
-    const mData = QUANTUM_LOGIC.mbti[mbtiGroup];
-
+    const l = translations[lang].quantum_logic;
     const analysis = lang === 'ko' ? 
-        `${bData.trait.ko}와 ${gData.trait.ko}가 ${mData.protocol.ko}에 동기화되었습니다.` :
-        `${bData.trait.en} and ${gData.trait.en} are synchronized with the ${mData.protocol.en}.`;
-
-    const jobs = {
-        ko: {
-            'NT+A+M': '행성 간 고속도로 설계 총괄자',
-            'NF+B+F': '멸종 위기 외계 생물 심리 치료사',
-            'SP+AB+M': '안드로이드 암시장 수리공',
-            'SJ+O+F': '은하 연합 데이터 보안 아카이브 부국장',
-            'NT+B+M': '테라포밍 엔진 최적화 아키텍트',
-            'NF+A+F': '뉴럴 링크 공감 프로토콜 개발자',
-            'default': '차원 간 자원 관리 전문가'
-        },
-        en: {
-            'NT+A+M': 'Interstellar Highway Design Supervisor',
-            'NF+B+F': 'Endangered Alien Psychologist',
-            'SP+AB+M': 'Android Black Market Mechanic',
-            'SJ+O+F': 'Galactic Data Security Deputy Director',
-            'default': 'Inter-dimensional Resource Manager'
-        }
-    };
+        `${l.blood[blood]}와 ${l.gender[gender]}가 ${l.mbti[mbtiGroup]}에 동기화되었습니다.` :
+        `${l.blood[blood]} and ${l.gender[gender]} are synchronized with the ${l.mbti[mbtiGroup]}.`;
 
     const key = `${mbtiGroup}+${blood}+${gender}`;
-    const job = jobs[lang][key] || jobs[lang]['default'];
+    const job = l.jobs[key] || l.jobs['default'];
 
-    const comments = {
-        ko: `"${bData.keyword.ko}의 파동이 ${gData.keyword.ko}과 ${mData.keyword.ko}을 만나 2150년의 거대한 운명의 흐름을 결정지었습니다."`,
-        en: `"Your quantum wave of ${bData.keyword.en} combined with ${gData.keyword.en} and ${mData.keyword.en} has defined your destiny in 2150."`
-    };
+    const comment = lang === 'ko' ? 
+        `"${l.keywords[blood]}의 파동이 ${l.keywords[gender]}과 ${l.keywords[mbtiGroup]}을 만나 2150년의 거대한 운명의 흐름을 결정지었습니다."` :
+        `"Your quantum wave of ${l.keywords[blood]} combined with ${l.keywords[gender]} and ${l.keywords[mbtiGroup]} has defined your destiny in 2150."`;
 
-    return { analysis, job, comment: comments[lang], score: Math.floor(Math.random() * 30) + 70 };
+    return { analysis, job, comment, score: Math.floor(Math.random() * 30) + 70 };
 }
 
 document.getElementById('extract-button').addEventListener('click', () => {
@@ -293,6 +338,8 @@ document.getElementById('extract-button').addEventListener('click', () => {
         alert(translations[lang].alert_message);
         return;
     }
+
+    lastInputs = inputs; // 입력값 저장 (언어 전환 대비)
 
     const extractButton = document.getElementById('extract-button');
     const analysisStatus = document.getElementById('analysis-status');
@@ -317,6 +364,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
             const synergyContainer = document.getElementById('synergy-container');
             const synergyScoreEl = document.getElementById('synergy-score');
             const healthBar = document.querySelector('.health-bar');
+            const curLang = localStorage.getItem('language') || 'ko';
 
             synergyContainer.style.display = 'block';
             let currentScore = 0;
@@ -324,7 +372,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
                 if (currentScore < fateData.score) {
                     currentScore++;
                     healthBar.style.width = `${currentScore}%`;
-                    synergyScoreEl.textContent = `${translations[lang].synergy_score_label} ${currentScore}%`;
+                    synergyScoreEl.textContent = `${translations[curLang].synergy_score_label} ${currentScore}%`;
                 } else {
                     clearInterval(interval);
                     showHomeButton();

@@ -229,6 +229,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300); // Glitch 애니메이션 지속 시간 (0.3s)
     }
 
+    // 미래 시간 계산 및 표시 로직
+    const futureTimeSpan = document.getElementById('future-time');
+    const startDate = new Date('2150-03-01T00:00:00Z'); // 2150년 3월 1일 0시 0분 0초 (UTC 기준)
+
+    function updateFutureTime() {
+        if (body.classList.contains('light-mode')) {
+            futureTimeSpan.style.display = 'none'; // 라이트 모드에서는 숨김
+            return;
+        } else {
+            futureTimeSpan.style.display = 'inline'; // 다크 모드에서는 표시
+        }
+
+        const now = new Date();
+        const elapsedMilliseconds = now.getTime() - startDate.getTime();
+
+        if (elapsedMilliseconds < 0) {
+            futureTimeSpan.textContent = "2150년 3월 1일 도달 전";
+            return;
+        }
+
+        const totalSeconds = Math.floor(elapsedMilliseconds / 1000);
+        const seconds = totalSeconds % 60;
+        const totalMinutes = Math.floor(totalSeconds / 60);
+        const minutes = totalMinutes % 60;
+        const totalHours = Math.floor(totalMinutes / 60);
+        const hours = totalHours % 24;
+        const totalDays = Math.floor(totalHours / 24);
+        const days = totalDays % 365; // 대략적인 연도 계산을 위해 365일 기준으로
+        const years = Math.floor(totalDays / 365);
+
+        futureTimeSpan.textContent = `2150년 ${years}년 ${days}일 ${String(hours).padStart(2, '0')}시 ${String(minutes).padStart(2, '0')}분 ${String(seconds).padStart(2, '0')}초`;
+    }
+
+    // 1초마다 업데이트
+    setInterval(updateFutureTime, 1000);
+    // 초기 호출
+    updateFutureTime();
+
     // 애니메이션 시작
     requestAnimationFrame(animateCharacters);
 });

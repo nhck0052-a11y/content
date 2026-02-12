@@ -68,7 +68,7 @@ body {
 }
 
 #lang-toggle {
-    position: fixed; /* Fixed position relative to the viewport */
+    position: fixed;
     top: 1rem;
     right: 1rem;
     background: none;
@@ -78,6 +78,19 @@ body {
     color: var(--text-color);
     transition: color 0.3s ease;
     z-index: 1000; /* Ensure button is on top */
+}
+
+#future-time {
+    position: fixed;
+    top: 1.2rem; /* 버튼들과 세로 중앙 정렬 */
+    right: 7rem; /* lang-toggle 옆에 배치 */
+    color: #0f0; /* 초록색 픽셀 글씨 */
+    font-family: 'DungGeunMo', monospace; /* 픽셀 폰트 적용 */
+    font-size: 0.8rem; /* 작게 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    z-index: 1000;
+    text-shadow: 0 0 5px #0f0; /* 약간의 네온 효과 */
+    display: inline; /* 기본적으로 표시 (main.js에서 다크 모드일 때만 표시하도록 제어) */
 }
 
 h1 {

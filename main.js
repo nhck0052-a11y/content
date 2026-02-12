@@ -166,61 +166,70 @@ document.getElementById('extract-button').addEventListener('click', () => {
     }
 });
 
-// Pixel Character Movement Logic
-const pixelCharacters = document.querySelectorAll('.pixel-character');
-const characterStates = [];
+document.addEventListener('DOMContentLoaded', () => {
+    // Pixel Character Movement Logic
+    const pixelCharacters = document.querySelectorAll('.pixel-character');
+    const characterStates = [];
 
-pixelCharacters.forEach((char, index) => {
-    const rect = char.getBoundingClientRect(); // 초기 위치 및 크기 계산
-    characterStates.push({
-        element: char,
-        x: Math.random() * (window.innerWidth - rect.width),
-        y: Math.random() * (window.innerHeight - rect.height),
-        vx: (Math.random() - 0.5) * 4, // -2 ~ 2 범위의 속도
-        vy: (Math.random() - 0.5) * 4, // -2 ~ 2 범위의 속도
-        width: rect.width,
-        height: rect.height,
-        originalSrc: char.src // 필요없을 수도 있지만 혹시 몰라 저장
+    pixelCharacters.forEach((char) => {
+        // 초기 위치를 화면 내에서 랜덤하게 설정
+        const initialX = Math.random() * (window.innerWidth - char.offsetWidth);
+        const initialY = Math.random() * (window.innerHeight - char.offsetHeight);
+
+        char.style.left = `${initialX}px`;
+        char.style.top = `${initialY}px`;
+
+        characterStates.push({
+            element: char,
+            x: initialX,
+            y: initialY,
+            vx: (Math.random() - 0.5) * 1, // 우주에 떠다니는 느낌을 위해 속도 감소 (-0.5 ~ 0.5 범위)
+            vy: (Math.random() - 0.5) * 1, // 우주에 떠다니는 느낌을 위해 속도 감소 (-0.5 ~ 0.5 범위)
+            width: char.offsetWidth,
+            height: char.offsetHeight,
+        });
     });
-});
 
-function animateCharacters() {
-    if (body.classList.contains('light-mode')) {
-        // 라이트 모드일 때는 움직이지 않음
+    function animateCharacters() {
+        if (body.classList.contains('light-mode')) {
+            // 라이트 모드일 때는 움직이지 않음
+            // 캐릭터들의 마지막 위치를 고정시키고, 다시 다크모드로 돌아왔을 때 부드럽게 움직이도록 처리할 수도 있지만,
+            // 여기서는 단순히 움직임을 중지
+            requestAnimationFrame(animateCharacters);
+            return;
+        }
+
+        characterStates.forEach(charState => {
+            // 위치 업데이트
+            charState.x += charState.vx;
+            charState.y += charState.vy;
+
+            // 경계 충돌 감지 및 방향 전환
+            if (charState.x + charState.width > window.innerWidth || charState.x < 0) {
+                charState.vx *= -1; // X 방향 반전
+                applyGlitchEffect(charState.element);
+            }
+            if (charState.y + charState.height > window.innerHeight || charState.y < 0) {
+                charState.vy *= -1; // Y 방향 반전
+                applyGlitchEffect(charState.element);
+            }
+
+            // 새로운 위치 적용
+            charState.element.style.left = `${charState.x}px`;
+            charState.element.style.top = `${charState.y}px`;
+        });
+
         requestAnimationFrame(animateCharacters);
-        return;
     }
 
-    characterStates.forEach(charState => {
-        // 위치 업데이트
-        charState.x += charState.vx;
-        charState.y += charState.vy;
+    function applyGlitchEffect(element) {
+        element.classList.add('glitch-effect');
+        setTimeout(() => {
+            element.classList.remove('glitch-effect');
+        }, 300); // Glitch 애니메이션 지속 시간 (0.3s)
+    }
 
-        // 경계 충돌 감지 및 방향 전환
-        if (charState.x + charState.width > window.innerWidth || charState.x < 0) {
-            charState.vx *= -1; // X 방향 반전
-            applyGlitchEffect(charState.element);
-        }
-        if (charState.y + charState.height > window.innerHeight || charState.y < 0) {
-            charState.vy *= -1; // Y 방향 반전
-            applyGlitchEffect(charState.element);
-        }
-
-        // 새로운 위치 적용
-        charState.element.style.left = `${charState.x}px`;
-        charState.element.style.top = `${charState.y}px`;
-    });
-
+    // 애니메이션 시작
     requestAnimationFrame(animateCharacters);
-}
-
-function applyGlitchEffect(element) {
-    element.classList.add('glitch-effect');
-    setTimeout(() => {
-        element.classList.remove('glitch-effect');
-    }, 300); // Glitch 애니메이션 지속 시간 (0.3s)
-}
-
-// 애니메이션 시작
-requestAnimationFrame(animateCharacters);
+});
 

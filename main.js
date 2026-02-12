@@ -22,8 +22,8 @@ const translations = {
         optimal_ai_partner_label: "Matched AI Unit",
         future_career_label: "Future Resource Role",
         alert_message: "Please synchronize all biological data protocols!",
-        gender_m: "XY Protocol",
-        gender_f: "XX Protocol",
+        gender_m: "XY (Man)",
+        gender_f: "XX (Woman)",
         gender_n: "Non-Binary Code"
     },
     ko: {
@@ -49,8 +49,8 @@ const translations = {
         optimal_ai_partner_label: "매칭 AI 유닛",
         future_career_label: "미래 자원 역할",
         alert_message: "모든 생체 데이터 프로토콜을 입력해주세요!",
-        gender_m: "XY 프로토콜",
-        gender_f: "XX 프로토콜",
+        gender_m: "XY (남자)",
+        gender_f: "XX (여자)",
         gender_n: "논바이너리 코드"
     }
 };

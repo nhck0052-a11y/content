@@ -95,6 +95,11 @@ body {
     z-index: 1000;
 }
 
+.light-mode #future-time {
+    color: #007BFF; /* 화이트 모드에서는 파란색 */
+    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 파란색 네온 효과 */
+}
+
 h1 {
     font-size: 2.5rem;
     text-shadow: 0 0 10px var(--box-shadow-color);

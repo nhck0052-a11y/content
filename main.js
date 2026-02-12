@@ -145,7 +145,7 @@ class FateResult extends HTMLElement {
                 if (charIndex < fullText[currentTextIndex].length) {
                     targetElements[currentTextIndex].textContent += fullText[currentTextIndex].charAt(charIndex);
                     charIndex++;
-                    setTimeout(typeWriter, 50);
+                    setTimeout(typeWriter, 10);
                 } else {
                     currentTextIndex++;
                     charIndex = 0;
@@ -333,7 +333,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
     });
 
     const totalTextLength = (selectedFateData.fate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + translations[lang].fate_prefix(name, interest).length);
-    const typingDuration = (totalTextLength * 50) + (3 * 500);
+    const typingDuration = (totalTextLength * 10) + (3 * 500);
 
     setTimeout(() => {
         extractButton.disabled = false;

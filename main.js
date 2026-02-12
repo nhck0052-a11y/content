@@ -86,6 +86,8 @@ const translations = {
         main_title: "2150 Quantum Data Fate Extractor",
         tagline: "Enter your name to extract your fate from the quantum realm.",
         name_input_placeholder: "Enter your name",
+        job_input_placeholder: "Enter your current job",
+        age_input_placeholder: "Enter your age",
         extract_button_text: "Extract Fate",
         fate_prefix: (name) => `${name}, your fate is: `,
         fates: [
@@ -103,6 +105,8 @@ const translations = {
         main_title: "2150 양자 데이터 운명 추출기",
         tagline: "양자 영역에서 당신의 운명을 추출하려면 이름을 입력하세요.",
         name_input_placeholder: "이름을 입력하세요",
+        job_input_placeholder: "현재 직업을 입력하세요",
+        age_input_placeholder: "나이를 입력하세요",
         extract_button_text: "운명 추출",
         fate_prefix: (name) => `${name}님, 당신의 운명은: `,
         fates: [
@@ -153,6 +157,56 @@ langToggle.addEventListener('click', () => {
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const name = document.getElementById('name-input').value;
+    const job = document.getElementById('job-input').value;
+    const age = parseInt(document.getElementById('age-input').value);
+
+    // 미래 직업 예측 로직 (단순 랜덤 선택)
+    const futureJobs = [
+        "우주 탐험가", "AI 개발자", "양자 물리학자", "가상 현실 디자이너",
+        "행성 테라포밍 전문가", "유전체 편집자", "사이버 보안 영웅", "우주 엘리베이터 기술자"
+    ];
+
+    // 각 직업에 대한 임의의 확률 부여
+    const jobPredictions = futureJobs.map(fj => ({
+        job: fj,
+        probability: Math.random() * 100 // 0% ~ 100%
+    }));
+
+    // 모든 확률의 합이 100이 되도록 정규화 (선택 사항이지만 바 그래프에는 좋음)
+    const totalProbability = jobPredictions.reduce((sum, jp) => sum + jp.probability, 0);
+    const normalizedPredictions = jobPredictions.map(jp => ({
+        job: jp.job,
+        probability: (jp.probability / totalProbability) * 100
+    }));
+
+    // 확률이 높은 순서로 정렬
+    normalizedPredictions.sort((a, b) => b.probability - a.probability);
+
+    // 결과 표시 (콘솔 로그로 우선 확인)
+    console.log("미래 직업 예측 (JSON):", JSON.stringify(normalizedPredictions, null, 2));
+
+    // 픽셀 바 그래프 그리기
+    const predictionGraph = document.getElementById('prediction-graph');
+    predictionGraph.innerHTML = ''; // 이전 그래프 삭제
+
+    normalizedPredictions.forEach(prediction => {
+        const barContainer = document.createElement('div');
+        barContainer.classList.add('graph-bar-container');
+
+        const barLabel = document.createElement('span');
+        barLabel.classList.add('graph-label');
+        barLabel.textContent = `${prediction.job}: ${prediction.probability.toFixed(1)}%`;
+
+        const bar = document.createElement('div');
+        bar.classList.add('graph-bar');
+        bar.style.width = `${prediction.probability}%`; // 확률에 비례하여 바 길이 설정
+
+        barContainer.appendChild(barLabel);
+        barContainer.appendChild(bar);
+        predictionGraph.appendChild(barContainer);
+    });
+
+
     if (name) {
         const currentLang = localStorage.getItem('language') || 'en';
         const fates = translations[currentLang].fates;

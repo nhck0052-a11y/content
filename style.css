@@ -130,18 +130,64 @@ body.light-mode .pixel-character {
 
 .input-container {
     display: flex;
+    flex-direction: column; /* 입력 필드들을 세로로 배치 */
     justify-content: center;
     gap: 1rem;
     margin-bottom: 2rem;
 }
 
-#name-input {
+#name-input,
+#job-input,
+#age-input {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
     color: var(--text-color);
     padding: 0.5rem;
     font-size: 1rem;
     border-radius: 5px;
+}
+
+/* Prediction Graph 스타일 */
+#prediction-graph {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100px;
+    border: 1px dashed var(--border-color);
+    border-radius: 10px;
+    padding: 1rem;
+    box-sizing: border-box;
+    color: var(--text-color); /* 그래프 텍스트 색상 */
+}
+
+.graph-bar-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.graph-label {
+    flex-basis: 40%; /* 라벨 영역 */
+    text-align: right;
+    padding-right: 0.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.graph-bar {
+    flex-basis: 60%; /* 바 영역 */
+    height: 1rem; /* 바 높이 */
+    background-color: var(--button-bg); /* 바 색상 */
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 5px var(--box-shadow-color);
+    border-radius: 2px;
+    image-rendering: pixelated;
+    transition: width 0.5s ease-out; /* 바 길이 변화 애니메이션 */
 }
 
 #extract-button {

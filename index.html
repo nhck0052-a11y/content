@@ -16,9 +16,12 @@
         <p data-key="tagline">Enter your name to extract your fate from the quantum realm.</p>
         <div class="input-container">
             <input type="text" id="name-input" placeholder="Enter your name" data-key="name_input_placeholder">
+            <input type="text" id="job-input" placeholder="Enter your current job" data-key="job_input_placeholder">
+            <input type="number" id="age-input" placeholder="Enter your age" data-key="age_input_placeholder" min="0">
             <button id="extract-button" data-key="extract_button_text">Extract Fate</button>
         </div>
         <div id="result-container"></div>
+        <div id="prediction-graph"></div>
     </div>
     <script src="main.js"></script>
     <div id="pixel-characters">

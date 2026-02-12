@@ -355,6 +355,9 @@ document.getElementById('extract-button').addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    const analysisStatus = document.getElementById('analysis-status');
+    analysisStatus.style.display = 'none'; // 초기 로드 시 "분석 준비 중..." 숨기기
+
     const pixelCharacters = document.querySelectorAll('.pixel-character');
     const characterStates = [];
 

@@ -231,7 +231,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 미래 시간 계산 및 표시 로직
     const futureTimeSpan = document.getElementById('future-time');
-    const startDate = new Date('2150-03-01T00:00:00Z'); // 2150년 3월 1일 0시 0분 0초 (UTC 기준)
+    // 2150년 3월 1일 3시 1분 0초 (UTC 기준 - 정확한 시작 시점을 위해 Z 사용)
+    const initialStartDate = new Date('2150-03-01T03:01:00Z');
+    let elapsedSecondsFromInitial = 0; // 초기 시작 시점으로부터 경과한 가상 초
+
+    // 페이지 로드 시 initialStartDate와 현재 시간의 차이를 계산하여 elapsedSecondsFromInitial 초기화
+    // 이는 페이지 새로고침 시에도 시간이 0부터 시작하지 않고 이어서 증가하도록 함
+    const now = new Date();
+    const diffSecondsAtLoad = Math.floor((now.getTime() - initialStartDate.getTime()) / 1000);
+    if (diffSecondsAtLoad > 0) {
+        elapsedSecondsFromInitial = diffSecondsAtLoad;
+    }
+
 
     function updateFutureTime() {
         if (body.classList.contains('light-mode')) {
@@ -241,15 +252,11 @@ document.addEventListener('DOMContentLoaded', () => {
             futureTimeSpan.style.display = 'inline'; // 다크 모드에서는 표시
         }
 
-        const now = new Date();
-        const elapsedMilliseconds = now.getTime() - startDate.getTime();
+        // elapsedSecondsFromInitial를 1초마다 증가
+        elapsedSecondsFromInitial++;
 
-        if (elapsedMilliseconds < 0) {
-            futureTimeSpan.textContent = "2150년 3월 1일 도달 전";
-            return;
-        }
-
-        const totalSeconds = Math.floor(elapsedMilliseconds / 1000);
+        // 이제 elapsedSecondsFromInitial을 기반으로 시간 계산
+        const totalSeconds = elapsedSecondsFromInitial;
         const seconds = totalSeconds % 60;
         const totalMinutes = Math.floor(totalSeconds / 60);
         const minutes = totalMinutes % 60;

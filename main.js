@@ -4,6 +4,7 @@ const translations = {
         main_title: "AI Coexistence Aptitude Tester",
         tagline: "This tester analyzes which AI field humanity should choose to grow in 2150.",
         name_input_placeholder: "Enter your name",
+        interest_select_placeholder: "Select your interest",
         extract_button_text: "Extract Destiny",
         analysis_status_preparing: "Preparing analysis...",
         analysis_messages: [
@@ -13,25 +14,42 @@ const translations = {
             "Synthesizing your destiny with AI trends...",
             "Finalizing the prophecy..."
         ],
-        fates: [
-            "Your destiny is intertwined with AI in the realm of innovation. You will pioneer new forms of creative expression.",
-            "You are destined to be a muse for AI, guiding its algorithmic processes to create masterpieces.",
-            "Your path is in building the very infrastructure of AI. You will design the next generation of intelligent systems.",
-            "You will engineer the perfect symbiotic relationship between humans and AI, creating a future of seamless integration.",
-            "You possess the vision to integrate AI into global markets, leading ventures that redefine industries.",
-            "Your knack for strategy will be amplified by AI, allowing you to optimize complex systems and drive innovation.",
-            "Your empathy will be crucial in developing AI that understands and supports human well-being.",
-            "You will unlock the secrets of the human mind with AI, fostering a new era of cognitive understanding.",
-            "Your future with AI is bright and full of unexpected opportunities."
-        ],
-        fate_prefix: (name) => `Your AI destiny, ${name}: `,
-        alert_message: "Please enter your name!"
+        fates: {
+            art: [
+                { fate: "Your destiny is intertwined with AI in the realm of art. You will pioneer new forms of creative expression.", optimal_ai_partner: "Creative AI (e.g., GANs, Style Transfer AI)", future_career: "AI Art Director, Digital Curator" },
+                { fate: "You are destined to be a muse for AI artists, guiding their algorithmic brushes to create masterpieces.", optimal_ai_partner: "Generative AI, Interactive Art AI", future_career: "AI Art Collaborator, Experiential Artist" }
+            ],
+            engineering: [
+                { fate: "Your path is in building the very infrastructure of AI. You will design the next generation of intelligent systems.", optimal_ai_partner: "Quantum AI, Neuromorphic Computing AI", future_career: "AI Systems Architect, Robotics Engineer" },
+                { fate: "You will engineer the perfect symbiotic relationship between humans and AI, creating a future of seamless integration.", optimal_ai_partner: "Human-AI Interface AI, Autonomous System AI", future_career: "AI Integration Specialist, Bio-AI Engineer" }
+            ],
+            business: [
+                { fate: "You possess the vision to integrate AI into global markets, leading ventures that redefine industries.", optimal_ai_partner: "Predictive Analytics AI, Economic Simulation AI", future_career: "AI Business Strategist, Automated Market Analyst" },
+                { fate: "Your knack for strategy will be amplified by AI, allowing you to optimize complex systems and drive innovation.", optimal_ai_partner: "Optimization AI, Supply Chain AI", future_career: "AI-driven Entrepreneur, Smart Logistics Manager" }
+            ],
+            psychology: [
+                { fate: "Your empathy will be crucial in developing AI that understands and supports human well-being.", optimal_ai_partner: "Emotional Intelligence AI, Therapeutic AI", future_career: "AI Empathy Designer, Digital Therapist" },
+                { fate: "You will unlock the secrets of the human mind with AI, fostering a new era of cognitive understanding.", optimal_ai_partner: "Cognitive AI, Behavioral Analysis AI", future_career: "AI-Assisted Psychologist, Neuro-AI Researcher" }
+            ],
+            default: [
+                { fate: "Your future with AI is bright and full of unexpected opportunities.", optimal_ai_partner: "Adaptive Learning AI", future_career: "AI Opportunity Seeker" }
+            ]
+        },
+        fate_prefix: (name, interest) => `Your AI destiny in ${translations.en.interest_map[interest] || interest} field, ${name}: `,
+        alert_message: "Please enter your name and select your interest!",
+        interest_map: {
+            art: "Art",
+            engineering: "Engineering",
+            business: "Business",
+            psychology: "Psychology"
+        }
     },
     ko: {
         app_title: "AI 공존 적성 검사기",
         main_title: "AI 공존 적성 검사기",
         tagline: "인류가 2150년 어떤 AI 분야를 선택해 성장시켜야 할지 분석해주는 검사기입니다.",
         name_input_placeholder: "이름을 입력하세요",
+        interest_select_placeholder: "관심 분야 선택",
         extract_button_text: "운명 추출",
         analysis_status_preparing: "분석 준비 중...",
         analysis_messages: [
@@ -41,15 +59,35 @@ const translations = {
             "당신의 운명을 AI 트렌드와 융합 중...",
             "예언을 최종 확정 중..."
         ],
-        fates: [
-            "당신은 AI와 함께 혁신적인 미래를 만들어갈 선구자가 될 것입니다.",
-            "AI의 도움으로 당신의 잠재력을 최대한 발휘하고 위대한 업적을 달성할 것입니다.",
-            "당신의 이름은 AI 역사에 길이 남을 것입니다.",
-            "AI가 당신의 가장 든든한 조력자가 되어 성공의 길을 열어줄 것입니다.",
-            "미지의 AI 세계를 탐험하며 놀라운 발견을 하게 될 것입니다."
-        ],
-        fate_prefix: (name) => `${name}님의 AI 운세: `,
-        alert_message: "이름을 입력해주세요!"
+        fates: {
+            art: [
+                { fate: "당신의 운명은 예술 분야에서 AI와 얽혀 있습니다. 새로운 형태의 창의적 표현을 개척할 것입니다.", optimal_ai_partner: "창작 AI (예: GANs, 스타일 전이 AI)", future_career: "AI 아트 디렉터, 디지털 큐레이터" },
+                { fate: "당신은 AI 예술가들의 뮤즈가 되어, 그들의 알고리즘 붓이 걸작을 만들도록 이끌 것입니다.", optimal_ai_partner: "생성 AI, 인터랙티브 아트 AI", future_career: "AI 아트 협업자, 체험 예술가" }
+            ],
+            engineering: [
+                { fate: "당신의 길은 AI의 인프라를 구축하는 것입니다. 다음 세대의 지능형 시스템을 설계할 것입니다.", optimal_ai_partner: "양자 AI, 뉴로모픽 컴퓨팅 AI", future_career: "AI 시스템 설계자, 로봇 공학자" },
+                { fate: "당신은 인간과 AI 간의 완벽한 공생 관계를 설계하여, 끊김 없는 통합의 미래를 창조할 것입니다.", optimal_ai_partner: "인간-AI 인터페이스 AI, 자율 시스템 AI", future_career: "AI 통합 전문가, 바이오-AI 엔지니어" }
+            ],
+            business: [
+                { fate: "당신은 AI를 글로벌 시장에 통합하여 산업을 재정의하는 벤처를 이끌 비전을 가지고 있습니다.", optimal_ai_partner: "예측 분석 AI, 경제 시뮬레이션 AI", future_career: "AI 비즈니스 전략가, 자동화 시장 분석가" },
+                { fate: "당신의 전략적인 재능은 AI에 의해 증폭되어, 복잡한 시스템을 최적화하고 혁신을 주도할 것입니다.", optimal_ai_partner: "최적화 AI, 공급망 AI", future_career: "AI 기반 기업가, 스마트 물류 관리자" }
+            ],
+            psychology: [
+                { fate: "당신의 공감 능력은 인간의 웰빙을 이해하고 지원하는 AI를 개발하는 데 중요할 것입니다.", optimal_ai_partner: "감성 지능 AI, 치료 AI", future_career: "AI 공감 디자이너, 디지털 치료사" },
+                { fate: "당신은 AI와 함께 인간 마음의 비밀을 밝혀내어, 인지 이해의 새로운 시대를 열 것입니다.", optimal_ai_partner: "인지 AI, 행동 분석 AI", future_career: "AI 보조 심리학자, 신경-AI 연구원" }
+            ],
+            default: [
+                { fate: "AI와 함께하는 당신의 미래는 밝고 예상치 못한 기회로 가득할 것입니다.", optimal_ai_partner: "적응형 학습 AI", future_career: "AI 기회 탐색가" }
+            ]
+        },
+        fate_prefix: (name, interest) => `${name}님의 ${translations.ko.interest_map[interest] || interest} 분야 AI 운세: `,
+        alert_message: "이름과 관심 분야를 모두 입력/선택해주세요!",
+        interest_map: {
+            art: "예술",
+            engineering: "공학",
+            business: "경영",
+            psychology: "심리"
+        }
     }
 };
 
@@ -72,19 +110,54 @@ class FateResult extends HTMLElement {
         this.shadowRoot.appendChild(style);
     }
 
-    displayFate({ fate }) { // Simplified to only take fate
+    displayFate({ fate, optimal_ai_partner, future_career }) {
         this.shadowRoot.innerHTML = ''; // Clear previous content
 
         const fateP = document.createElement('p');
-        fateP.textContent = fate;
+        const partnerP = document.createElement('p');
+        const careerP = document.createElement('p');
+
         this.shadowRoot.appendChild(fateP);
+        this.shadowRoot.appendChild(partnerP);
+        this.shadowRoot.appendChild(careerP);
+
+        let fullText = [
+            fate,
+            `\n최적의 AI 파트너: ${optimal_ai_partner}`,
+            `\n미래 직업: ${future_career}`
+        ];
+        let currentTextIndex = 0;
+        let charIndex = 0;
+
+        const typeWriter = () => {
+            if (currentTextIndex < fullText.length) {
+                if (charIndex < fullText[currentTextIndex].length) {
+                    let targetElement;
+                    if (currentTextIndex === 0) {
+                        targetElement = fateP;
+                    } else if (currentTextIndex === 1) {
+                        targetElement = partnerP;
+                    } else {
+                        targetElement = careerP;
+                    }
+                    targetElement.textContent += fullText[currentTextIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeWriter, 50);
+                } else {
+                    currentTextIndex++;
+                    charIndex = 0;
+                    setTimeout(typeWriter, 500); // Pause before typing next section
+                }
+            }
+        };
+        typeWriter();
     }
 }
 
 customElements.define('fate-result', FateResult);
 
 const themeToggle = document.getElementById('theme-toggle');
-const langToggle = document.getElementById('lang-toggle'); // Define langToggle here
+const langToggle = document.getElementById('lang-toggle');
 const body = document.body;
 
 function setTheme(theme) {
@@ -107,7 +180,7 @@ const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
     setTheme(savedTheme);
 } else {
-    setTheme('dark'); // Default to dark mode
+    setTheme('dark');
 }
 
 themeToggle.addEventListener('click', () => {
@@ -129,11 +202,23 @@ function setLanguage(lang) {
         if (translations[lang] && translations[lang][key]) {
             if (element.tagName === 'INPUT') {
                 element.placeholder = translations[lang][key];
-            } else {
+            } else if (element.tagName === 'OPTION' && element.value === '') { // Add this for placeholder option
+                element.textContent = translations[lang][key];
+            }else {
                 element.textContent = translations[lang][key];
             }
         }
     });
+
+    // Update specific option texts for 'interest-select'
+    const interestSelect = document.getElementById('interest-select');
+    if (interestSelect) {
+        Array.from(interestSelect.options).forEach(option => {
+            if (option.value !== '') { // Skip the placeholder option
+                option.textContent = translations[lang].interest_map[option.value];
+            }
+        });
+    }
 
     if (lang === 'ko') {
         langToggle.textContent = '🇺🇸';
@@ -142,21 +227,47 @@ function setLanguage(lang) {
     }
 }
 
-const currentLang = localStorage.getItem('language') || 'ko'; // Default to Korean
-setLanguage(currentLang);
+// Add function to update interest options dynamically
+function updateInterestOptions(lang) {
+    const interestSelect = document.getElementById('interest-select');
+    if (interestSelect) {
+        // Clear existing options except the disabled placeholder
+        Array.from(interestSelect.options).forEach(option => {
+            if (option.value !== '') {
+                option.remove();
+            }
+        });
+
+        // Add options based on the current language's interest_map
+        const interestMap = translations[lang].interest_map;
+        for (const key in interestMap) {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = interestMap[key];
+            interestSelect.appendChild(option);
+        }
+    }
+}
+
+// Initial setup for interest options based on current language
+const initialLang = localStorage.getItem('language') || 'ko';
+setLanguage(initialLang);
+updateInterestOptions(initialLang); // Call after setLanguage
 
 langToggle.addEventListener('click', () => {
-    const currentLang = localStorage.getItem('language') || 'ko'; // Read current language inside the event listener
+    const currentLang = localStorage.getItem('language') || 'ko';
     const newLang = currentLang === 'ko' ? 'en' : 'ko';
     setLanguage(newLang);
+    updateInterestOptions(newLang); // Update interest options when language changes
 });
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const name = document.getElementById('name-input').value;
+    const interest = document.getElementById('interest-select').value; // Get selected interest
     const extractButton = document.getElementById('extract-button');
     const analysisStatus = document.getElementById('analysis-status');
 
-    if (!name) {
+    if (!name || !interest) {
         alert(translations[localStorage.getItem('language') || 'ko'].alert_message);
         return;
     }
@@ -173,17 +284,22 @@ document.getElementById('extract-button').addEventListener('click', () => {
         messageIndex = (messageIndex + 1) % messages.length;
     }, 1500);
 
-    const fates = translations[lang].fates;
-    const randomIndex = Math.floor(Math.random() * fates.length);
-    const selectedFate = fates[randomIndex];
+    const interestFates = translations[lang].fates[interest] || translations[lang].fates["default"];
+    const randomIndex = Math.floor(Math.random() * interestFates.length);
+    const selectedFateData = interestFates[randomIndex];
 
     let resultContainer = document.getElementById('result-container');
     resultContainer.innerHTML = '';
     const fateResult = document.createElement('fate-result');
     resultContainer.appendChild(fateResult);
-    fateResult.displayFate({ fate: `${translations[lang].fate_prefix(name)}${selectedFate}` });
+    fateResult.displayFate({
+        fate: `${translations[lang].fate_prefix(name, interest)}${selectedFateData.fate}`,
+        optimal_ai_partner: selectedFateData.optimal_ai_partner,
+        future_career: selectedFateData.future_career
+    });
 
-    const typingDuration = (selectedFate.length + name.length + translations[lang].fate_prefix(name).length) * 50;
+    const totalTextLength = selectedFateData.fate.length + selectedFateData.optimal_ai_partner.length + selectedFateData.future_career.length + translations[lang].fate_prefix(name, interest).length;
+    const typingDuration = (totalTextLength * 50) + (2 * 500);
 
     setTimeout(() => {
         extractButton.disabled = false;

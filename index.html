@@ -16,6 +16,13 @@
         <p data-key="tagline">인류가 2150년 어떤 AI 분야를 선택해 성장시켜야 할지 분석해주는 검사기입니다.</p>
         <div class="input-container">
             <input type="text" id="name-input" placeholder="이름을 입력하세요" data-key="name_input_placeholder">
+            <select id="interest-select">
+                <option value="" disabled selected data-key="interest_select_placeholder">관심 분야 선택</option>
+                <option value="art" data-key="interest_map_art">예술</option>
+                <option value="engineering" data-key="interest_map_engineering">공학</option>
+                <option value="business" data-key="interest_map_business">경영</option>
+                <option value="psychology" data-key="interest_map_psychology">심리</option>
+            </select>
             <button id="extract-button" data-key="extract_button_text">운명 추출</button>
         </div>
         <div id="analysis-status">분석 준비 중...</div>

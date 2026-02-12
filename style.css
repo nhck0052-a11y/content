@@ -246,48 +246,37 @@ fate-result::part(fate-border) {
 
 @keyframes glitch {
     0% {
-        transform: translate(0);
-        filter: hue-rotate(0deg) drop-shadow(0 0 0 #ff0000);
+        transform: translate(0) skew(0);
     }
     10% {
-        transform: translate(-2px, 2px);
-        filter: hue-rotate(120deg) drop-shadow(2px 2px 5px #ff0000);
+        transform: translate(-5px, -5px) skew(5deg, 5deg);
     }
     20% {
-        transform: translate(2px, -2px);
-        filter: hue-rotate(240deg) drop-shadow(-2px -2px 5px #00ff00);
+        transform: translate(5px, 5px) skew(-5deg, -5deg);
     }
     30% {
-        transform: translate(-2px, -2px);
-        filter: hue-rotate(0deg) drop-shadow(2px -2px 5px #0000ff);
+        transform: translate(-5px, 5px) skew(5deg, -5deg);
     }
     40% {
-        transform: translate(2px, 2px);
-        filter: hue-rotate(120deg) drop-shadow(-2px 2px 5px #ff00ff);
+        transform: translate(5px, -5px) skew(-5deg, 5deg);
     }
     50% {
-        transform: translate(0);
-        filter: hue-rotate(240deg) drop-shadow(0 0 0 #ffff00);
+        transform: translate(0) skew(0);
     }
     60% {
-        transform: translate(-2px, 2px);
-        filter: hue-rotate(0deg) drop-shadow(2px 2px 5px #00ffff);
+        transform: translate(-5px, -5px) skew(5deg, 5deg);
     }
     70% {
-        transform: translate(2px, -2px);
-        filter: hue-rotate(120deg) drop-shadow(-2px -2px 5px #ff0000);
+        transform: translate(5px, 5px) skew(-5deg, -5deg);
     }
     80% {
-        transform: translate(-2px, -2px);
-        filter: hue-rotate(240deg) drop-shadow(2px -2px 5px #00ff00);
+        transform: translate(-5px, 5px) skew(5deg, -5deg);
     }
     90% {
-        transform: translate(2px, 2px);
-        filter: hue-rotate(0deg) drop-shadow(-2px 2px 5px #0000ff);
+        transform: translate(5px, -5px) skew(-5deg, 5deg);
     }
     100% {
-        transform: translate(0);
-        filter: hue-rotate(120deg) drop-shadow(0 0 0 #ff00ff);
+        transform: translate(0) skew(0);
     }
 }
 

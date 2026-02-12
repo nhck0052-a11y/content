@@ -169,9 +169,8 @@ class FateResult extends HTMLElement {
                             synergyScoreEl.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${currentScore}%`;
                         } else {
                             clearInterval(interval);
-                            healthBar.style.width = `${synergy_score}%`;
-                            synergyScoreEl.textContent = `${translations[localStorage.getItem('language') || 'ko'].synergy_score_label} ${synergy_score}%`;
                             
+                            // 애니메이션 완료 후 홈 버튼 표시
                             const globalHomeButtonContainer = document.getElementById('global-home-button-container');
                             if (globalHomeButtonContainer) {
                                 globalHomeButtonContainer.innerHTML = '';
@@ -184,7 +183,7 @@ class FateResult extends HTMLElement {
                                 globalHomeButtonContainer.appendChild(globalHomeButton);
                             }
                         }
-                    }, 50);
+                    }, 30); // 애니메이션 속도 약간 조정
                 }
             }
         };

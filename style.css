@@ -191,3 +191,74 @@ p {
 #char-6 { bottom: 20%; right: 5%; }
 #char-7 { top: 40%; right: 25%; }
 #char-8 { bottom: 10%; left: 30%; }
+
+#synergy-container {
+    margin-top: 2rem;
+    display: none;
+}
+
+#synergy-score {
+    font-family: 'DungGeunMo', monospace;
+    font-size: 1.4rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    text-shadow: 0 0 5px var(--box-shadow-color);
+}
+
+.health-bar-container {
+    width: 80%;
+    margin: 0 auto;
+    height: 24px;
+    border: 3px solid var(--border-color);
+    background-color: var(--input-bg);
+    padding: 2px;
+    box-sizing: content-box;
+    position: relative;
+}
+
+.health-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #0f0;
+    /* 픽셀 칸 구분 효과 */
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px);
+    background-size: 12px 100%;
+    box-shadow: 0 0 15px #0f0;
+    transition: width 0.1s linear;
+}
+
+.light-mode .health-bar {
+    background-color: #2ecc71;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+}
+
+#global-home-button-container {
+    position: fixed;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-button-global {
+    background: var(--container-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.6rem 1.5rem;
+    font-family: 'DungGeunMo', monospace;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px var(--box-shadow-color);
+    text-transform: uppercase;
+}
+
+.home-button-global:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-color);
+    transform: scale(1.1);
+}

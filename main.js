@@ -354,18 +354,7 @@ function applyGlitchEffect(element) {
     element.classList.add('glitch-effect');
     setTimeout(() => {
         element.classList.remove('glitch-effect');
-    }, 500);
-
-    for (let i = 0; i < 10; i++) {
-        const glitter = document.createElement('div');
-        glitter.classList.add('glitter');
-        glitter.style.left = `${Math.random() * 100}%`;
-        glitter.style.top = `${Math.random() * 100}%`;
-        element.appendChild(glitter);
-        setTimeout(() => {
-            glitter.remove();
-        }, 1000);
-    }
+    }, 400); // .glitch-effect 애니메이션 시간과 맞춤
 }
 
 function initCharacters() {

@@ -24,7 +24,11 @@ class FateResult extends HTMLElement {
         }
 
         const p = document.createElement('p');
+        // p.textContent += fate.charAt(i); 대신 innerHTML 사용
+        p.innerHTML = fate; // HTML 문자열을 직접 렌더링
+
         this.shadowRoot.appendChild(p);
+        /*
         let i = 0;
         const typeWriter = () => {
             if (i < fate.length) {
@@ -34,6 +38,7 @@ class FateResult extends HTMLElement {
             }
         };
         typeWriter();
+        */
     }
 }
 
@@ -86,8 +91,12 @@ const translations = {
         main_title: "2150 Quantum Data Fate Extractor",
         tagline: "Enter your name to extract your fate from the quantum realm.",
         name_input_placeholder: "Enter your name",
-        job_input_placeholder: "Enter your current job",
-        age_input_placeholder: "Enter your age",
+        interest_select_placeholder: "Select your interest",
+        select_interest_option: "Select your interest",
+        interest_art: "Art",
+        interest_engineering: "Engineering",
+        interest_business: "Business",
+        interest_psychology: "Psychology",
         extract_button_text: "Extract Fate",
         fate_prefix: (name) => `${name}, your fate is: `,
         fates: [
@@ -105,8 +114,12 @@ const translations = {
         main_title: "2150 양자 데이터 운명 추출기",
         tagline: "양자 영역에서 당신의 운명을 추출하려면 이름을 입력하세요.",
         name_input_placeholder: "이름을 입력하세요",
-        job_input_placeholder: "현재 직업을 입력하세요",
-        age_input_placeholder: "나이를 입력하세요",
+        interest_select_placeholder: "관심 분야를 선택하세요",
+        select_interest_option: "관심 분야를 선택하세요",
+        interest_art: "예술",
+        interest_engineering: "공학",
+        interest_business: "경영",
+        interest_psychology: "심리",
         extract_button_text: "운명 추출",
         fate_prefix: (name) => `${name}님, 당신의 운명은: `,
         fates: [
@@ -157,67 +170,92 @@ langToggle.addEventListener('click', () => {
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const name = document.getElementById('name-input').value;
-    const job = document.getElementById('job-input').value;
-    const age = parseInt(document.getElementById('age-input').value);
-
-    // 미래 직업 예측 로직 (단순 랜덤 선택)
-    const futureJobs = [
-        "우주 탐험가", "AI 개발자", "양자 물리학자", "가상 현실 디자이너",
-        "행성 테라포밍 전문가", "유전체 편집자", "사이버 보안 영웅", "우주 엘리베이터 기술자"
-    ];
-
-    // 각 직업에 대한 임의의 확률 부여
-    const jobPredictions = futureJobs.map(fj => ({
-        job: fj,
-        probability: Math.random() * 100 // 0% ~ 100%
-    }));
-
-    // 모든 확률의 합이 100이 되도록 정규화 (선택 사항이지만 바 그래프에는 좋음)
-    const totalProbability = jobPredictions.reduce((sum, jp) => sum + jp.probability, 0);
-    const normalizedPredictions = jobPredictions.map(jp => ({
-        job: jp.job,
-        probability: (jp.probability / totalProbability) * 100
-    }));
-
-    // 확률이 높은 순서로 정렬
-    normalizedPredictions.sort((a, b) => b.probability - a.probability);
-
-    // 결과 표시 (콘솔 로그로 우선 확인)
-    console.log("미래 직업 예측 (JSON):", JSON.stringify(normalizedPredictions, null, 2));
-
-    // 픽셀 바 그래프 그리기
+    const interest = document.getElementById('interest-select').value;
+    const resultContainer = document.getElementById('result-container');
     const predictionGraph = document.getElementById('prediction-graph');
-    predictionGraph.innerHTML = ''; // 이전 그래프 삭제
+    const analysisStatus = document.getElementById('analysis-status');
 
-    normalizedPredictions.forEach(prediction => {
-        const barContainer = document.createElement('div');
-        barContainer.classList.add('graph-bar-container');
+    // 입력값 유효성 검사
+    if (!name || !interest) {
+        alert("이름과 관심 분야를 입력해주세요!");
+        return;
+    }
 
-        const barLabel = document.createElement('span');
-        barLabel.classList.add('graph-label');
-        barLabel.textContent = `${prediction.job}: ${prediction.probability.toFixed(1)}%`;
+    // 기존 결과 및 그래프 숨기기/지우기
+    resultContainer.innerHTML = '';
+    predictionGraph.innerHTML = '';
+    predictionGraph.style.display = 'none';
 
-        const bar = document.createElement('div');
-        bar.classList.add('graph-bar');
-        bar.style.width = `${prediction.probability}%`; // 확률에 비례하여 바 길이 설정
-
-        barContainer.appendChild(barLabel);
-        barContainer.appendChild(bar);
-        predictionGraph.appendChild(barContainer);
-    });
+    // 분석 중 UI 활성화
+    analysisStatus.style.display = 'block';
+    analysisStatus.innerHTML = '<span class="flow-text">양자 뇌 구조 스캐닝 중... AI 최적화 시뮬레이션 가동... 미래 AI 파트너 예측...</span>';
 
 
-    if (name) {
+    // 시뮬레이션된 분석 시간
+    const analysisDuration = 3000; // 3초
+
+    setTimeout(() => {
+        // 분석 중 UI 비활성화
+        analysisStatus.style.display = 'none';
+        analysisStatus.innerHTML = ''; // 텍스트 지우기
+        analysisStatus.querySelector('span').classList.remove('flow-text');
+
+
+        // '최적의 AI 파트너'와 '미래 직업' 추천 로직 (규칙 기반 시뮬레이션)
+        const aiPartners = {
+            'art': { partner: "AI 예술 코디네이터 '뮤즈'", job: "미래 예술 큐레이터" },
+            'engineering': { partner: "AI 설계 보조 '프로메테우스'", job: "첨단 인프라 엔지니어" },
+            'business': { partner: "AI 시장 분석가 '오라클'", job: "데이터 기반 전략가" },
+            'psychology': { partner: "AI 감정 분석가 '에코'", job: "디지털 심리 상담사" },
+        };
+
+        const recommended = aiPartners[interest];
+
+        // AI 시너지 수치 계산 (관심 분야와 랜덤 요소를 결합)
+        const aiSynergyScore = Math.floor(Math.random() * 40) + 60; // 60-99%
+
+        // 결과 표시 (운명 추출 대신 AI 분석 결과 표시)
         const currentLang = localStorage.getItem('language') || 'en';
-        const fates = translations[currentLang].fates;
-        const randomIndex = Math.floor(Math.random() * fates.length);
-        const fate = fates[randomIndex];
-        let resultContainer = document.getElementById('result-container');
-        resultContainer.innerHTML = '';
+        const aiResultText = `
+            <p>${name}님, 당신의 분석 결과입니다:</p>
+            <p>관심 분야: ${interest}</p>
+            <p>최적의 AI 파트너: ${recommended.partner}</p>
+            <p>미래 직업: ${recommended.job}</p>
+            <p>AI 시너지 수치: ${aiSynergyScore}%</p>
+        `;
         const fateResult = document.createElement('fate-result');
         resultContainer.appendChild(fateResult);
-        fateResult.displayFate(translations[currentLang].fate_prefix(name) + fate);
-    }
+        fateResult.displayFate(aiResultText); // HTML 렌더링 가능
+
+
+        // 바 그래프 데이터 준비 (AI 시너지 수치)
+        const synergyPrediction = [{
+            job: "AI 시너지",
+            probability: aiSynergyScore
+        }];
+
+        // 픽셀 바 그래프 그리기
+        predictionGraph.innerHTML = ''; // 이전 그래프 삭제
+        predictionGraph.style.display = 'flex'; // 그래프 다시 표시
+
+        synergyPrediction.forEach(prediction => {
+            const barContainer = document.createElement('div');
+            barContainer.classList.add('graph-bar-container');
+
+            const barLabel = document.createElement('span');
+            barLabel.classList.add('graph-label');
+            barLabel.textContent = `${prediction.job}: ${prediction.probability.toFixed(0)}%`; // 소수점 없이 표시
+
+            const bar = document.createElement('div');
+            bar.classList.add('graph-bar');
+            bar.style.width = `${prediction.probability}%`; // 확률에 비례하여 바 길이 설정
+
+            barContainer.appendChild(barLabel);
+            barContainer.appendChild(bar);
+            predictionGraph.appendChild(barContainer);
+        });
+
+    }, analysisDuration); // 분석 시간 후 결과 표시
 });
 
 document.addEventListener('DOMContentLoaded', () => {

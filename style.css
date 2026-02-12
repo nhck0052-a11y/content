@@ -137,14 +137,19 @@ body.light-mode .pixel-character {
 }
 
 #name-input,
-#job-input,
-#age-input {
+#interest-select { /* 드롭다운 메뉴 스타일 적용 */
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
     color: var(--text-color);
     padding: 0.5rem;
     font-size: 1rem;
     border-radius: 5px;
+    appearance: none; /* 기본 드롭다운 화살표 숨기기 */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%230f0%22%20d%3D%22M287%20197.3l-118.4-118.4c-6.2-6.2-16.4-6.2-22.6%200L5.3%20197.3c-9.2%209.2-3.8%2024.3%208.5%2024.3h273.6c12.3%200%2017.7-15.2%208.5-24.3z%22%2F%3E%3C%2Fsvg%3E'); /* 사용자 정의 화살표 */
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%;
+    background-size: 0.65em auto;
+    cursor: pointer;
 }
 
 /* Prediction Graph 스타일 */
@@ -188,6 +193,34 @@ body.light-mode .pixel-character {
     border-radius: 2px;
     image-rendering: pixelated;
     transition: width 0.5s ease-out; /* 바 길이 변화 애니메이션 */
+}
+
+/* Analysis Status 스타일 */
+#analysis-status {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px dashed var(--border-color);
+    border-radius: 10px;
+    color: #0f0; /* 초록색 픽셀 글씨 */
+    font-family: 'DungGeunMo', monospace; /* 픽셀 폰트 적용 */
+    font-size: 1.2rem;
+    text-align: center;
+    overflow: hidden; /* 텍스트 흐름을 위한 오버플로우 숨김 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    width: 100%;
+    box-sizing: border-box;
+    display: none; /* 기본적으로 숨김 */
+    text-shadow: 0 0 5px #0f0; /* 네온 효과 */
+}
+
+/* 텍스트 흐름 애니메이션 */
+@keyframes flowText {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.flow-text {
+    animation: flowText 10s linear infinite; /* 텍스트 흐름 애니메이션 적용 */
 }
 
 #extract-button {

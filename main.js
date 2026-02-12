@@ -44,6 +44,12 @@ const themeToggle = document.getElementById('theme-toggle');
 const body = document.body;
 
 function setTheme(theme) {
+    // Add glitch effect
+    body.classList.add('glitch-effect');
+    setTimeout(() => {
+        body.classList.remove('glitch-effect');
+    }, 300); // Animation duration is 0.3s
+
     if (theme === 'light') {
         body.classList.add('light-mode');
         themeToggle.textContent = '🌙'; // Moon emoji for dark mode

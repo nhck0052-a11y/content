@@ -142,17 +142,24 @@ body {
     position: fixed;
     top: 1rem;
     background: var(--container-bg);
-    border: 1px solid var(--border-color);
-    padding: 0.4rem 0.8rem;
+    border: 2px solid var(--border-color);
+    padding: 0.5rem 0.8rem;
     font-family: 'DungGeunMo', monospace;
     font-size: 0.85rem;
     cursor: pointer;
     color: var(--text-color);
     z-index: 1000;
     border-radius: 4px;
+    box-shadow: 0 0 10px var(--box-shadow-color);
+    transition: all 0.2s ease;
 }
 
-#theme-toggle { right: 6rem; }
+#theme-toggle:hover, #lang-toggle:hover {
+    background: var(--button-hover-bg);
+    color: var(--button-hover-color);
+}
+
+#theme-toggle { right: 6.5rem; }
 #lang-toggle { right: 1rem; }
 
 #future-time {
@@ -163,6 +170,7 @@ body {
     font-family: 'DungGeunMo', monospace;
     font-size: 0.8rem;
     z-index: 1000;
+    text-shadow: 0 0 5px var(--box-shadow-color);
 }
 
 h1 {
@@ -338,8 +346,14 @@ body:not(.light-mode) .light-pixel-character { opacity: 0; }
 
     #extract-button { padding: 0.6rem; font-size: 0.95rem; margin-top: 0.4rem; }
     #analysis-status { font-size: 0.75rem; }
-    #theme-toggle, #lang-toggle { top: auto; bottom: 0.8rem; font-size: 0.7rem; }
-    #theme-toggle { right: 4.5rem; }
+    
+    #theme-toggle, #lang-toggle { 
+        top: 0.5rem; 
+        font-size: 0.7rem; 
+        padding: 0.3rem 0.5rem;
+    }
+    #theme-toggle { right: 5rem; }
+    #lang-toggle { right: 0.5rem; }
     
     .home-button-global { 
         width: 100%;

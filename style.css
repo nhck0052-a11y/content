@@ -48,65 +48,39 @@ body {
     margin: 0;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
+    position: relative;
 }
 
-/* 우주 배경 스타일 */
+/* 우주 배경 스타일 - 최하단 레이어 보장 */
 #space-background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1; /* body 배경색보다 확실히 위로 올림 */
+    z-index: 0; /* body 위에 바로 위치 */
     pointer-events: none;
     overflow: hidden;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    display: none; /* 기본 숨김 */
 }
 
-/* 다크 모드일 때 배경을 확실하게 노출 */
+/* 다크 모드일 때만 배경 노출 */
 body:not(.light-mode) #space-background {
-    opacity: 1; 
+    display: block;
+    opacity: 0.7;
 }
 
 .planet {
     position: absolute;
     object-fit: contain;
-    filter: blur(2px); /* 요청하신 대로 약간의 흐림 효과 유지 */
+    filter: blur(1px) drop-shadow(0 0 10px rgba(0, 255, 0, 0.2));
     pointer-events: none;
 }
 
-.planet-1 {
-    width: 500px;
-    top: -100px;
-    right: -100px;
-    opacity: 0.6;
-    transform: rotate(15deg);
-}
-
-.planet-2 {
-    width: 400px;
-    bottom: 50px;
-    left: -100px;
-    opacity: 0.5;
-    transform: rotate(-15deg);
-}
-
-.planet-3 {
-    width: 300px;
-    top: 40%;
-    right: 5%;
-    opacity: 0.4;
-    filter: blur(5px);
-}
-
-.planet-4 {
-    width: 250px;
-    top: 15%;
-    left: 10%;
-    opacity: 0.5;
-    filter: blur(1px);
-}
+.planet-1 { width: 500px; top: -100px; right: -100px; transform: rotate(15deg); }
+.planet-2 { width: 400px; bottom: 50px; left: -100px; transform: rotate(-15deg); }
+.planet-3 { width: 300px; top: 40%; right: 5%; filter: blur(4px); }
+.planet-4 { width: 250px; top: 15%; left: 10%; filter: blur(2px); }
 
 .container {
     text-align: center;
@@ -118,7 +92,7 @@ body:not(.light-mode) #space-background {
     width: 90%;
     max-width: 500px;
     box-sizing: border-box;
-    z-index: 10; /* 배경보다 위에 오도록 유지 */
+    z-index: 10; /* 배경보다 무조건 위 */
     position: relative;
 }
 

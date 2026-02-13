@@ -157,86 +157,23 @@ class FateResult extends HTMLElement {
 
     getStyle() {
         return `
-            :host {
-                display: block;
-                padding: 2px;
-                background: var(--border-color);
-                border-radius: 8px;
-                box-shadow: 0 0 30px var(--box-shadow-color);
-                margin-top: 1rem;
-                overflow: hidden;
-            }
-            .id-card {
-                background: var(--report-bg);
-                color: var(--report-text);
-                padding: 1.5rem;
-                border-radius: 6px;
-                font-family: 'DungGeunMo', monospace;
-                position: relative;
-                border: 2px solid rgba(255, 255, 255, 0.1);
-            }
-            .card-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                border-bottom: 2px solid var(--border-color);
-                padding-bottom: 0.8rem;
-                margin-bottom: 1rem;
-            }
+            :host { display: block; padding: 2px; background: var(--border-color); border-radius: 8px; box-shadow: 0 0 30px var(--box-shadow-color); margin-top: 1.5rem; overflow: hidden; }
+            .id-card { background: var(--report-bg); color: var(--report-text); padding: 1.5rem; border-radius: 6px; font-family: 'DungGeunMo', monospace; position: relative; border: 2px solid rgba(255, 255, 255, 0.1); }
+            .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1rem; }
             .card-title { font-size: 1rem; font-weight: bold; }
-            .agent-photo {
-                width: 80px;
-                height: 80px;
-                border: 2px solid var(--border-color);
-                float: right;
-                margin-left: 1rem;
-                background: rgba(0,0,0,0.5);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 2rem;
-            }
+            .agent-photo { width: 80px; height: 80px; border: 2px solid var(--border-color); float: right; margin-left: 1rem; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
             .section { margin-bottom: 1.2rem; clear: both; }
             .label { color: var(--border-color); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.3rem; display: block; opacity: 0.8; }
             .content { font-size: 1rem; line-height: 1.4; }
             .job-highlight { color: var(--job-color); font-size: 1.2rem; font-weight: bold; text-shadow: 0 0 5px var(--job-color); }
-            
             .synergy-box { margin-top: 1.5rem; }
             .bar-container { width: 100%; height: 20px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.4); position: relative; }
             .bar-fill { height: 100%; background: var(--border-color); width: 0%; transition: width 0.05s linear; }
             .bar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 0.8rem; line-height: 20px; color: #fff; mix-blend-mode: difference; }
-
-            .thesis-origin { 
-                margin-top: 1.5rem; 
-                font-size: 0.7rem; 
-                opacity: 0.6; 
-                border-top: 1px dashed var(--border-color); 
-                padding-top: 0.8rem;
-            }
-
-            .download-btn {
-                width: 100%;
-                margin-top: 1.5rem;
-                padding: 0.8rem;
-                background: var(--button-bg);
-                color: var(--text-color);
-                border: 2px solid var(--border-color);
-                cursor: pointer;
-                font-family: 'DungGeunMo', monospace;
-                border-radius: 4px;
-            }
+            .thesis-origin { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.6; border-top: 1px dashed var(--border-color); padding-top: 0.8rem; }
+            .download-btn { width: 100%; margin-top: 1.5rem; padding: 0.8rem; background: var(--button-bg); color: var(--text-color); border: 2px solid var(--border-color); cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; }
             .download-btn:hover { background: var(--button-hover-bg); color: var(--button-hover-color); }
-
-            .scanline {
-                width: 100%;
-                height: 2px;
-                background: rgba(0, 255, 0, 0.1);
-                position: absolute;
-                top: 0;
-                left: 0;
-                animation: scan 4s linear infinite;
-                pointer-events: none;
-            }
+            .scanline { width: 100%; height: 2px; background: rgba(0, 255, 0, 0.1); position: absolute; top: 0; left: 0; animation: scan 4s linear infinite; pointer-events: none; }
             @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
         `;
     }
@@ -251,24 +188,19 @@ class FateResult extends HTMLElement {
                     <div class="card-title">${translations[lang].analysis_report_title}</div>
                     <div style="font-size: 0.7rem;">NO. ${Math.random().toString(36).substr(2, 9).toUpperCase()}</div>
                 </div>
-                
                 <div class="agent-photo">👤</div>
-                
                 <div class="section">
                     <span class="label">AGENT NAME</span>
                     <div class="content">${lastInputs.name}</div>
                 </div>
-
                 <div class="section">
                     <span class="label">${translations[lang].labels.job}</span>
                     <div class="content job-highlight">${data.job}</div>
                 </div>
-
                 <div class="section">
                     <span class="label">${translations[lang].labels.analysis}</span>
                     <div class="content">${data.analysis}</div>
                 </div>
-
                 <div class="synergy-box">
                     <span class="label">${translations[lang].synergy_score_label}</span>
                     <div class="bar-container">
@@ -276,13 +208,11 @@ class FateResult extends HTMLElement {
                         <div class="bar-text" id="id-score">0%</div>
                     </div>
                 </div>
-
                 <div class="thesis-origin">
                     <span class="label">${translations[lang].labels.origin}</span>
-                    <div>Dr. Seo et al. (2148), "Quantum Neural Mapping of Legacy Human DNA," <i>Neo-Seoul Journal of Bio-Cybernetics</i>, Vol. 12.</div>
+                    <div>Dr. Seo et al. (2148), "Quantum Mapping," <i>Neo-Seoul Journal</i>.</div>
                 </div>
-
-                <button class="download-btn" onclick="alert('Citizenship data encrypted and sent to your neural link.')">${translations[lang].download_button_text}</button>
+                <button class="download-btn">${translations[lang].download_button_text}</button>
             </div>
         `;
         this.animateSynergy(data.score);
@@ -295,8 +225,8 @@ class FateResult extends HTMLElement {
         const interval = setInterval(() => {
             if (current < targetScore) {
                 current++;
-                bar.style.width = `${current}%`;
-                scoreEl.textContent = `${current}%`;
+                if (bar) bar.style.width = `${current}%`;
+                if (scoreEl) scoreEl.textContent = `${current}%`;
             } else {
                 clearInterval(interval);
                 this.dispatchEvent(new CustomEvent('report-finished'));
@@ -311,22 +241,30 @@ const body = document.body;
 const themeToggle = document.getElementById('theme-toggle');
 const langToggle = document.getElementById('lang-toggle');
 
+// 테마 설정 함수 정밀화
 function setTheme(theme) {
-    body.classList.add('glitch-effect');
-    setTimeout(() => { body.classList.remove('glitch-effect'); }, 300);
     if (theme === 'light') {
         body.classList.add('light-mode');
-        themeToggle.textContent = '[ DARK ]';
+        themeToggle.textContent = '🌑 DARK'; // 라이트 모드일 때 "다크로 가기" 표시
     } else {
         body.classList.remove('light-mode');
-        themeToggle.textContent = '[ LIGHT ]';
+        themeToggle.textContent = '☀️ LIGHT'; // 다크 모드일 때 "라이트로 가기" 표시
     }
     localStorage.setItem('theme', theme);
 }
 
-setTheme(localStorage.getItem('theme') || 'dark');
-themeToggle.addEventListener('click', () => setTheme(body.classList.contains('light-mode') ? 'dark' : 'light'));
+// 초기 테마 로드
+const savedTheme = localStorage.getItem('theme') || 'dark';
+setTheme(savedTheme);
 
+themeToggle.addEventListener('click', () => {
+    const newTheme = body.classList.contains('light-mode') ? 'dark' : 'light';
+    setTheme(newTheme);
+    body.classList.add('glitch-effect');
+    setTimeout(() => body.classList.remove('glitch-effect'), 300);
+});
+
+// 언어 설정 함수 정밀화
 function setLanguage(lang) {
     localStorage.setItem('language', lang);
     document.querySelectorAll('[data-key]').forEach(el => {
@@ -337,15 +275,14 @@ function setLanguage(lang) {
         }
     });
     
-    const selects = ['interest-select', 'mbti-select', 'age-select', 'gender-select', 'blood-select'];
-    selects.forEach(id => {
+    // Select 요소 한글화
+    ['interest-select', 'mbti-select', 'age-select', 'gender-select', 'blood-select'].forEach(id => {
         const select = document.getElementById(id);
         if (select) {
             Array.from(select.options).forEach(opt => {
                 const key = opt.dataset.key;
-                if (key && translations[lang][key]) {
-                    opt.textContent = translations[lang][key];
-                } else if (opt.value === '') {
+                if (key && translations[lang][key]) opt.textContent = translations[lang][key];
+                else if (opt.value === '') {
                     const pk = id.replace('-', '_') + '_placeholder';
                     if (translations[lang][pk]) opt.textContent = translations[lang][pk];
                 }
@@ -353,46 +290,28 @@ function setLanguage(lang) {
         }
     });
 
-    const report = document.querySelector('fate-result');
-    if (report && lastInputs) {
-        const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
-        report.displayFate(fateData);
-    }
-
-    const analysisStatus = document.getElementById('analysis-status');
-    if (analysisStatus && analysisStatus.style.display !== 'none') {
-        analysisStatus.textContent = translations[lang].please_wait;
-    }
-
-    langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
+    langToggle.textContent = lang === 'ko' ? '🇺🇸 EN' : '🇰🇷 KO';
 }
 
-setLanguage(localStorage.getItem('language') || 'ko');
+// 초기 언어 로드
+const savedLang = localStorage.getItem('language') || 'ko';
+setLanguage(savedLang);
+
 langToggle.addEventListener('click', () => {
+    const newLang = localStorage.getItem('language') === 'ko' ? 'en' : 'ko';
+    setLanguage(newLang);
     body.classList.add('glitch-effect');
-    setTimeout(() => { body.classList.remove('glitch-effect'); }, 300);
-    setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko');
+    setTimeout(() => body.classList.remove('glitch-effect'), 300);
 });
 
+// 결과 생성 로직
 function generateFate(mbtiStr, blood, gender) {
     const lang = localStorage.getItem('language') || 'ko';
-    const mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' :
-                      mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' :
-                      mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP';
-
+    const mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' : mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' : mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP';
     const l = translations[lang].quantum_logic;
-    const analysis = lang === 'ko' ? 
-        `${l.blood[blood]}와 ${l.gender[gender]}가 ${l.mbti[mbtiGroup]}에 동기화되었습니다.` :
-        `${l.blood[blood]} and ${l.gender[gender]} are synchronized with the ${l.mbti[mbtiGroup]}.`;
-
-    const key = `${mbtiGroup}+${blood}+${gender}`;
-    const job = l.jobs[key] || l.jobs['default'];
-
-    const comment = lang === 'ko' ? 
-        `"${l.keywords[blood]}의 파동이 ${l.keywords[gender]}과 ${l.keywords[mbtiGroup]}을 만나 2150년의 거대한 운명의 흐름을 결정지었습니다."` :
-        `"Your quantum wave of ${l.keywords[blood]} combined with ${l.keywords[gender]} and ${l.keywords[mbtiGroup]} has defined your destiny in 2150."`;
-
-    return { analysis, job, comment, score: Math.floor(Math.random() * 30) + 70 };
+    const analysis = lang === 'ko' ? `${l.blood[blood]}와 ${l.gender[gender]}가 ${l.mbti[mbtiGroup]}에 동기화되었습니다.` : `${l.blood[blood]} and ${l.gender[gender]} are synchronized with the ${l.mbti[mbtiGroup]}.`;
+    const job = l.jobs[`${mbtiGroup}+${blood}+${gender}`] || l.jobs['default'];
+    return { analysis, job, score: Math.floor(Math.random() * 30) + 70 };
 }
 
 document.getElementById('extract-button').addEventListener('click', () => {
@@ -404,92 +323,48 @@ document.getElementById('extract-button').addEventListener('click', () => {
         age: document.getElementById('age-select').value,
         interest: document.getElementById('interest-select').value
     };
-
     const lang = localStorage.getItem('language') || 'ko';
-    if (!Object.values(inputs).every(v => v)) {
-        alert(translations[lang].alert_message);
-        return;
-    }
-
+    if (!Object.values(inputs).every(v => v)) { alert(translations[lang].alert_message); return; }
     lastInputs = inputs;
-    const extractButton = document.getElementById('extract-button');
-    const analysisStatus = document.getElementById('analysis-status');
-    const inputContainer = document.querySelector('.input-container');
-    const resultContainer = document.getElementById('result-container');
-
-    extractButton.disabled = true;
-    analysisStatus.textContent = translations[lang].please_wait;
-    analysisStatus.style.display = 'block';
-
+    const btn = document.getElementById('extract-button');
+    const status = document.getElementById('analysis-status');
+    const inputCont = document.querySelector('.input-container');
+    const resCont = document.getElementById('result-container');
+    btn.disabled = true;
+    status.textContent = translations[lang].please_wait;
+    status.style.display = 'block';
     setTimeout(() => {
-        inputContainer.style.display = 'none';
-        analysisStatus.style.display = 'none';
-        
-        const fateData = generateFate(inputs.mbti, inputs.blood, inputs.gender);
-        resultContainer.innerHTML = '';
+        inputCont.style.display = 'none';
+        status.style.display = 'none';
+        resCont.innerHTML = '';
         const report = document.createElement('fate-result');
-        resultContainer.appendChild(report);
-        report.displayFate(fateData);
-        
+        resCont.appendChild(report);
+        report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender));
         report.addEventListener('report-finished', () => {
-            showHomeButton();
+            const homeCont = document.getElementById('global-home-button-container');
+            homeCont.innerHTML = `<button class="home-button-global" onclick="location.reload()">${translations[lang].home_button_text}</button>`;
         });
     }, 2000);
 });
 
-function showHomeButton() {
-    const lang = localStorage.getItem('language') || 'ko';
-    const container = document.getElementById('global-home-button-container');
-    container.innerHTML = `<button class="home-button-global" data-key="home_button_text" onclick="location.reload()">${translations[lang].home_button_text}</button>`;
-}
-
-function triggerGlitch(el) {
-    el.classList.add('char-glitch');
-    setTimeout(() => el.classList.remove('char-glitch'), 300);
-}
+// 캐릭터 및 배경 행성 초기화
+function triggerGlitch(el) { el.classList.add('char-glitch'); setTimeout(() => el.classList.remove('char-glitch'), 300); }
 
 function initCharacters() {
     const chars = document.querySelectorAll('.pixel-character, .light-pixel-character');
     const states = [];
     chars.forEach(char => {
-        const w = char.offsetWidth || 60, h = char.offsetHeight || 60;
-        const x = Math.random() * (window.innerWidth - w), y = Math.random() * (window.innerHeight - h);
+        const x = Math.random() * (window.innerWidth - 60), y = Math.random() * (window.innerHeight - 60);
         char.style.left = `${x}px`; char.style.top = `${y}px`;
-        states.push({ element: char, x, y, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3, width: w, height: h });
+        states.push({ element: char, x, y, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3 });
     });
-
     function animate() {
-        for (let i = 0; i < states.length; i++) {
-            let s1 = states[i];
+        states.forEach(s1 => {
             s1.x += s1.vx; s1.y += s1.vy;
-
-            if (s1.x + s1.width > window.innerWidth || s1.x < 0) {
-                s1.vx *= -1;
-                triggerGlitch(s1.element);
-            }
-            if (s1.y + s1.height > window.innerHeight || s1.y < 0) {
-                s1.vy *= -1;
-                triggerGlitch(s1.element);
-            }
-
-            for (let j = i + 1; j < states.length; j++) {
-                let s2 = states[j];
-                const dx = (s1.x + s1.width/2) - (s2.x + s2.width/2);
-                const dy = (s1.y + s1.height/2) - (s2.y + s2.height/2);
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const minDist = (s1.width + s2.width) / 2.5;
-
-                if (distance < minDist) {
-                    s1.vx *= -1; s1.vy *= -1;
-                    s2.vx *= -1; s2.vy *= -1;
-                    triggerGlitch(s1.element);
-                    triggerGlitch(s2.element);
-                }
-            }
-
-            s1.element.style.left = `${s1.x}px`;
-            s1.element.style.top = `${s1.y}px`;
-        }
+            if (s1.x + 60 > window.innerWidth || s1.x < 0) { s1.vx *= -1; triggerGlitch(s1.element); }
+            if (s1.y + 60 > window.innerHeight || s1.y < 0) { s1.vy *= -1; triggerGlitch(s1.element); }
+            s1.element.style.left = `${s1.x}px`; s1.element.style.top = `${s1.y}px`;
+        });
         requestAnimationFrame(animate);
     }
     animate();
@@ -498,15 +373,11 @@ window.addEventListener('load', initCharacters);
 
 function updateTime() {
     cyberTime.setSeconds(cyberTime.getSeconds() + 1);
-    const futureTimeElement = document.getElementById('future-time');
-    if (futureTimeElement) {
-        const y = cyberTime.getFullYear();
-        const m = String(cyberTime.getMonth() + 1).padStart(2, '0');
-        const d = String(cyberTime.getDate()).padStart(2, '0');
-        const hh = String(cyberTime.getHours()).padStart(2, '0');
-        const mm = String(cyberTime.getMinutes()).padStart(2, '0');
-        const ss = String(cyberTime.getSeconds()).padStart(2, '0');
-        futureTimeElement.textContent = `2150 CYBERNETIC ERA - ${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+    const el = document.getElementById('future-time');
+    if (el) {
+        const y = cyberTime.getFullYear(), m = String(cyberTime.getMonth() + 1).padStart(2, '0'), d = String(cyberTime.getDate()).padStart(2, '0');
+        const hh = String(cyberTime.getHours()).padStart(2, '0'), mm = String(cyberTime.getMinutes()).padStart(2, '0'), ss = String(cyberTime.getSeconds()).padStart(2, '0');
+        el.textContent = `2150 ERA - ${y}-${m}-${d} ${hh}:${mm}:${ss}`;
     }
 }
 setInterval(updateTime, 1000); updateTime();

@@ -106,6 +106,12 @@ const translations = {
 let lastInputs = null;
 let cyberTime = new Date(2150, 2, 1, 0, 0, 0);
 
+// 전역 에러 핸들러 추가 (Preventative Measure)
+window.onerror = function(message, source, lineno, colno, error) {
+    console.error("System Error Detected:", message, "at", source, ":", lineno);
+    return false; 
+};
+
 class FateResult extends HTMLElement {
     constructor() { super(); this.attachShadow({ mode: 'open' }); }
     getStyle() {
@@ -169,7 +175,7 @@ class FateResult extends HTMLElement {
             <div class="id-card" id="main-card">
                 <div class="card-header"><div class="card-title">${translations[lang].analysis_report_title}</div></div>
                 <div class="agent-photo">👤</div>
-                <div class="section"><span class="label">AGENT NAME</span><div class="content">${lastInputs.name}</div></div>
+                <div class="section"><span class="label">AGENT NAME</span><div class="content">${lastInputs ? lastInputs.name : 'Unknown'}</div></div>
                 <div class="section"><span class="label">${translations[lang].labels.job}</span><div class="content job-highlight">${data.job}</div></div>
                 <div class="synergy-box">
                     <span class="label">${translations[lang].synergy_score_label}</span>
@@ -192,7 +198,7 @@ class FateResult extends HTMLElement {
                     <div style="margin-top:30px; display:flex; gap:30px;">
                         <div style="width:180px; height:180px; border:4px solid var(--border-color); display:flex; align-items:center; justify-content:center; font-size:5rem;">👤</div>
                         <div>
-                            <div class="section"><span class="label" style="font-size:1rem;">AGENT ID</span><div style="font-size:2rem; color:var(--text-color)">${lastInputs.name}</div></div>
+                            <div class="section"><span class="label" style="font-size:1rem;">AGENT ID</span><div style="font-size:2rem; color:var(--text-color)">${lastInputs ? lastInputs.name : 'Unknown'}</div></div>
                             <div class="section"><span class="label" style="font-size:1rem;">ASSIGNED CLASS</span><div class="export-job">${data.job}</div></div>
                         </div>
                     </div>
@@ -212,10 +218,20 @@ class FateResult extends HTMLElement {
         this.setupModal(data);
     }
     setupModal(data) {
-        const modal = this.shadowRoot.getElementById('reasoning-modal'), openBtn = this.shadowRoot.getElementById('open-reasoning'), closeBtn = this.shadowRoot.getElementById('close-reasoning'), imgBtn = this.shadowRoot.getElementById('save-image'), content = this.shadowRoot.getElementById('reasoning-content'), exportText = this.shadowRoot.getElementById('export-reasoning-text'), lang = localStorage.getItem('language') || 'ko';
+        const modal = this.shadowRoot.getElementById('reasoning-modal'), 
+              openBtn = this.shadowRoot.getElementById('open-reasoning'), 
+              closeBtn = this.shadowRoot.getElementById('close-reasoning'), 
+              imgBtn = this.shadowRoot.getElementById('save-image'), 
+              content = this.shadowRoot.getElementById('reasoning-content'), 
+              exportText = this.shadowRoot.getElementById('export-reasoning-text'), 
+              lang = localStorage.getItem('language') || 'ko';
+        
+        if (!lastInputs) return;
+
         const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
         const l = translations[lang].quantum_logic;
         const reason = lang === 'ko' ? `분석 결과, 귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
+        
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; exportText.textContent = reason; };
         closeBtn.onclick = () => modal.classList.remove('modal-active');
         
@@ -268,13 +284,30 @@ class FateResult extends HTMLElement {
     }
     animateSynergy(targetScore) {
         const bar = this.shadowRoot.getElementById('id-bar'), scoreEl = this.shadowRoot.getElementById('id-score');
-        let current = 0; const interval = setInterval(() => { if (current < targetScore) { current++; if (bar) bar.style.width = `${current}%`; if (scoreEl) scoreEl.textContent = `${current}%`; } else { clearInterval(interval); this.dispatchEvent(new CustomEvent('report-finished')); } }, 30);
+        let current = 0; 
+        const interval = setInterval(() => { 
+            if (current < targetScore) { 
+                current++; 
+                if (bar) bar.style.width = `${current}%`; 
+                if (scoreEl) scoreEl.textContent = `${current}%`; 
+            } else { 
+                clearInterval(interval); 
+                this.dispatchEvent(new CustomEvent('report-finished')); 
+            } 
+        }, 30);
     }
 }
 customElements.define('fate-result', FateResult);
 
-const body = document.body, themeToggle = document.getElementById('theme-toggle'), langToggle = document.getElementById('lang-toggle'), shareToggle = document.getElementById('share-toggle'), shareMenu = document.getElementById('share-menu');
-shareToggle.addEventListener('click', () => shareMenu.classList.toggle('collapsed'));
+// 메인 앱 로직
+const body = document.body, 
+      themeToggle = document.getElementById('theme-toggle'), 
+      langToggle = document.getElementById('lang-toggle'), 
+      shareToggle = document.getElementById('share-toggle'), 
+      shareMenu = document.getElementById('share-menu');
+
+if (shareToggle) shareToggle.addEventListener('click', () => shareMenu.classList.toggle('collapsed'));
+
 function setTheme(theme) { 
     if (theme === 'light') { body.classList.add('light-mode'); themeToggle.textContent = '[ DARK ]'; } 
     else { body.classList.remove('light-mode'); themeToggle.textContent = '[ LIGHT ]'; } 
@@ -285,12 +318,21 @@ function setTheme(theme) {
         report.displayFate(fateData);
     }
 }
+
 setTheme(localStorage.getItem('theme') || 'dark');
-themeToggle.addEventListener('click', () => setTheme(body.classList.contains('light-mode') ? 'dark' : 'light'));
+if (themeToggle) themeToggle.addEventListener('click', () => setTheme(body.classList.contains('light-mode') ? 'dark' : 'light'));
+
 function setLanguage(lang) {
     localStorage.setItem('language', lang);
-    document.querySelectorAll('[data-key]').forEach(el => { const key = el.dataset.key; if (translations[lang][key]) { if (el.tagName === 'INPUT') el.placeholder = translations[lang][key]; else el.textContent = translations[lang][key]; } });
-    shareToggle.textContent = translations[lang].share_btn; langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
+    document.querySelectorAll('[data-key]').forEach(el => { 
+        const key = el.dataset.key; 
+        if (translations[lang][key]) { 
+            if (el.tagName === 'INPUT') el.placeholder = translations[lang][key]; 
+            else el.textContent = translations[lang][key]; 
+        } 
+    });
+    if (shareToggle) shareToggle.textContent = translations[lang].share_btn; 
+    if (langToggle) langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
     
     const report = document.querySelector('fate-result');
     if (report && lastInputs) {
@@ -307,39 +349,66 @@ function toggleLanguage() {
 }
 
 setLanguage(localStorage.getItem('language') || 'ko');
+if (langToggle) langToggle.addEventListener('click', toggleLanguage);
 
-langToggle.addEventListener('click', toggleLanguage);
-
-// 한영키 및 언어 전환 단축키 지원
 window.addEventListener('keydown', (e) => {
-    // e.code 'HangulMode'는 일반적인 한영키, 'AltRight'는 일부 환경에서의 한영키
     if (e.code === 'HangulMode' || e.key === 'HangulMode') {
         toggleLanguage();
     }
 });
-document.getElementById('extract-button').addEventListener('click', () => {
-    const inputs = { name: document.getElementById('name-input').value, mbti: document.getElementById('mbti-select').value, blood: document.getElementById('blood-select').value, gender: document.getElementById('gender-select').value, age: document.getElementById('age-select').value, interest: document.getElementById('interest-select').value };
-    const lang = localStorage.getItem('language') || 'ko';
-    if (!Object.values(inputs).every(v => v)) { alert(translations[lang].alert_message); return; }
-    lastInputs = inputs; const btn = document.getElementById('extract-button'), status = document.getElementById('analysis-status'), inputCont = document.querySelector('.input-container'), resCont = document.getElementById('result-container');
-    btn.disabled = true; status.textContent = translations[lang].please_wait; status.style.display = 'block';
-    setTimeout(() => { 
-        inputCont.style.display = 'none'; 
-        status.style.display = 'none'; 
-        resCont.innerHTML = ''; 
-        const report = document.createElement('fate-result'); 
-        resCont.appendChild(report); 
-        report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender)); 
-        const homeCont = document.getElementById('global-home-button-container'); 
-        homeCont.innerHTML = `<button class="home-button-global" data-key="home_button_text" onclick="location.reload()">${translations[lang].home_button_text}</button>`; 
-    }, 2000);
-});
-function generateFate(mbtiStr, blood, gender) {
-    const lang = localStorage.getItem('language') || 'ko', mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' : mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' : mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP', l = translations[lang].quantum_logic;
-    const analysis = lang === 'ko' ? `${l.blood[blood]}와 ${l.gender[gender]}가 ${l.mbti[mbtiGroup]}에 동기화되었습니다.` : `${l.blood[blood]} and ${l.gender[gender]} are synchronized with the ${l.mbti[mbtiGroup]}.`;
-    const job = l.jobs[`${mbtiGroup}+${blood}+${gender}`] || l.jobs['default']; return { analysis, job, score: Math.floor(Math.random() * 30) + 70 };
+
+const extractBtn = document.getElementById('extract-button');
+if (extractBtn) {
+    extractBtn.addEventListener('click', () => {
+        try {
+            const inputs = { 
+                name: document.getElementById('name-input').value, 
+                mbti: document.getElementById('mbti-select').value, 
+                blood: document.getElementById('blood-select').value, 
+                gender: document.getElementById('gender-select').value, 
+                age: document.getElementById('age-select').value, 
+                interest: document.getElementById('interest-select').value 
+            };
+            const lang = localStorage.getItem('language') || 'ko';
+            if (!Object.values(inputs).every(v => v)) { alert(translations[lang].alert_message); return; }
+            lastInputs = inputs; 
+            const status = document.getElementById('analysis-status'), 
+                  inputCont = document.querySelector('.input-container'), 
+                  resCont = document.getElementById('result-container');
+            
+            extractBtn.disabled = true; 
+            status.textContent = translations[lang].please_wait; 
+            status.style.display = 'block';
+            
+            setTimeout(() => { 
+                inputCont.style.display = 'none'; 
+                status.style.display = 'none'; 
+                resCont.innerHTML = ''; 
+                const report = document.createElement('fate-result'); 
+                resCont.appendChild(report); 
+                report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender)); 
+                const homeCont = document.getElementById('global-home-button-container'); 
+                homeCont.innerHTML = `<button class="home-button-global" data-key="home_button_text" onclick="location.reload()">${translations[lang].home_button_text}</button>`; 
+            }, 2000);
+        } catch (e) {
+            console.error("Extraction failed:", e);
+            alert("Analysis failed. System rebooting...");
+            location.reload();
+        }
+    });
 }
+
+function generateFate(mbtiStr, blood, gender) {
+    const lang = localStorage.getItem('language') || 'ko', 
+          mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' : mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' : mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP', 
+          l = translations[lang].quantum_logic;
+    const analysis = lang === 'ko' ? `${l.blood[blood]}와 ${l.gender[gender]}가 ${l.mbti[mbtiGroup]}에 동기화되었습니다.` : `${l.blood[blood]} and ${l.gender[gender]} are synchronized with the ${l.mbti[mbtiGroup]}.`;
+    const job = l.jobs[`${mbtiGroup}+${blood}+${gender}`] || l.jobs['default']; 
+    return { analysis, job, score: Math.floor(Math.random() * 30) + 70 };
+}
+
 function triggerGlitch(el) { el.classList.add('char-glitch'); setTimeout(() => el.classList.remove('char-glitch'), 300); }
+
 function initCharacters() {
     const chars = document.querySelectorAll('.pixel-character, .light-pixel-character'), states = [];
     chars.forEach(char => { 
@@ -361,168 +430,21 @@ function initCharacters() {
     } 
     if (states.length > 0) animate();
 }
+
 window.addEventListener('load', initCharacters);
+
 function updateTime() {
-    cyberTime.setSeconds(cyberTime.getSeconds() + 1); const el = document.getElementById('future-time');
-    if (el) { const y = cyberTime.getFullYear(), m = String(cyberTime.getMonth() + 1).padStart(2, '0'), d = String(cyberTime.getDate()).padStart(2, '0'), hh = String(cyberTime.getHours()).padStart(2, '0'), mm = String(cyberTime.getMinutes()).padStart(2, '0'), ss = String(cyberTime.getSeconds()).padStart(2, '0'); el.textContent = `2150 ERA - ${y}-${m}-${d} ${hh}:${mm}:${ss}`; }
-}
-setInterval(updateTime, 1000); updateTime();
-        this.animateSynergy(data.score);
-        this.setupModal(data);
-    }
-    setupModal(data) {
-        const modal = this.shadowRoot.getElementById('reasoning-modal'), openBtn = this.shadowRoot.getElementById('open-reasoning'), closeBtn = this.shadowRoot.getElementById('close-reasoning'), imgBtn = this.shadowRoot.getElementById('save-image'), content = this.shadowRoot.getElementById('reasoning-content'), exportText = this.shadowRoot.getElementById('export-reasoning-text'), lang = localStorage.getItem('language') || 'ko';
-        const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
-        const l = translations[lang].quantum_logic;
-        const reason = lang === 'ko' ? `분석 결과, 귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
-        openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; exportText.textContent = reason; };
-        closeBtn.onclick = () => modal.classList.remove('modal-active');
-        
-        const generateImage = async () => {
-            const wrapper = this.shadowRoot.getElementById('image-export-wrapper');
-            const isLight = document.body.classList.contains('light-mode');
-            return html2canvas(wrapper, { 
-                scale: 2, 
-                backgroundColor: isLight ? '#FFFFFF' : '#000000', 
-                useCORS: true,
-                logging: false
-            });
-        };
-
-        imgBtn.onclick = async () => {
-            const originalText = imgBtn.textContent;
-            imgBtn.textContent = translations[lang].generating_text;
-            imgBtn.disabled = true;
-
-            try {
-                const canvas = await generateImage();
-                const dataUrl = canvas.toDataURL('image/png');
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-                if (isMobile) {
-                    const newWindow = window.open();
-                    newWindow.document.write(`
-                        <body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;">
-                            <img src="${dataUrl}" style="width:100%; max-width:100%;">
-                            <p style="color:#fff; font-family:sans-serif; margin-top:20px; text-align:center;">${translations[lang].mobile_save_notice}</p>
-                            <button onclick="window.close()" style="margin-top:20px; padding:10px 20px; background:#fff; border:none; border-radius:5px;">Close</button>
-                        </body>
-                    `);
-                } else {
-                    const link = document.createElement('a'); 
-                    link.download = `NeoSeoul_Report_${lastInputs.name}.png`; 
-                    link.href = dataUrl; 
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
-            } catch (err) {
-                console.error('Save failed:', err);
-                alert('Save failed. Please try again.');
-            } finally {
-                imgBtn.textContent = originalText;
-                imgBtn.disabled = false;
-            }
-        };
-    }
-    animateSynergy(targetScore) {
-        const bar = this.shadowRoot.getElementById('id-bar'), scoreEl = this.shadowRoot.getElementById('id-score');
-        let current = 0; const interval = setInterval(() => { if (current < targetScore) { current++; if (bar) bar.style.width = `${current}%`; if (scoreEl) scoreEl.textContent = `${current}%`; } else { clearInterval(interval); this.dispatchEvent(new CustomEvent('report-finished')); } }, 30);
+    cyberTime.setSeconds(cyberTime.getSeconds() + 1); 
+    const el = document.getElementById('future-time');
+    if (el) { 
+        const y = cyberTime.getFullYear(), 
+              m = String(cyberTime.getMonth() + 1).padStart(2, '0'), 
+              d = String(cyberTime.getDate()).padStart(2, '0'), 
+              hh = String(cyberTime.getHours()).padStart(2, '0'), 
+              mm = String(cyberTime.getMinutes()).padStart(2, '0'), 
+              ss = String(cyberTime.getSeconds()).padStart(2, '0'); 
+        el.textContent = `2150 ERA - ${y}-${m}-${d} ${hh}:${mm}:${ss}`; 
     }
 }
-customElements.define('fate-result', FateResult);
-
-const body = document.body, themeToggle = document.getElementById('theme-toggle'), langToggle = document.getElementById('lang-toggle'), shareToggle = document.getElementById('share-toggle'), shareMenu = document.getElementById('share-menu');
-shareToggle.addEventListener('click', () => shareMenu.classList.toggle('collapsed'));
-function setTheme(theme) { 
-    if (theme === 'light') { body.classList.add('light-mode'); themeToggle.textContent = '[ DARK ]'; } 
-    else { body.classList.remove('light-mode'); themeToggle.textContent = '[ LIGHT ]'; } 
-    localStorage.setItem('theme', theme);
-    const report = document.querySelector('fate-result');
-    if (report && lastInputs) {
-        const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
-        report.displayFate(fateData);
-    }
-}
-setTheme(localStorage.getItem('theme') || 'dark');
-themeToggle.addEventListener('click', () => setTheme(body.classList.contains('light-mode') ? 'dark' : 'light'));
-function setLanguage(lang) {
-    localStorage.setItem('language', lang);
-    document.querySelectorAll('[data-key]').forEach(el => { const key = el.dataset.key; if (translations[lang][key]) { if (el.tagName === 'INPUT') el.placeholder = translations[lang][key]; else el.textContent = translations[lang][key]; } });
-    shareToggle.textContent = translations[lang].share_btn; langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
-    
-    const report = document.querySelector('fate-result');
-    if (report && lastInputs) {
-        const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
-        report.displayFate(fateData);
-    }
-}
-
-function toggleLanguage() {
-    body.classList.add('glitch-effect');
-    setTimeout(() => body.classList.remove('glitch-effect'), 300);
-    const currentLang = localStorage.getItem('language') || 'ko';
-    setLanguage(currentLang === 'ko' ? 'en' : 'ko');
-}
-
-setLanguage(localStorage.getItem('language') || 'ko');
-
-langToggle.addEventListener('click', toggleLanguage);
-
-// 한영키 및 언어 전환 단축키 지원
-window.addEventListener('keydown', (e) => {
-    // e.code 'HangulMode'는 일반적인 한영키, 'AltRight'는 일부 환경에서의 한영키
-    if (e.code === 'HangulMode' || e.key === 'HangulMode') {
-        toggleLanguage();
-    }
-});
-document.getElementById('extract-button').addEventListener('click', () => {
-    const inputs = { name: document.getElementById('name-input').value, mbti: document.getElementById('mbti-select').value, blood: document.getElementById('blood-select').value, gender: document.getElementById('gender-select').value, age: document.getElementById('age-select').value, interest: document.getElementById('interest-select').value };
-    const lang = localStorage.getItem('language') || 'ko';
-    if (!Object.values(inputs).every(v => v)) { alert(translations[lang].alert_message); return; }
-    lastInputs = inputs; const btn = document.getElementById('extract-button'), status = document.getElementById('analysis-status'), inputCont = document.querySelector('.input-container'), resCont = document.getElementById('result-container');
-    btn.disabled = true; status.textContent = translations[lang].please_wait; status.style.display = 'block';
-    setTimeout(() => { 
-        inputCont.style.display = 'none'; 
-        status.style.display = 'none'; 
-        resCont.innerHTML = ''; 
-        const report = document.createElement('fate-result'); 
-        resCont.appendChild(report); 
-        report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender)); 
-        const homeCont = document.getElementById('global-home-button-container'); 
-        homeCont.innerHTML = `<button class="home-button-global" data-key="home_button_text" onclick="location.reload()">${translations[lang].home_button_text}</button>`; 
-    }, 2000);
-});
-function generateFate(mbtiStr, blood, gender) {
-    const lang = localStorage.getItem('language') || 'ko', mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' : mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' : mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP', l = translations[lang].quantum_logic;
-    const analysis = lang === 'ko' ? `${l.blood[blood]}와 ${l.gender[gender]}가 ${l.mbti[mbtiGroup]}에 동기화되었습니다.` : `${l.blood[blood]} and ${l.gender[gender]} are synchronized with the ${l.mbti[mbtiGroup]}.`;
-    const job = l.jobs[`${mbtiGroup}+${blood}+${gender}`] || l.jobs['default']; return { analysis, job, score: Math.floor(Math.random() * 30) + 70 };
-}
-function triggerGlitch(el) { el.classList.add('char-glitch'); setTimeout(() => el.classList.remove('char-glitch'), 300); }
-function initCharacters() {
-    const chars = document.querySelectorAll('.pixel-character, .light-pixel-character'), states = [];
-    chars.forEach(char => { 
-        const x = Math.random() * (window.innerWidth - 60), y = Math.random() * (window.innerHeight - 60); 
-        char.style.left = `${x}px`; 
-        char.style.top = `${y}px`; 
-        states.push({ element: char, x, y, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3 }); 
-    });
-    function animate() { 
-        states.forEach(s1 => { 
-            s1.x += s1.vx; 
-            s1.y += s1.vy; 
-            if (s1.x + 60 > window.innerWidth || s1.x < 0) { s1.vx *= -1; triggerGlitch(s1.element); } 
-            if (s1.y + 60 > window.innerHeight || s1.y < 0) { s1.vy *= -1; triggerGlitch(s1.element); } 
-            s1.element.style.left = `${s1.x}px`; 
-            s1.element.style.top = `${s1.y}px`; 
-        }); 
-        requestAnimationFrame(animate); 
-    } 
-    if (states.length > 0) animate();
-}
-window.addEventListener('load', initCharacters);
-function updateTime() {
-    cyberTime.setSeconds(cyberTime.getSeconds() + 1); const el = document.getElementById('future-time');
-    if (el) { const y = cyberTime.getFullYear(), m = String(cyberTime.getMonth() + 1).padStart(2, '0'), d = String(cyberTime.getDate()).padStart(2, '0'), hh = String(cyberTime.getHours()).padStart(2, '0'), mm = String(cyberTime.getMinutes()).padStart(2, '0'), ss = String(cyberTime.getSeconds()).padStart(2, '0'); el.textContent = `2150 ERA - ${y}-${m}-${d} ${hh}:${mm}:${ss}`; }
-}
-setInterval(updateTime, 1000); updateTime();
+setInterval(updateTime, 1000); 
+updateTime();

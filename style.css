@@ -104,9 +104,16 @@ body:not(.light-mode) #space-background {
     position: relative;
 }
 
-#theme-toggle, #lang-toggle {
+#top-controls {
     position: fixed;
     top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 1000;
+}
+
+#theme-toggle, #lang-toggle, #share-toggle {
     background: var(--container-bg);
     border: 2px solid var(--border-color);
     padding: 0.5rem 0.8rem;
@@ -114,19 +121,36 @@ body:not(.light-mode) #space-background {
     font-size: 0.85rem;
     cursor: pointer;
     color: var(--text-color);
-    z-index: 1000;
     border-radius: 4px;
     box-shadow: 0 0 10px var(--box-shadow-color);
     transition: all 0.2s ease;
 }
 
-#theme-toggle:hover, #lang-toggle:hover {
+#theme-toggle:hover, #lang-toggle:hover, #share-toggle:hover {
     background: var(--button-hover-bg);
     color: var(--button-hover-color);
 }
 
-#theme-toggle { right: 6.5rem; }
-#lang-toggle { right: 1rem; }
+/* 공유 메뉴 스타일 */
+#share-menu {
+    position: fixed;
+    top: 4rem;
+    right: 1rem;
+    background: var(--container-bg);
+    border: 2px solid var(--border-color);
+    padding: 0.8rem;
+    border-radius: 8px;
+    z-index: 999;
+    box-shadow: 0 0 20px var(--box-shadow-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top right;
+}
+
+#share-menu.collapsed {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+    pointer-events: none;
+}
 
 #future-time {
     position: fixed;

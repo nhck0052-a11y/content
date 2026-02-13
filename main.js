@@ -48,7 +48,8 @@ const translations = {
             jobs: { 'NT+A+M': 'Interstellar Highway Design Supervisor', 'NF+B+F': 'Endangered Alien Psychologist', 'SP+AB+M': 'Android Black Market Mechanic', 'SJ+O+F': 'Galactic Data Security Deputy Director', 'default': 'Inter-dimensional Resource Manager' }
         },
         deep_analysis_title: "OFFICIAL SUITABILITY REPORT",
-        close_button: "Return to Main"
+        close_button: "Return to Main",
+        share_btn: "📡 SHARE"
     },
     ko: {
         app_title: "2150 AI 생존 시뮬레이션",
@@ -99,7 +100,8 @@ const translations = {
             jobs: { 'NT+A+M': '행성 간 고속도로 설계 총괄자', 'NF+B+F': '멸종 위기 외계 생물 심리 치료사', 'SP+AB+M': '안드로이드 암시장 수리공', 'SJ+O+F': '은하 연합 데이터 보안 아카이브 부국장', 'default': '차원 간 자원 관리 전문가' }
         },
         deep_analysis_title: "정식 직업 적합도 보고서",
-        close_button: "시민증으로 돌아가기"
+        close_button: "시민증으로 돌아가기",
+        share_btn: "📡 공유"
     }
 };
 
@@ -196,7 +198,6 @@ class FateResult extends HTMLElement {
         `;
         this.setupModal(data);
     }
-
     setupModal(data) {
         const modal = this.shadowRoot.getElementById('reasoning-modal');
         const openBtn = this.shadowRoot.getElementById('open-reasoning');
@@ -204,26 +205,14 @@ class FateResult extends HTMLElement {
         const pdfBtn = this.shadowRoot.getElementById('download-pdf');
         const content = this.shadowRoot.getElementById('reasoning-content');
         const lang = localStorage.getItem('language') || 'ko';
-
         const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
         const l = translations[lang].quantum_logic;
-
-        const reason = lang === 'ko' ? 
-            `[분석 근거 요약] \n\n귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n논문 'Legacy Human Mapping(2148)'의 제 4장에 따르면, 이러한 결합은 '${data.job}' 클래스가 요구하는 고도의 ${l.keywords[mbtiGroup]}와(과) ${l.keywords[lastInputs.blood]}의 조화를 완벽하게 충족합니다. \n\n성별 프로토콜 기반의 ${l.keywords[lastInputs.gender]} 에너지 또한 해당 직무 수행 시 필요한 AI 공명 지수를 극대화하는 핵심 요소로 분석되었습니다. 따라서 귀하는 2150년 네오-서울의 생존 시뮬레이션에서 해당 직업군으로 활동할 때 가장 높은 생존율과 효율을 보장받습니다.` :
-            `[Analysis Evidence Summary] \n\nYour biological energy unit (Type ${lastInputs.blood}) exhibits ${l.blood[lastInputs.blood]} characteristics, which generate the most stable quantum leaps when combined with the ${l.mbti[mbtiGroup]} thinking circuit. \n\nAccording to Chapter 4 of 'Legacy Human Mapping (2148)', this combination perfectly meets the harmony of ${l.keywords[mbtiGroup]} and ${l.keywords[lastInputs.blood]} required by the '${data.job}' class. \n\nThe ${l.keywords[lastInputs.gender]} energy based on the gender protocol was also analyzed as a key factor in maximizing the AI resonance index required for this job. Therefore, you are guaranteed the highest survival rate and efficiency when active in this career group in the 2150 Neo-Seoul simulation.`;
-
+        const reason = lang === 'ko' ? `[분석 근거 요약] \n\n귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며...` : `[Analysis Evidence Summary] \n\nYour biological energy unit (Type ${lastInputs.blood}) exhibits...`;
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; };
         closeBtn.onclick = () => { modal.classList.remove('modal-active'); };
-        
         pdfBtn.onclick = () => {
             const element = this.shadowRoot.getElementById('pdf-report-content');
-            const opt = {
-                margin: 10,
-                filename: `NeoSeoul_ID_${lastInputs.name}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, backgroundColor: '#000' },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            const opt = { margin: 10, filename: `NeoSeoul_ID_${lastInputs.name}.pdf`, html2canvas: { scale: 2, backgroundColor: '#000' }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             html2pdf().set(opt).from(element).save();
         };
     }
@@ -233,6 +222,11 @@ customElements.define('fate-result', FateResult);
 const body = document.body;
 const themeToggle = document.getElementById('theme-toggle');
 const langToggle = document.getElementById('lang-toggle');
+const shareToggle = document.getElementById('share-toggle');
+const shareMenu = document.getElementById('share-menu');
+
+// 공유 메뉴 토글 로직
+shareToggle.addEventListener('click', () => shareMenu.classList.toggle('collapsed'));
 
 function setTheme(theme) {
     if (theme === 'light') { body.classList.add('light-mode'); themeToggle.textContent = '[ DARK ]'; }
@@ -251,33 +245,18 @@ function setLanguage(lang) {
             else el.textContent = translations[lang][key];
         }
     });
-    ['interest-select', 'mbti-select', 'age-select', 'gender-select', 'blood-select'].forEach(id => {
-        const select = document.getElementById(id);
-        if (select) {
-            Array.from(select.options).forEach(opt => {
-                const key = opt.dataset.key;
-                if (key && translations[lang][key]) opt.textContent = translations[lang][key];
-                else if (opt.value === '') {
-                    const pk = id.replace('-', '_') + '_placeholder';
-                    if (translations[lang][pk]) opt.textContent = translations[lang][pk];
-                }
-            });
-        }
-    });
+    shareToggle.textContent = translations[lang].share_btn;
     langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
 }
 setLanguage(localStorage.getItem('language') || 'ko');
-langToggle.addEventListener('click', () => setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko'));
+langToggle.addEventListener('click', () => {
+    body.classList.add('glitch-effect');
+    setTimeout(() => body.classList.remove('glitch-effect'), 300);
+    setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko');
+});
 
 document.getElementById('extract-button').addEventListener('click', () => {
-    const inputs = {
-        name: document.getElementById('name-input').value,
-        mbti: document.getElementById('mbti-select').value,
-        blood: document.getElementById('blood-select').value,
-        gender: document.getElementById('gender-select').value,
-        age: document.getElementById('age-select').value,
-        interest: document.getElementById('interest-select').value
-    };
+    const inputs = { name: document.getElementById('name-input').value, mbti: document.getElementById('mbti-select').value, blood: document.getElementById('blood-select').value, gender: document.getElementById('gender-select').value, age: document.getElementById('age-select').value, interest: document.getElementById('interest-select').value };
     const lang = localStorage.getItem('language') || 'ko';
     if (!Object.values(inputs).every(v => v)) { alert(translations[lang].alert_message); return; }
     lastInputs = inputs;
@@ -289,16 +268,9 @@ document.getElementById('extract-button').addEventListener('click', () => {
     status.textContent = translations[lang].please_wait;
     status.style.display = 'block';
     setTimeout(() => {
-        inputCont.style.display = 'none';
-        status.style.display = 'none';
-        resCont.innerHTML = '';
-        const report = document.createElement('fate-result');
-        resCont.appendChild(report);
-        const fateData = generateFate(inputs.mbti, inputs.blood, inputs.gender);
-        report.displayFate(fateData);
-        
-        document.getElementById('share-container').style.display = 'flex';
-        
+        inputCont.style.display = 'none'; status.style.display = 'none'; resCont.innerHTML = '';
+        const report = document.createElement('fate-result'); resCont.appendChild(report);
+        report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender));
         report.addEventListener('report-finished', () => {
             const homeCont = document.getElementById('global-home-button-container');
             homeCont.innerHTML = `<button class="home-button-global" onclick="location.reload()">${translations[lang].home_button_text}</button>`;

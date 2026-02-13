@@ -69,9 +69,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     pointer-events: none;
-    /* 모든 트랜지션 제거 (잔상 효과 방지) */
     transition: none !important;
-    /* 사각형 테두리를 없애기 위한 마스크 적용 */
     mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
     -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
 }
@@ -84,7 +82,6 @@ body:not(.light-mode) .planet {
 }
 .light-mode .planet { display: none; }
 
-/* 다크 모드 전용 행성/별 배치 복구 */
 .p-1 { width: 450px; height: 450px; top: -100px; right: -150px; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5523.jpg'); transform: rotate(15deg); }
 .p-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5524.jpg'); transform: rotate(-10deg); }
 .p-3 { width: 350px; height: 350px; top: 35%; right: -50px; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5540.jpg'); opacity: 0.6; }
@@ -100,20 +97,27 @@ body:not(.light-mode) .planet {
 .light-planet {
     display: none;
     mix-blend-mode: multiply;
-    opacity: 0.6;
-    filter: contrast(1.1) brightness(1.05);
+    opacity: 0.8;
+    filter: contrast(1.3) saturate(1.2) brightness(1.02);
 }
 .light-mode .light-planet { display: block; }
 
-/* 새로운 8개 이미지 개별 배치 */
+/* 라이트 모드 행성 개별 배치 (총 15개) */
 .lp-1 { width: 350px; height: 350px; top: -80px; left: -80px; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5547.jpg'); }
 .lp-2 { width: 300px; height: 300px; top: 5%; right: -50px; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5549.jpg'); }
 .lp-3 { width: 220px; height: 220px; bottom: 5%; left: -30px; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5550.jpg'); }
 .lp-4 { width: 280px; height: 220px; bottom: -40px; right: -40px; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5551.jpg'); }
-.lp-5 { width: 150px; height: 150px; top: 45%; left: 10%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5552.jpg'); opacity: 0.5; }
+.lp-5 { width: 150px; height: 150px; top: 45%; left: 8%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5552.jpg'); opacity: 0.6; }
 .lp-6 { width: 130px; height: 130px; top: 25%; right: 25%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5553.jpg'); }
-.lp-7 { width: 180px; height: 180px; bottom: 35%; right: 5%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5556.jpg'); opacity: 0.6; }
-.lp-8 { width: 160px; height: 160px; top: 10%; left: 35%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5562.jpg'); opacity: 0.5; }
+.lp-7 { width: 180px; height: 180px; bottom: 35%; right: 5%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5556.jpg'); opacity: 0.7; }
+.lp-8 { width: 160px; height: 160px; top: 10%; left: 35%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5562.jpg'); opacity: 0.6; }
+.lp-9 { width: 120px; height: 120px; bottom: 15%; left: 45%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5547.jpg'); opacity: 0.5; }
+.lp-10 { width: 140px; height: 140px; top: 60%; left: 25%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5549.jpg'); transform: rotate(45deg); }
+.lp-11 { width: 110px; height: 110px; top: 40%; right: 35%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5550.jpg'); opacity: 0.4; }
+.lp-12 { width: 130px; height: 130px; bottom: 45%; left: 20%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5551.jpg'); }
+.lp-13 { width: 90px; height: 90px; top: 15%; left: 15%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5552.jpg'); opacity: 0.5; }
+.lp-14 { width: 100px; height: 100px; bottom: 10%; right: 25%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5553.jpg'); opacity: 0.6; }
+.lp-15 { width: 120px; height: 120px; top: 50%; right: 15%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5556.jpg'); transform: scaleX(-1); }
 
 .container {
     text-align: center;

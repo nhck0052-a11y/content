@@ -16,7 +16,7 @@ const translations = {
         synergy_score_label: "AI Job Suitability:",
         home_button_text: "Reboot System",
         download_button_text: "Issue Official ID",
-        pdf_button_text: "Download as PDF",
+        pdf_button_text: "Save PDF Report (16:9)",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -65,7 +65,7 @@ const translations = {
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
         download_button_text: "시민증 정식 발급",
-        pdf_button_text: "PDF 보고서 저장",
+        pdf_button_text: "보고서 PDF 저장 (16:9)",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
@@ -115,54 +115,56 @@ class FateResult extends HTMLElement {
     getStyle() {
         return `
             :host { display: block; padding: 2px; background: var(--border-color); border-radius: 8px; box-shadow: 0 0 30px var(--box-shadow-color); margin-top: 1.5rem; overflow: hidden; position: relative; }
-            .id-card { background: var(--report-bg); color: var(--report-text); padding: 1.5rem; border-radius: 6px; font-family: 'DungGeunMo', monospace; position: relative; border: 2px solid rgba(255, 255, 255, 0.1); }
-            .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1rem; }
-            .card-title { font-size: 1rem; font-weight: bold; }
-            .agent-photo { width: 80px; height: 80px; border: 2px solid var(--border-color); float: right; margin-left: 1rem; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+            .id-card { background: #000; color: #0f0; padding: 1.5rem; border-radius: 6px; font-family: 'DungGeunMo', monospace; position: relative; border: 2px solid rgba(0, 255, 0, 0.2); }
+            .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0f0; padding-bottom: 0.8rem; margin-bottom: 1rem; }
+            .card-title { font-size: 1rem; font-weight: bold; color: #0f0; }
+            .agent-photo { width: 80px; height: 80px; border: 2px solid #0f0; float: right; margin-left: 1rem; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
             .section { margin-bottom: 1.2rem; clear: both; }
-            .label { color: var(--border-color); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.3rem; display: block; opacity: 0.8; }
-            .content { font-size: 1rem; line-height: 1.4; }
-            .job-highlight { color: var(--job-color); font-size: 1.2rem; font-weight: bold; text-shadow: 0 0 5px var(--job-color); }
+            .label { color: #0f0; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.3rem; display: block; opacity: 0.7; }
+            .content { font-size: 1rem; line-height: 1.4; color: #0f0; }
+            .job-highlight { color: #ff0; font-size: 1.2rem; font-weight: bold; text-shadow: 0 0 5px #ff0; }
             .synergy-box { margin-top: 1.5rem; }
-            .bar-container { width: 100%; height: 20px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.4); position: relative; }
-            .bar-fill { height: 100%; background: var(--border-color); width: 0%; transition: width 0.05s linear; }
+            .bar-container { width: 100%; height: 20px; border: 1px solid #0f0; background: rgba(0,0,0,0.4); position: relative; }
+            .bar-fill { height: 100%; background: #0f0; width: 0%; }
             .bar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 0.8rem; line-height: 20px; color: #fff; mix-blend-mode: difference; }
-            .thesis-origin { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.6; border-top: 1px dashed var(--border-color); padding-top: 0.8rem; }
+            .thesis-origin { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.6; border-top: 1px dashed #0f0; padding-top: 0.8rem; color: #0f0; }
             
-            /* Hint Animation */
-            .hint-container { 
-                margin-top: 2rem; 
-                text-align: center; 
-                animation: bounce 1.5s infinite; 
-            }
-            .hint-text { 
-                color: #ffff00; 
-                font-size: 0.8rem; 
-                text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
-                margin-bottom: 0.5rem;
-                display: block;
-            }
-            @keyframes bounce {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-5px); }
-            }
+            .hint-container { margin-top: 2rem; text-align: center; animation: bounce 1.5s infinite; }
+            .hint-text { color: #ffff00; font-size: 0.8rem; text-shadow: 0 0 5px rgba(255, 255, 0, 0.5); margin-bottom: 0.5rem; display: block; }
+            @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-            .download-btn { width: 100%; padding: 0.8rem; background: var(--button-bg); color: var(--text-color); border: 2px solid var(--border-color); cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; font-size: 1rem; }
-            .download-btn:hover { background: var(--button-hover-bg); color: var(--button-hover-color); }
-            .pdf-btn { background: #050; border-color: #0f0; margin-top: 0.5rem; }
+            .download-btn { width: 100%; padding: 0.8rem; background: #030; color: #0f0; border: 2px solid #0f0; cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; font-size: 1rem; }
+            .download-btn:hover { background: #0f0; color: #000; }
+            .pdf-btn { background: #050; border-color: #0f0; margin-top: 1rem; color: #0f0; }
             
-            #reasoning-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--report-bg); z-index: 100; padding: 1.5rem; box-sizing: border-box; flex-direction: column; overflow-y: auto; }
+            #reasoning-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; padding: 1.5rem; box-sizing: border-box; flex-direction: column; overflow-y: auto; color: #0f0; }
             .modal-active { display: flex !important; animation: slideUp 0.4s ease-out; }
             @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-            .reasoning-text { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; margin-top: 1rem; border-top: 1px solid rgba(0,255,0,0.2); padding-top: 1rem; }
-            .summary-info { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding: 0.8rem; border: 1px solid var(--border-color); background: rgba(0,255,0,0.05); }
+            .reasoning-text { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; margin-top: 1rem; border-top: 1px solid rgba(0,255,0,0.2); padding-top: 1rem; color: #0f0; }
+            .summary-info { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding: 0.8rem; border: 1px solid #0f0; background: rgba(0,255,0,0.05); }
+            
+            /* PDF Export Area (16:9) */
+            #pdf-export-wrapper { 
+                width: 1000px; 
+                height: 562.5px; 
+                background: #000; 
+                display: flex; 
+                padding: 40px; 
+                box-sizing: border-box; 
+                gap: 30px; 
+                position: absolute; 
+                left: -9999px; /* 화면 밖 렌더링 */
+            }
+            .pdf-col { flex: 1; display: flex; flex-direction: column; }
         `;
     }
     displayFate(data) {
         const lang = localStorage.getItem('language') || 'ko';
         this.shadowRoot.innerHTML = `
             <style>${this.getStyle()}</style>
-            <div class="id-card">
+            
+            <!-- 실제 화면용 카드 -->
+            <div class="id-card" id="main-card">
                 <div class="card-header">
                     <div class="card-title">${translations[lang].analysis_report_title}</div>
                     <div style="font-size: 0.7rem;">NO. ${Math.random().toString(36).substr(2, 9).toUpperCase()}</div>
@@ -176,47 +178,57 @@ class FateResult extends HTMLElement {
                     <span class="label">${translations[lang].labels.job}</span>
                     <div class="content job-highlight">${data.job}</div>
                 </div>
-                <div class="section">
-                    <span class="label">${translations[lang].labels.analysis}</span>
-                    <div class="content">${data.analysis}</div>
-                </div>
                 <div class="synergy-box">
                     <span class="label">${translations[lang].synergy_score_label}</span>
                     <div class="bar-container">
-                        <div class="bar-fill" id="id-bar" style="width: ${data.score}%"></div>
-                        <div class="bar-text" id="id-score">${data.score}%</div>
+                        <div class="bar-fill" id="id-bar"></div>
+                        <div class="bar-text" id="id-score">0%</div>
                     </div>
                 </div>
-                
                 <div class="hint-container">
                     <span class="hint-text">${translations[lang].click_hint}</span>
                     <button class="download-btn" id="open-reasoning">${translations[lang].download_button_text}</button>
                 </div>
-
-                <div class="thesis-origin">
-                    <span class="label">${translations[lang].labels.origin}</span>
-                    <div>Dr. Seo et al. (2148), "Quantum Mapping," <i>Neo-Seoul Journal</i>.</div>
-                </div>
             </div>
             
+            <!-- 상세 분석 모달 -->
             <div id="reasoning-modal">
-                <div id="pdf-report-content">
-                    <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
-                    <div class="summary-info">
-                        <div style="font-size: 1.5rem;">👤</div>
-                        <div>
-                            <div style="font-size: 0.9rem; font-weight: bold;">${lastInputs.name} 요원</div>
-                            <div style="font-size: 0.75rem; color: var(--job-color);">${data.job}</div>
-                        </div>
+                <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
+                <div class="summary-info">
+                    <div style="font-size: 1.5rem;">👤</div>
+                    <div>
+                        <div style="font-size: 0.9rem; font-weight: bold; color:#0f0;">${lastInputs.name} 요원</div>
+                        <div style="font-size: 0.75rem; color: #ff0;">${data.job}</div>
                     </div>
-                    <div class="reasoning-text" id="reasoning-content"></div>
                 </div>
-                <div style="margin-top: auto; padding-top: 1rem;">
+                <div class="reasoning-text" id="reasoning-content"></div>
+                <div style="margin-top: auto;">
                     <button class="download-btn pdf-btn" id="download-pdf">${translations[lang].pdf_button_text}</button>
-                    <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
+                    <button class="download-btn" style="margin-top:0.5rem" id="close-reasoning">${translations[lang].close_button}</button>
+                </div>
+            </div>
+
+            <!-- PDF 전용 16:9 통합 래퍼 (숨김 처리됨) -->
+            <div id="pdf-export-wrapper">
+                <div class="pdf-col">
+                    <div class="id-card" style="height:100%">
+                        <div class="card-header"><div class="card-title">${translations[lang].analysis_report_title}</div></div>
+                        <div class="agent-photo" style="width:120px; height:120px;">👤</div>
+                        <div class="section"><span class="label">AGENT NAME</span><div class="content" style="font-size:1.5rem;">${lastInputs.name}</div></div>
+                        <div class="section"><span class="label">JOB CLASS</span><div class="content job-highlight" style="font-size:1.8rem;">${data.job}</div></div>
+                        <div class="synergy-box"><span class="label">SUITABILITY</span><div class="bar-container" style="height:30px;"><div class="bar-fill" style="width:${data.score}%"></div><div class="bar-text" style="line-height:30px;">${data.score}%</div></div></div>
+                    </div>
+                </div>
+                <div class="pdf-col">
+                    <div class="id-card" style="height:100%">
+                        <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
+                        <div class="reasoning-text" style="font-size:1.1rem; border:none;" id="pdf-reasoning-text"></div>
+                        <div style="margin-top:auto; font-size:0.8rem; opacity:0.6; color:#0f0; border-top:1px dashed #0f0; padding-top:10px;">Neo-Seoul Bio-Quantum Research Lab / DNA Mapping Vol.12</div>
+                    </div>
                 </div>
             </div>
         `;
+        this.animateSynergy(data.score);
         this.setupModal(data);
     }
     setupModal(data) {
@@ -225,20 +237,38 @@ class FateResult extends HTMLElement {
         const closeBtn = this.shadowRoot.getElementById('close-reasoning');
         const pdfBtn = this.shadowRoot.getElementById('download-pdf');
         const content = this.shadowRoot.getElementById('reasoning-content');
+        const pdfText = this.shadowRoot.getElementById('pdf-reasoning-text');
         const lang = localStorage.getItem('language') || 'ko';
         const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
         const l = translations[lang].quantum_logic;
-        const reason = lang === 'ko' ? 
-            `[분석 근거 요약] \n\n귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : 
-            `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
+        const reason = lang === 'ko' ? `[분석 근거 요약] \n\n귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
         
-        openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; };
+        openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; pdfText.textContent = reason; };
         closeBtn.onclick = () => { modal.classList.remove('modal-active'); };
+        
         pdfBtn.onclick = () => {
-            const element = this.shadowRoot.getElementById('pdf-report-content');
-            const opt = { margin: 10, filename: `NeoSeoul_ID_${lastInputs.name}.pdf`, html2canvas: { scale: 2, backgroundColor: '#000' }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            const element = this.shadowRoot.getElementById('pdf-export-wrapper');
+            const opt = { 
+                margin: 0, 
+                filename: `NeoSeoul_Agent_${lastInputs.name}.pdf`, 
+                image: { type: 'jpeg', quality: 1 }, 
+                html2canvas: { scale: 2, backgroundColor: '#000', useCORS: true }, 
+                jsPDF: { unit: 'px', format: [1000, 562.5], orientation: 'landscape' } 
+            };
             html2pdf().set(opt).from(element).save();
         };
+    }
+    animateSynergy(targetScore) {
+        const bar = this.shadowRoot.getElementById('id-bar');
+        const scoreEl = this.shadowRoot.getElementById('id-score');
+        let current = 0;
+        const interval = setInterval(() => {
+            if (current < targetScore) {
+                current++;
+                if (bar) bar.style.width = `${current}%`;
+                if (scoreEl) scoreEl.textContent = `${current}%`;
+            } else { clearInterval(interval); this.dispatchEvent(new CustomEvent('report-finished')); }
+        }, 30);
     }
 }
 customElements.define('fate-result', FateResult);
@@ -272,7 +302,11 @@ function setLanguage(lang) {
     langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
 }
 setLanguage(localStorage.getItem('language') || 'ko');
-langToggle.addEventListener('click', () => setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko'));
+langToggle.addEventListener('click', () => {
+    body.classList.add('glitch-effect');
+    setTimeout(() => body.classList.remove('glitch-effect'), 300);
+    setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko');
+});
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const inputs = { name: document.getElementById('name-input').value, mbti: document.getElementById('mbti-select').value, blood: document.getElementById('blood-select').value, gender: document.getElementById('gender-select').value, age: document.getElementById('age-select').value, interest: document.getElementById('interest-select').value };
@@ -290,8 +324,6 @@ document.getElementById('extract-button').addEventListener('click', () => {
         inputCont.style.display = 'none'; status.style.display = 'none'; resCont.innerHTML = '';
         const report = document.createElement('fate-result'); resCont.appendChild(report);
         report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender));
-        
-        // 시스템 재부팅 버튼 생성
         const homeCont = document.getElementById('global-home-button-container');
         homeCont.innerHTML = `<button class="home-button-global" onclick="location.reload()">${translations[lang].home_button_text}</button>`;
     }, 2000);

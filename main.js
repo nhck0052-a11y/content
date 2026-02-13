@@ -212,7 +212,7 @@ class FateResult extends HTMLElement {
                     <span class="label">${translations[lang].labels.origin}</span>
                     <div>Dr. Seo et al. (2148), "Quantum Mapping," <i>Neo-Seoul Journal</i>.</div>
                 </div>
-                <button class="download-btn" onclick="alert('Encrypted data saved.')">${translations[lang].download_button_text}</button>
+                <button class="download-btn" onclick="alert('Citizenship data saved to neural link.')">${translations[lang].download_button_text}</button>
             </div>
         `;
         this.animateSynergy(data.score);

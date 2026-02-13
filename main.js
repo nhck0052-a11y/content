@@ -407,8 +407,8 @@ function showHomeButton() {
 }
 
 function triggerGlitch(el) {
-    el.classList.add('glitch-effect');
-    setTimeout(() => el.classList.remove('glitch-effect'), 300);
+    el.classList.add('char-glitch');
+    setTimeout(() => el.classList.remove('char-glitch'), 300);
 }
 
 function initCharacters() {

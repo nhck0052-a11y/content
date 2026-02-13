@@ -161,35 +161,45 @@ p {
 .light-mode .light-pixel-character { opacity: 0.6; }
 body:not(.light-mode) .light-pixel-character { opacity: 0; }
 
+/* Body 전용 글리치: 레이아웃에 영향을 주지 않도록 transform 제외 */
 .glitch-effect { 
-    animation: retro-glitch 0.2s ease-out infinite; 
-    position: relative;
+    animation: body-glitch 0.2s ease-out; 
 }
 
-/* 캐릭터 자체가 쪼개지고 번쩍이는 애니메이션 */
-@keyframes retro-glitch {
+@keyframes body-glitch {
+    0% { filter: hue-rotate(0deg) brightness(1); }
+    50% { filter: hue-rotate(180deg) brightness(1.2); }
+    100% { filter: hue-rotate(360deg) brightness(1); }
+}
+
+/* 캐릭터 전용 글리치: 강렬한 쪼개짐과 움직임 포함 */
+.char-glitch { 
+    animation: char-glitch-ani 0.2s ease-out; 
+}
+
+@keyframes char-glitch-ani {
     0% { 
         transform: translate(0);
         filter: hue-rotate(0deg) brightness(1);
         clip-path: inset(0 0 0 0);
     }
     20% { 
-        transform: translate(-3px, 2px);
-        filter: hue-rotate(90deg) brightness(2) contrast(1.5);
+        transform: translate(-5px, 3px);
+        filter: hue-rotate(90deg) brightness(2);
         clip-path: inset(10% 0 40% 0);
     }
     40% { 
-        transform: translate(3px, -2px);
-        filter: hue-rotate(180deg) brightness(1.5) sepia(1);
+        transform: translate(5px, -3px);
+        filter: hue-rotate(180deg) brightness(1.5);
         clip-path: inset(50% 0 10% 0);
     }
     60% { 
-        transform: translate(-5px, -3px);
+        transform: translate(-8px, -4px);
         filter: hue-rotate(270deg) brightness(2.5);
         clip-path: inset(30% 0 20% 0);
     }
     80% { 
-        transform: translate(5px, 3px);
+        transform: translate(8px, 4px);
         filter: hue-rotate(360deg) brightness(1.8);
         clip-path: inset(0% 0 70% 0);
     }

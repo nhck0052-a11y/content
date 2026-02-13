@@ -49,7 +49,8 @@ const translations = {
         },
         deep_analysis_title: "OFFICIAL SUITABILITY REPORT",
         close_button: "Return to Main",
-        share_btn: "📡 SHARE"
+        share_btn: "📡 SHARE",
+        click_hint: "Click here to view analysis summary and share! ↓"
     },
     ko: {
         app_title: "2150 AI 생존 시뮬레이션",
@@ -101,7 +102,8 @@ const translations = {
         },
         deep_analysis_title: "정식 직업 적합도 보고서",
         close_button: "시민증으로 돌아가기",
-        share_btn: "📡 공유"
+        share_btn: "📡 공유",
+        click_hint: "이곳을 클릭하여 분석근거 요약을 확인하고 공유해보세요! ↓"
     }
 };
 
@@ -126,12 +128,29 @@ class FateResult extends HTMLElement {
             .bar-fill { height: 100%; background: var(--border-color); width: 0%; transition: width 0.05s linear; }
             .bar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 0.8rem; line-height: 20px; color: #fff; mix-blend-mode: difference; }
             .thesis-origin { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.6; border-top: 1px dashed var(--border-color); padding-top: 0.8rem; }
-            .download-btn { width: 100%; margin-top: 1rem; padding: 0.8rem; background: var(--button-bg); color: var(--text-color); border: 2px solid var(--border-color); cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; }
+            
+            /* Hint Animation */
+            .hint-container { 
+                margin-top: 2rem; 
+                text-align: center; 
+                animation: bounce 1.5s infinite; 
+            }
+            .hint-text { 
+                color: #ffff00; 
+                font-size: 0.8rem; 
+                text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+                margin-bottom: 0.5rem;
+                display: block;
+            }
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-5px); }
+            }
+
+            .download-btn { width: 100%; padding: 0.8rem; background: var(--button-bg); color: var(--text-color); border: 2px solid var(--border-color); cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; font-size: 1rem; }
             .download-btn:hover { background: var(--button-hover-bg); color: var(--button-hover-color); }
             .pdf-btn { background: #050; border-color: #0f0; margin-top: 0.5rem; }
-            .scanline { width: 100%; height: 2px; background: rgba(0, 255, 0, 0.1); position: absolute; top: 0; left: 0; animation: scan 4s linear infinite; pointer-events: none; }
-            @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-
+            
             #reasoning-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--report-bg); z-index: 100; padding: 1.5rem; box-sizing: border-box; flex-direction: column; overflow-y: auto; }
             .modal-active { display: flex !important; animation: slideUp 0.4s ease-out; }
             @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -143,8 +162,7 @@ class FateResult extends HTMLElement {
         const lang = localStorage.getItem('language') || 'ko';
         this.shadowRoot.innerHTML = `
             <style>${this.getStyle()}</style>
-            <div class="id-card" id="pdf-area">
-                <div class="scanline"></div>
+            <div class="id-card">
                 <div class="card-header">
                     <div class="card-title">${translations[lang].analysis_report_title}</div>
                     <div style="font-size: 0.7rem;">NO. ${Math.random().toString(36).substr(2, 9).toUpperCase()}</div>
@@ -169,12 +187,15 @@ class FateResult extends HTMLElement {
                         <div class="bar-text" id="id-score">${data.score}%</div>
                     </div>
                 </div>
+                
+                <div class="hint-container">
+                    <span class="hint-text">${translations[lang].click_hint}</span>
+                    <button class="download-btn" id="open-reasoning">${translations[lang].download_button_text}</button>
+                </div>
+
                 <div class="thesis-origin">
                     <span class="label">${translations[lang].labels.origin}</span>
                     <div>Dr. Seo et al. (2148), "Quantum Mapping," <i>Neo-Seoul Journal</i>.</div>
-                </div>
-                <div id="btn-group">
-                    <button class="download-btn" id="open-reasoning">${translations[lang].download_button_text}</button>
                 </div>
             </div>
             
@@ -207,7 +228,10 @@ class FateResult extends HTMLElement {
         const lang = localStorage.getItem('language') || 'ko';
         const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
         const l = translations[lang].quantum_logic;
-        const reason = lang === 'ko' ? `[분석 근거 요약] \n\n귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며...` : `[Analysis Evidence Summary] \n\nYour biological energy unit (Type ${lastInputs.blood}) exhibits...`;
+        const reason = lang === 'ko' ? 
+            `[분석 근거 요약] \n\n귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : 
+            `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
+        
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; };
         closeBtn.onclick = () => { modal.classList.remove('modal-active'); };
         pdfBtn.onclick = () => {
@@ -225,7 +249,6 @@ const langToggle = document.getElementById('lang-toggle');
 const shareToggle = document.getElementById('share-toggle');
 const shareMenu = document.getElementById('share-menu');
 
-// 공유 메뉴 토글 로직
 shareToggle.addEventListener('click', () => shareMenu.classList.toggle('collapsed'));
 
 function setTheme(theme) {
@@ -249,11 +272,7 @@ function setLanguage(lang) {
     langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
 }
 setLanguage(localStorage.getItem('language') || 'ko');
-langToggle.addEventListener('click', () => {
-    body.classList.add('glitch-effect');
-    setTimeout(() => body.classList.remove('glitch-effect'), 300);
-    setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko');
-});
+langToggle.addEventListener('click', () => setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko'));
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const inputs = { name: document.getElementById('name-input').value, mbti: document.getElementById('mbti-select').value, blood: document.getElementById('blood-select').value, gender: document.getElementById('gender-select').value, age: document.getElementById('age-select').value, interest: document.getElementById('interest-select').value };
@@ -271,10 +290,10 @@ document.getElementById('extract-button').addEventListener('click', () => {
         inputCont.style.display = 'none'; status.style.display = 'none'; resCont.innerHTML = '';
         const report = document.createElement('fate-result'); resCont.appendChild(report);
         report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender));
-        report.addEventListener('report-finished', () => {
-            const homeCont = document.getElementById('global-home-button-container');
-            homeCont.innerHTML = `<button class="home-button-global" onclick="location.reload()">${translations[lang].home_button_text}</button>`;
-        });
+        
+        // 시스템 재부팅 버튼 생성
+        const homeCont = document.getElementById('global-home-button-container');
+        homeCont.innerHTML = `<button class="home-button-global" onclick="location.reload()">${translations[lang].home_button_text}</button>`;
     }, 2000);
 });
 

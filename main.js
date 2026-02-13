@@ -264,17 +264,44 @@ class FateResult extends HTMLElement {
             try {
                 const canvas = await generateImage();
                 const dataUrl = canvas.toDataURL('image/png');
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                if (isMobile) {
-                    const newWindow = window.open();
-                    newWindow.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;"><img src="${dataUrl}" style="width:100%; max-width:100%;"><p style="color:#fff; font-family:sans-serif; margin-top:20px; text-align:center;">${translations[lang].mobile_save_notice}</p><button onclick="window.close()" style="margin-top:20px; padding:10px 20px; background:#fff; border:none; border-radius:5px;">Close</button></body>`);
-                } else {
+                
+                // 모바일 및 데스크탑 공통: 미리보기 오버레이 생성
+                const previewOverlay = document.createElement('div');
+                previewOverlay.id = 'image-preview-overlay';
+                previewOverlay.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:10000; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;";
+                
+                const img = document.createElement('img');
+                img.src = dataUrl;
+                img.style = "max-width:100%; max-height:75%; border:2px solid #00FF41; box-shadow: 0 0 20px rgba(0,255,65,0.5); object-fit:contain;";
+                
+                const msg = document.createElement('p');
+                msg.textContent = translations[lang].mobile_save_notice;
+                msg.style = "color:#fff; margin-top:20px; text-align:center; font-family:sans-serif; font-size:0.9rem; line-height:1.5;";
+                
+                const closeBtnOverlay = document.createElement('button');
+                closeBtnOverlay.textContent = translations[lang].close_button;
+                closeBtnOverlay.style = "margin-top:20px; padding:12px 24px; background:#222; color:#00FF41; border:2px solid #00FF41; cursor:pointer; font-family:inherit; font-weight:bold;";
+                closeBtnOverlay.onclick = () => document.body.removeChild(previewOverlay);
+                
+                previewOverlay.appendChild(img);
+                previewOverlay.appendChild(msg);
+                previewOverlay.appendChild(closeBtnOverlay);
+                document.body.appendChild(previewOverlay);
+
+                // 데스크탑에서는 자동 다운로드 시도
+                if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                     const link = document.createElement('a'); 
                     link.download = `NeoSeoul_Report_${lastInputs.name}.png`; 
                     link.href = dataUrl; 
                     link.click();
                 }
-            } catch (err) { console.error('Save failed:', err); } finally { imgBtn.textContent = originalText; imgBtn.disabled = false; }
+            } catch (err) { 
+                console.error('Save failed:', err); 
+                alert("Image generation failed. Please take a screenshot instead.");
+            } finally { 
+                imgBtn.textContent = originalText; 
+                imgBtn.disabled = false; 
+            }
         };
     }
 

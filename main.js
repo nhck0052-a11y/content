@@ -17,6 +17,7 @@ const translations = {
         home_button_text: "Reboot System",
         download_button_text: "Issue Official ID",
         img_button_text: "Save Tactical Report (PNG)",
+        share_report_button: "Share Tactical Report",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -62,6 +63,7 @@ const translations = {
         home_button_text: "시스템 재부팅",
         download_button_text: "시민증 정식 발급",
         img_button_text: "전술 보고서 사진 저장 (PNG)",
+        share_report_button: "전술 보고서 외부 공유",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
@@ -176,7 +178,11 @@ class FateResult extends HTMLElement {
             <div id="reasoning-modal">
                 <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
                 <div class="reasoning-text" id="reasoning-content"></div>
-                <div style="margin-top: auto;"><button class="download-btn" id="save-image">${translations[lang].img_button_text}</button><button class="download-btn" style="margin-top:0.5rem" id="close-reasoning">${translations[lang].close_button}</button></div>
+                <div style="margin-top: auto; display:flex; flex-direction:column; gap:0.5rem;">
+                    <button class="download-btn" id="save-image">${translations[lang].img_button_text}</button>
+                    <button class="download-btn" id="share-report">${translations[lang].share_report_button}</button>
+                    <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
+                </div>
             </div>
             <div id="image-export-wrapper">
                 <div class="notebook-page">
@@ -205,18 +211,44 @@ class FateResult extends HTMLElement {
         this.setupModal(data);
     }
     setupModal(data) {
-        const modal = this.shadowRoot.getElementById('reasoning-modal'), openBtn = this.shadowRoot.getElementById('open-reasoning'), closeBtn = this.shadowRoot.getElementById('close-reasoning'), imgBtn = this.shadowRoot.getElementById('save-image'), content = this.shadowRoot.getElementById('reasoning-content'), exportText = this.shadowRoot.getElementById('export-reasoning-text'), lang = localStorage.getItem('language') || 'ko';
+        const modal = this.shadowRoot.getElementById('reasoning-modal'), openBtn = this.shadowRoot.getElementById('open-reasoning'), closeBtn = this.shadowRoot.getElementById('close-reasoning'), imgBtn = this.shadowRoot.getElementById('save-image'), shareBtn = this.shadowRoot.getElementById('share-report'), content = this.shadowRoot.getElementById('reasoning-content'), exportText = this.shadowRoot.getElementById('export-reasoning-text'), lang = localStorage.getItem('language') || 'ko';
         const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
         const l = translations[lang].quantum_logic;
         const reason = lang === 'ko' ? `분석 결과, 귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; exportText.textContent = reason; };
         closeBtn.onclick = () => modal.classList.remove('modal-active');
-        imgBtn.onclick = () => {
+        
+        const generateImageFile = async () => {
             const wrapper = this.shadowRoot.getElementById('image-export-wrapper');
             const isLight = document.body.classList.contains('light-mode');
-            html2canvas(wrapper, { scale: 2, backgroundColor: isLight ? '#FFFFFF' : '#000000', useCORS: true }).then(canvas => {
-                const link = document.createElement('a'); link.download = `NeoSeoul_Tactical_Report_${lastInputs.name}.png`; link.href = canvas.toDataURL(); link.click();
-            });
+            const canvas = await html2canvas(wrapper, { scale: 2, backgroundColor: isLight ? '#FFFFFF' : '#000000', useCORS: true });
+            return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        };
+
+        imgBtn.onclick = async () => {
+            const blob = await generateImageFile();
+            const link = document.createElement('a'); 
+            link.download = `NeoSeoul_Tactical_Report_${lastInputs.name}.png`; 
+            link.href = URL.createObjectURL(blob); 
+            link.click();
+        };
+
+        shareBtn.onclick = async () => {
+            try {
+                const blob = await generateImageFile();
+                const file = new File([blob], `NeoSeoul_Report_${lastInputs.name}.png`, { type: 'image/png' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: '2150 AI 생존 시뮬레이션 결과',
+                        text: `${lastInputs.name} 요원의 전술 보고서입니다. #2150AI #생존시뮬레이션`
+                    });
+                } else {
+                    alert(lang === 'ko' ? '이 브라우저는 이미지 공유를 지원하지 않습니다. 사진 저장 기능을 이용해주세요.' : 'Direct image sharing is not supported on this browser. Please use the Save button.');
+                }
+            } catch (err) {
+                console.error('Share failed:', err);
+            }
         };
     }
     animateSynergy(targetScore) {

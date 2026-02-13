@@ -16,6 +16,7 @@ const translations = {
         synergy_score_label: "AI Job Suitability:",
         home_button_text: "Reboot System",
         download_button_text: "Issue Official ID",
+        pdf_button_text: "Download as PDF",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -62,6 +63,7 @@ const translations = {
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
         download_button_text: "시민증 정식 발급",
+        pdf_button_text: "PDF 보고서 저장",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
@@ -102,7 +104,6 @@ const translations = {
 };
 
 let lastInputs = null;
-let currentResonanceScore = 0;
 let cyberTime = new Date(2150, 2, 1, 0, 0, 0);
 
 class FateResult extends HTMLElement {
@@ -123,12 +124,12 @@ class FateResult extends HTMLElement {
             .bar-fill { height: 100%; background: var(--border-color); width: 0%; transition: width 0.05s linear; }
             .bar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 0.8rem; line-height: 20px; color: #fff; mix-blend-mode: difference; }
             .thesis-origin { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.6; border-top: 1px dashed var(--border-color); padding-top: 0.8rem; }
-            .download-btn { width: 100%; margin-top: 1.5rem; padding: 0.8rem; background: var(--button-bg); color: var(--text-color); border: 2px solid var(--border-color); cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; }
+            .download-btn { width: 100%; margin-top: 1rem; padding: 0.8rem; background: var(--button-bg); color: var(--text-color); border: 2px solid var(--border-color); cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; }
             .download-btn:hover { background: var(--button-hover-bg); color: var(--button-hover-color); }
+            .pdf-btn { background: #050; border-color: #0f0; margin-top: 0.5rem; }
             .scanline { width: 100%; height: 2px; background: rgba(0, 255, 0, 0.1); position: absolute; top: 0; left: 0; animation: scan 4s linear infinite; pointer-events: none; }
             @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-            /* Integrated Report View */
             #reasoning-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--report-bg); z-index: 100; padding: 1.5rem; box-sizing: border-box; flex-direction: column; overflow-y: auto; }
             .modal-active { display: flex !important; animation: slideUp 0.4s ease-out; }
             @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -140,7 +141,7 @@ class FateResult extends HTMLElement {
         const lang = localStorage.getItem('language') || 'ko';
         this.shadowRoot.innerHTML = `
             <style>${this.getStyle()}</style>
-            <div class="id-card">
+            <div class="id-card" id="pdf-area">
                 <div class="scanline"></div>
                 <div class="card-header">
                     <div class="card-title">${translations[lang].analysis_report_title}</div>
@@ -162,37 +163,37 @@ class FateResult extends HTMLElement {
                 <div class="synergy-box">
                     <span class="label">${translations[lang].synergy_score_label}</span>
                     <div class="bar-container">
-                        <div class="bar-fill" id="id-bar"></div>
-                        <div class="bar-text" id="id-score">0%</div>
+                        <div class="bar-fill" id="id-bar" style="width: ${data.score}%"></div>
+                        <div class="bar-text" id="id-score">${data.score}%</div>
                     </div>
                 </div>
                 <div class="thesis-origin">
                     <span class="label">${translations[lang].labels.origin}</span>
                     <div>Dr. Seo et al. (2148), "Quantum Mapping," <i>Neo-Seoul Journal</i>.</div>
                 </div>
-                <button class="download-btn" id="open-reasoning">${translations[lang].download_button_text}</button>
+                <div id="btn-group">
+                    <button class="download-btn" id="open-reasoning">${translations[lang].download_button_text}</button>
+                </div>
             </div>
             
             <div id="reasoning-modal">
-                <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
-                
-                <div class="summary-info">
-                    <div style="font-size: 1.5rem;">👤</div>
-                    <div>
-                        <div style="font-size: 0.9rem; font-weight: bold;">${lastInputs.name} 요원</div>
-                        <div style="font-size: 0.75rem; color: var(--job-color);">${data.job}</div>
+                <div id="pdf-report-content">
+                    <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
+                    <div class="summary-info">
+                        <div style="font-size: 1.5rem;">👤</div>
+                        <div>
+                            <div style="font-size: 0.9rem; font-weight: bold;">${lastInputs.name} 요원</div>
+                            <div style="font-size: 0.75rem; color: var(--job-color);">${data.job}</div>
+                        </div>
                     </div>
+                    <div class="reasoning-text" id="reasoning-content"></div>
                 </div>
-
-                <div class="reasoning-text" id="reasoning-content"></div>
-                
                 <div style="margin-top: auto; padding-top: 1rem;">
-                    <div style="font-size: 0.65rem; opacity: 0.5; margin-bottom: 1rem;">* 본 보고서는 네오-서울 중앙 컴퓨터의 생체 양자 분석 알고리즘에 의해 자동 생성되었습니다.</div>
+                    <button class="download-btn pdf-btn" id="download-pdf">${translations[lang].pdf_button_text}</button>
                     <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
                 </div>
             </div>
         `;
-        this.animateSynergy(data.score);
         this.setupModal(data);
     }
 
@@ -200,6 +201,7 @@ class FateResult extends HTMLElement {
         const modal = this.shadowRoot.getElementById('reasoning-modal');
         const openBtn = this.shadowRoot.getElementById('open-reasoning');
         const closeBtn = this.shadowRoot.getElementById('close-reasoning');
+        const pdfBtn = this.shadowRoot.getElementById('download-pdf');
         const content = this.shadowRoot.getElementById('reasoning-content');
         const lang = localStorage.getItem('language') || 'ko';
 
@@ -212,16 +214,18 @@ class FateResult extends HTMLElement {
 
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; };
         closeBtn.onclick = () => { modal.classList.remove('modal-active'); };
-    }
-
-    animateSynergy(targetScore) {
-        const bar = this.shadowRoot.getElementById('id-bar');
-        const scoreEl = this.shadowRoot.getElementById('id-score');
-        let current = 0;
-        const interval = setInterval(() => {
-            if (current < targetScore) { current++; if (bar) bar.style.width = `${current}%`; if (scoreEl) scoreEl.textContent = `${current}%`; }
-            else { clearInterval(interval); this.dispatchEvent(new CustomEvent('report-finished')); }
-        }, 25);
+        
+        pdfBtn.onclick = () => {
+            const element = this.shadowRoot.getElementById('pdf-report-content');
+            const opt = {
+                margin: 10,
+                filename: `NeoSeoul_ID_${lastInputs.name}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, backgroundColor: '#000' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        };
     }
 }
 customElements.define('fate-result', FateResult);
@@ -290,7 +294,11 @@ document.getElementById('extract-button').addEventListener('click', () => {
         resCont.innerHTML = '';
         const report = document.createElement('fate-result');
         resCont.appendChild(report);
-        report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender));
+        const fateData = generateFate(inputs.mbti, inputs.blood, inputs.gender);
+        report.displayFate(fateData);
+        
+        document.getElementById('share-container').style.display = 'flex';
+        
         report.addEventListener('report-finished', () => {
             const homeCont = document.getElementById('global-home-button-container');
             homeCont.innerHTML = `<button class="home-button-global" onclick="location.reload()">${translations[lang].home_button_text}</button>`;

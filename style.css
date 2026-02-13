@@ -69,13 +69,15 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     pointer-events: none;
+    /* 모든 트랜지션 제거 (잔상 효과 방지) */
+    transition: none !important;
 }
 
 /* 다크 모드 행성 설정 */
 body:not(.light-mode) .planet {
     display: block;
     mix-blend-mode: screen;
-    filter: brightness(1.4) contrast(1.2);
+    filter: brightness(1.2) contrast(1.1); /* 필터 강도 완화 */
 }
 .light-mode .planet { display: none; }
 
@@ -96,7 +98,7 @@ body:not(.light-mode) .planet {
     display: none;
     mix-blend-mode: multiply;
     opacity: 0.7;
-    filter: contrast(1.1);
+    filter: none; /* 필터 제거 */
 }
 .light-mode .light-planet { display: block; }
 

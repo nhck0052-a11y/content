@@ -150,11 +150,7 @@ let currentResonanceScore = 0;
 let cyberTime = new Date(2150, 2, 1, 0, 0, 0);
 
 class FateResult extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-
+    constructor() { super(); this.attachShadow({ mode: 'open' }); }
     getStyle() {
         return `
             :host { display: block; padding: 2px; background: var(--border-color); border-radius: 8px; box-shadow: 0 0 30px var(--box-shadow-color); margin-top: 1.5rem; overflow: hidden; }
@@ -177,7 +173,6 @@ class FateResult extends HTMLElement {
             @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
         `;
     }
-
     displayFate(data) {
         const lang = localStorage.getItem('language') || 'ko';
         this.shadowRoot.innerHTML = `
@@ -212,29 +207,21 @@ class FateResult extends HTMLElement {
                     <span class="label">${translations[lang].labels.origin}</span>
                     <div>Dr. Seo et al. (2148), "Quantum Mapping," <i>Neo-Seoul Journal</i>.</div>
                 </div>
-                <button class="download-btn" onclick="alert('Citizenship data saved to neural link.')">${translations[lang].download_button_text}</button>
+                <button class="download-btn" onclick="alert('Encrypted data saved.')">${translations[lang].download_button_text}</button>
             </div>
         `;
         this.animateSynergy(data.score);
     }
-
     animateSynergy(targetScore) {
         const bar = this.shadowRoot.getElementById('id-bar');
         const scoreEl = this.shadowRoot.getElementById('id-score');
         let current = 0;
         const interval = setInterval(() => {
-            if (current < targetScore) {
-                current++;
-                if (bar) bar.style.width = `${current}%`;
-                if (scoreEl) scoreEl.textContent = `${current}%`;
-            } else {
-                clearInterval(interval);
-                this.dispatchEvent(new CustomEvent('report-finished'));
-            }
+            if (current < targetScore) { current++; if (bar) bar.style.width = `${current}%`; if (scoreEl) scoreEl.textContent = `${current}%`; }
+            else { clearInterval(interval); this.dispatchEvent(new CustomEvent('report-finished')); }
         }, 25);
     }
 }
-
 customElements.define('fate-result', FateResult);
 
 const body = document.body;
@@ -242,23 +229,12 @@ const themeToggle = document.getElementById('theme-toggle');
 const langToggle = document.getElementById('lang-toggle');
 
 function setTheme(theme) {
-    if (theme === 'light') {
-        body.classList.add('light-mode');
-        themeToggle.textContent = '[ DARK ]';
-    } else {
-        body.classList.remove('light-mode');
-        themeToggle.textContent = '[ LIGHT ]';
-    }
+    if (theme === 'light') { body.classList.add('light-mode'); themeToggle.textContent = '[ DARK ]'; }
+    else { body.classList.remove('light-mode'); themeToggle.textContent = '[ LIGHT ]'; }
     localStorage.setItem('theme', theme);
 }
-
 setTheme(localStorage.getItem('theme') || 'dark');
-themeToggle.addEventListener('click', () => {
-    const newTheme = body.classList.contains('light-mode') ? 'dark' : 'light';
-    setTheme(newTheme);
-    body.classList.add('glitch-effect');
-    setTimeout(() => body.classList.remove('glitch-effect'), 300);
-});
+themeToggle.addEventListener('click', () => setTheme(body.classList.contains('light-mode') ? 'dark' : 'light'));
 
 function setLanguage(lang) {
     localStorage.setItem('language', lang);
@@ -269,7 +245,6 @@ function setLanguage(lang) {
             else el.textContent = translations[lang][key];
         }
     });
-    
     ['interest-select', 'mbti-select', 'age-select', 'gender-select', 'blood-select'].forEach(id => {
         const select = document.getElementById(id);
         if (select) {
@@ -283,26 +258,10 @@ function setLanguage(lang) {
             });
         }
     });
-
     langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
 }
-
 setLanguage(localStorage.getItem('language') || 'ko');
-langToggle.addEventListener('click', () => {
-    const newLang = localStorage.getItem('language') === 'ko' ? 'en' : 'ko';
-    setLanguage(newLang);
-    body.classList.add('glitch-effect');
-    setTimeout(() => body.classList.remove('glitch-effect'), 300);
-});
-
-function generateFate(mbtiStr, blood, gender) {
-    const lang = localStorage.getItem('language') || 'ko';
-    const mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' : mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' : mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP';
-    const l = translations[lang].quantum_logic;
-    const analysis = lang === 'ko' ? `${l.blood[blood]}와 ${l.gender[gender]}가 ${l.mbti[mbtiGroup]}에 동기화되었습니다.` : `${l.blood[blood]} and ${l.gender[gender]} are synchronized with the ${l.mbti[mbtiGroup]}.`;
-    const job = l.jobs[`${mbtiGroup}+${blood}+${gender}`] || l.jobs['default'];
-    return { analysis, job, score: Math.floor(Math.random() * 30) + 70 };
-}
+langToggle.addEventListener('click', () => setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko'));
 
 document.getElementById('extract-button').addEventListener('click', () => {
     const inputs = {
@@ -336,6 +295,15 @@ document.getElementById('extract-button').addEventListener('click', () => {
         });
     }, 2000);
 });
+
+function generateFate(mbtiStr, blood, gender) {
+    const lang = localStorage.getItem('language') || 'ko';
+    const mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' : mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' : mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP';
+    const l = translations[lang].quantum_logic;
+    const analysis = lang === 'ko' ? `${l.blood[blood]}와 ${l.gender[gender]}가 ${l.mbti[mbtiGroup]}에 동기화되었습니다.` : `${l.blood[blood]} and ${l.gender[gender]} are synchronized with the ${l.mbti[mbtiGroup]}.`;
+    const job = l.jobs[`${mbtiGroup}+${blood}+${gender}`] || l.jobs['default'];
+    return { analysis, job, score: Math.floor(Math.random() * 30) + 70 };
+}
 
 function triggerGlitch(el) { el.classList.add('char-glitch'); setTimeout(() => el.classList.remove('char-glitch'), 300); }
 

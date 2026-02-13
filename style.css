@@ -61,34 +61,42 @@ body {
     z-index: 1;
     pointer-events: none;
     overflow: hidden;
-    display: none;
 }
 
-body:not(.light-mode) #space-background {
-    display: block;
-}
-
-.planet {
+.planet, .light-planet {
     position: absolute;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    mix-blend-mode: screen; /* 검은색 배경 투명화 */
     pointer-events: none;
-    filter: brightness(1.4) contrast(1.2);
 }
 
-/* 새로운 이미지 URL 및 위치 설정 */
-.p-1 { width: 450px; height: 450px; top: -100px; right: -150px; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5523.jpg'); transform: rotate(15deg); }
-.p-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5524.jpg'); transform: rotate(-10deg); }
-.p-3 { width: 350px; height: 350px; top: 35%; right: -50px; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5540.jpg'); opacity: 0.7; }
-.p-4 { width: 300px; height: 300px; top: 15%; left: 5%; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5541.jpg'); opacity: 0.8; }
-.p-5 { width: 320px; height: 320px; bottom: 15%; right: 10%; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5542.jpg'); opacity: 0.7; }
+/* 다크 모드 행성 설정 */
+body:not(.light-mode) .planet {
+    display: block;
+    mix-blend-mode: screen;
+    filter: brightness(1.4) contrast(1.2);
+}
+.light-mode .planet { display: none; }
 
-.p-star-1 { width: 150px; height: 150px; top: 5%; left: 45%; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5543.jpg'); }
-.p-star-2 { width: 130px; height: 130px; bottom: 30%; left: 15%; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5544.jpg'); }
-.p-star-3 { width: 110px; height: 110px; top: 65%; left: 5%; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5543.jpg'); transform: scaleX(-1); }
-.p-star-4 { width: 140px; height: 140px; top: 25%; right: 25%; background-image: url('https://temporary-tomato-l6zfd6pmld.edgeone.app/IMG_5544.jpg'); opacity: 0.6; }
+/* 라이트 모드 행성 설정 */
+.light-planet {
+    display: none;
+    mix-blend-mode: multiply;
+    opacity: 0.7;
+    filter: contrast(1.1);
+}
+.light-mode .light-planet { display: block; }
+
+/* 새로운 8개 이미지 개별 배치 */
+.lp-1 { width: 350px; height: 350px; top: -80px; left: -80px; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5547.jpg'); }
+.lp-2 { width: 300px; height: 300px; top: 5%; right: -50px; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5549.jpg'); }
+.lp-3 { width: 220px; height: 220px; bottom: 5%; left: -30px; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5550.jpg'); }
+.lp-4 { width: 280px; height: 220px; bottom: -40px; right: -40px; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5551.jpg'); }
+.lp-5 { width: 150px; height: 150px; top: 45%; left: 10%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5552.jpg'); opacity: 0.5; }
+.lp-6 { width: 130px; height: 130px; top: 25%; right: 25%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5553.jpg'); }
+.lp-7 { width: 180px; height: 180px; bottom: 35%; right: 5%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5556.jpg'); opacity: 0.6; }
+.lp-8 { width: 160px; height: 160px; top: 10%; left: 35%; background-image: url('https://linguistic-black-w9snct6qdp.edgeone.app/IMG_5562.jpg'); opacity: 0.5; }
 
 .container {
     text-align: center;

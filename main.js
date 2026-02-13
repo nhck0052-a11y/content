@@ -263,9 +263,7 @@ setLanguage(localStorage.getItem('language') || 'ko');
 
 langToggle.addEventListener('click', toggleLanguage);
 
-// 한영키 및 언어 전환 단축키 지원
 window.addEventListener('keydown', (e) => {
-    // e.code 'HangulMode'는 일반적인 한영키, 'AltRight'는 일부 환경에서의 한영키
     if (e.code === 'HangulMode' || e.key === 'HangulMode') {
         toggleLanguage();
     }
@@ -295,8 +293,24 @@ function generateFate(mbtiStr, blood, gender) {
 function triggerGlitch(el) { el.classList.add('char-glitch'); setTimeout(() => el.classList.remove('char-glitch'), 300); }
 function initCharacters() {
     const chars = document.querySelectorAll('.pixel-character, .light-pixel-character'), states = [];
-    chars.forEach(char => { const x = Math.random() * (window.innerWidth - 60), y = Math.random() * (window.innerHeight - 60); char.style.left = `${x}px`; char.style.top = `${y}px`; states.push({ element: char, x, y, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3 }); });
-    function animate() { states.forEach(s1 => { s1.x += s1.vx; s1.y += s1.vy; if (s1.x + 60 > window.innerWidth || s1.x < 0) { s1.vx *= -1; triggerGlitch(s1.element); } if (s1.y + 60 > window.innerHeight || s1.y < 0) { s1.vy *= -1; triggerGlitch(s1.element); } s1.element.style.left = `${s1.x}px`; s1.element.style.top = `${s1.y}px`; }); requestAnimationFrame(animate); } animate();
+    chars.forEach(char => { 
+        const x = Math.random() * (window.innerWidth - 60), y = Math.random() * (window.innerHeight - 60); 
+        char.style.left = `${x}px`; 
+        char.style.top = `${y}px`; 
+        states.push({ element: char, x, y, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3 }); 
+    });
+    function animate() { 
+        states.forEach(s1 => { 
+            s1.x += s1.vx; 
+            s1.y += s1.vy; 
+            if (s1.x + 60 > window.innerWidth || s1.x < 0) { s1.vx *= -1; triggerGlitch(s1.element); } 
+            if (s1.y + 60 > window.innerHeight || s1.y < 0) { s1.vy *= -1; triggerGlitch(s1.element); } 
+            s1.element.style.left = `${s1.x}px`; 
+            s1.element.style.top = `${s1.y}px`; 
+        }); 
+        requestAnimationFrame(animate); 
+    } 
+    if (states.length > 0) animate();
 }
 window.addEventListener('load', initCharacters);
 function updateTime() {

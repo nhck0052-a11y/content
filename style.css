@@ -97,8 +97,8 @@ body:not(.light-mode) .planet {
 .light-planet {
     display: none;
     mix-blend-mode: multiply;
-    opacity: 0.8;
-    filter: contrast(1.3) saturate(1.2) brightness(1.02);
+    opacity: 0.95; /* 선명도를 위해 투명도 상향 */
+    filter: contrast(1.6) saturate(1.4) brightness(1.0); /* 선명도 및 채도 대폭 강화 */
 }
 .light-mode .light-planet { display: block; }
 

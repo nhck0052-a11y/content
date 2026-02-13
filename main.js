@@ -237,6 +237,8 @@ setTheme(localStorage.getItem('theme') || 'dark');
 themeToggle.addEventListener('click', () => setTheme(body.classList.contains('light-mode') ? 'dark' : 'light'));
 
 function setLanguage(lang) {
+    body.classList.add('glitch-effect');
+    setTimeout(() => body.classList.remove('glitch-effect'), 300);
     localStorage.setItem('language', lang);
     document.querySelectorAll('[data-key]').forEach(el => {
         const key = el.dataset.key;

@@ -142,7 +142,7 @@ const translations = {
 };
 
 let lastInputs = null;
-let currentResonanceScore = 0; // 실시간 번역을 위한 현재 점수 보존
+let currentResonanceScore = 0;
 
 class FateResult extends HTMLElement {
     constructor() {
@@ -289,7 +289,6 @@ function setLanguage(lang) {
         analysisStatus.textContent = translations[lang].please_wait;
     }
 
-    // 양자 공명 지수 레이블 실시간 업데이트
     const synergyContainer = document.getElementById('synergy-container');
     const synergyScoreEl = document.getElementById('synergy-score');
     if (synergyContainer && synergyContainer.style.display !== 'none' && synergyScoreEl) {
@@ -391,6 +390,11 @@ function showHomeButton() {
     container.innerHTML = `<button class="home-button-global" data-key="home_button_text" onclick="location.reload()">${translations[lang].home_button_text}</button>`;
 }
 
+function triggerGlitch(el) {
+    el.classList.add('glitch-effect');
+    setTimeout(() => el.classList.remove('glitch-effect'), 300);
+}
+
 function initCharacters() {
     const chars = document.querySelectorAll('.pixel-character, .light-pixel-character');
     const states = [];
@@ -398,15 +402,43 @@ function initCharacters() {
         const w = char.offsetWidth || 60, h = char.offsetHeight || 60;
         const x = Math.random() * (window.innerWidth - w), y = Math.random() * (window.innerHeight - h);
         char.style.left = `${x}px`; char.style.top = `${y}px`;
-        states.push({ element: char, x, y, vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2, width: w, height: h });
+        states.push({ element: char, x, y, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3, width: w, height: h });
     });
+
     function animate() {
-        states.forEach(s => {
-            s.x += s.vx; s.y += s.vy;
-            if (s.x + s.width > window.innerWidth || s.x < 0) s.vx *= -1;
-            if (s.y + s.height > window.innerHeight || s.y < 0) s.vy *= -1;
-            s.element.style.left = `${s.x}px`; s.element.style.top = `${s.y}px`;
-        });
+        for (let i = 0; i < states.length; i++) {
+            let s1 = states[i];
+            s1.x += s1.vx; s1.y += s1.vy;
+
+            // Wall Collision
+            if (s1.x + s1.width > window.innerWidth || s1.x < 0) {
+                s1.vx *= -1;
+                triggerGlitch(s1.element);
+            }
+            if (s1.y + s1.height > window.innerHeight || s1.y < 0) {
+                s1.vy *= -1;
+                triggerGlitch(s1.element);
+            }
+
+            // Character Collision
+            for (let j = i + 1; j < states.length; j++) {
+                let s2 = states[j];
+                const dx = (s1.x + s1.width/2) - (s2.x + s2.width/2);
+                const dy = (s1.y + s1.height/2) - (s2.y + s2.height/2);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const minDist = (s1.width + s2.width) / 2.5;
+
+                if (distance < minDist) {
+                    s1.vx *= -1; s1.vy *= -1;
+                    s2.vx *= -1; s2.vy *= -1;
+                    triggerGlitch(s1.element);
+                    triggerGlitch(s2.element);
+                }
+            }
+
+            s1.element.style.left = `${s1.x}px`;
+            s1.element.style.top = `${s1.y}px`;
+        }
         requestAnimationFrame(animate);
     }
     animate();

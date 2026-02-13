@@ -16,7 +16,7 @@ const translations = {
         synergy_score_label: "AI Job Suitability:",
         home_button_text: "Reboot System",
         download_button_text: "Issue Official ID",
-        pdf_button_text: "Save PDF Report (16:9)",
+        pdf_button_text: "Download Tactical Log (16:9 PDF)",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -65,7 +65,7 @@ const translations = {
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
         download_button_text: "시민증 정식 발급",
-        pdf_button_text: "보고서 PDF 저장 (16:9)",
+        pdf_button_text: "전술 보고서 PDF 저장 (16:9)",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
@@ -127,7 +127,6 @@ class FateResult extends HTMLElement {
             .bar-container { width: 100%; height: 20px; border: 1px solid #0f0; background: rgba(0,0,0,0.4); position: relative; }
             .bar-fill { height: 100%; background: #0f0; width: 0%; }
             .bar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 0.8rem; line-height: 20px; color: #fff; mix-blend-mode: difference; }
-            .thesis-origin { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.6; border-top: 1px dashed #0f0; padding-top: 0.8rem; color: #0f0; }
             
             .hint-container { margin-top: 2rem; text-align: center; animation: bounce 1.5s infinite; }
             .hint-text { color: #ffff00; font-size: 0.8rem; text-shadow: 0 0 5px rgba(255, 255, 0, 0.5); margin-bottom: 0.5rem; display: block; }
@@ -135,7 +134,6 @@ class FateResult extends HTMLElement {
 
             .download-btn { width: 100%; padding: 0.8rem; background: #030; color: #0f0; border: 2px solid #0f0; cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; font-size: 1rem; }
             .download-btn:hover { background: #0f0; color: #000; }
-            .pdf-btn { background: #050; border-color: #0f0; margin-top: 1rem; color: #0f0; }
             
             #reasoning-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; padding: 1.5rem; box-sizing: border-box; flex-direction: column; overflow-y: auto; color: #0f0; }
             .modal-active { display: flex !important; animation: slideUp 0.4s ease-out; }
@@ -143,19 +141,58 @@ class FateResult extends HTMLElement {
             .reasoning-text { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; margin-top: 1rem; border-top: 1px solid rgba(0,255,0,0.2); padding-top: 1rem; color: #0f0; }
             .summary-info { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding: 0.8rem; border: 1px solid #0f0; background: rgba(0,255,0,0.05); }
             
-            /* PDF Export Area (16:9) */
+            /* PDF Notebook Style (16:9) */
             #pdf-export-wrapper { 
-                width: 1000px; 
-                height: 562.5px; 
-                background: #000; 
+                width: 1280px; 
+                height: 720px; 
+                background: #0a0a0a; 
                 display: flex; 
                 padding: 40px; 
                 box-sizing: border-box; 
-                gap: 30px; 
+                gap: 40px; 
                 position: absolute; 
-                left: -9999px; /* 화면 밖 렌더링 */
+                left: -9999px; 
+                border: 12px solid #1a1a1a;
+                border-radius: 20px;
+                background-image: 
+                    linear-gradient(rgba(0, 255, 0, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
+                background-size: 30px 30px; /* 디지털 눈금 종이 느낌 */
             }
-            .pdf-col { flex: 1; display: flex; flex-direction: column; }
+            .pdf-page { 
+                flex: 1; 
+                display: flex; 
+                flex-direction: column; 
+                background: rgba(0, 20, 0, 0.8);
+                border: 2px solid #0f0;
+                border-radius: 10px;
+                padding: 30px;
+                position: relative;
+                box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+            }
+            .pdf-fold {
+                position: absolute;
+                left: 50%;
+                top: 0;
+                width: 2px;
+                height: 100%;
+                background: linear-gradient(to bottom, transparent, rgba(0, 255, 0, 0.3), transparent);
+                transform: translateX(-50%);
+            }
+            .confidential-stamp {
+                position: absolute;
+                bottom: 20px;
+                right: 20px;
+                border: 3px solid #f00;
+                color: #f00;
+                padding: 5px 15px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                transform: rotate(-15deg);
+                opacity: 0.6;
+                border-radius: 5px;
+                pointer-events: none;
+            }
         `;
     }
     displayFate(data) {
@@ -163,27 +200,14 @@ class FateResult extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>${this.getStyle()}</style>
             
-            <!-- 실제 화면용 카드 -->
             <div class="id-card" id="main-card">
-                <div class="card-header">
-                    <div class="card-title">${translations[lang].analysis_report_title}</div>
-                    <div style="font-size: 0.7rem;">NO. ${Math.random().toString(36).substr(2, 9).toUpperCase()}</div>
-                </div>
+                <div class="card-header"><div class="card-title">${translations[lang].analysis_report_title}</div></div>
                 <div class="agent-photo">👤</div>
-                <div class="section">
-                    <span class="label">AGENT NAME</span>
-                    <div class="content">${lastInputs.name}</div>
-                </div>
-                <div class="section">
-                    <span class="label">${translations[lang].labels.job}</span>
-                    <div class="content job-highlight">${data.job}</div>
-                </div>
+                <div class="section"><span class="label">AGENT NAME</span><div class="content">${lastInputs.name}</div></div>
+                <div class="section"><span class="label">${translations[lang].labels.job}</span><div class="content job-highlight">${data.job}</div></div>
                 <div class="synergy-box">
                     <span class="label">${translations[lang].synergy_score_label}</span>
-                    <div class="bar-container">
-                        <div class="bar-fill" id="id-bar"></div>
-                        <div class="bar-text" id="id-score">0%</div>
-                    </div>
+                    <div class="bar-container"><div class="bar-fill" id="id-bar"></div><div class="bar-text" id="id-score">0%</div></div>
                 </div>
                 <div class="hint-container">
                     <span class="hint-text">${translations[lang].click_hint}</span>
@@ -191,40 +215,44 @@ class FateResult extends HTMLElement {
                 </div>
             </div>
             
-            <!-- 상세 분석 모달 -->
             <div id="reasoning-modal">
                 <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
                 <div class="summary-info">
                     <div style="font-size: 1.5rem;">👤</div>
-                    <div>
-                        <div style="font-size: 0.9rem; font-weight: bold; color:#0f0;">${lastInputs.name} 요원</div>
-                        <div style="font-size: 0.75rem; color: #ff0;">${data.job}</div>
-                    </div>
+                    <div><div style="font-size: 0.9rem; font-weight: bold; color:#0f0;">${lastInputs.name} 요원</div><div style="font-size: 0.75rem; color: #ff0;">${data.job}</div></div>
                 </div>
                 <div class="reasoning-text" id="reasoning-content"></div>
                 <div style="margin-top: auto;">
-                    <button class="download-btn pdf-btn" id="download-pdf">${translations[lang].pdf_button_text}</button>
+                    <button class="download-btn" style="background:#050" id="download-pdf">${translations[lang].pdf_button_text}</button>
                     <button class="download-btn" style="margin-top:0.5rem" id="close-reasoning">${translations[lang].close_button}</button>
                 </div>
             </div>
 
-            <!-- PDF 전용 16:9 통합 래퍼 (숨김 처리됨) -->
+            <!-- PDF 전용 16:9 통합 공책 디자인 (숨김) -->
             <div id="pdf-export-wrapper">
-                <div class="pdf-col">
-                    <div class="id-card" style="height:100%">
-                        <div class="card-header"><div class="card-title">${translations[lang].analysis_report_title}</div></div>
-                        <div class="agent-photo" style="width:120px; height:120px;">👤</div>
-                        <div class="section"><span class="label">AGENT NAME</span><div class="content" style="font-size:1.5rem;">${lastInputs.name}</div></div>
-                        <div class="section"><span class="label">JOB CLASS</span><div class="content job-highlight" style="font-size:1.8rem;">${data.job}</div></div>
-                        <div class="synergy-box"><span class="label">SUITABILITY</span><div class="bar-container" style="height:30px;"><div class="bar-fill" style="width:${data.score}%"></div><div class="bar-text" style="line-height:30px;">${data.score}%</div></div></div>
+                <div class="pdf-fold"></div>
+                <div class="pdf-page">
+                    <div class="card-header"><div class="card-title" style="font-size:1.5rem;">[ AGENT ID: ${lastInputs.name} ]</div></div>
+                    <div style="margin-top:20px; display:flex; gap:20px;">
+                        <div style="width:150px; height:150px; border:3px solid #0f0; display:flex; align-items:center; justify-content:center; font-size:4rem;">👤</div>
+                        <div>
+                            <div class="section"><span class="label">ASSIGNED CLASS</span><div class="job-highlight" style="font-size:2rem;">${data.job}</div></div>
+                            <div class="section"><span class="label">SYNC RATE</span><div style="font-size:1.8rem; color:#0f0;">${data.score}%</div></div>
+                        </div>
                     </div>
+                    <div style="margin-top:auto; font-size:0.9rem; line-height:1.6; border-top:1px solid #0f0; padding-top:20px;">
+                        ${data.analysis}
+                    </div>
+                    <div class="confidential-stamp">NEO-SEOUL</div>
                 </div>
-                <div class="pdf-col">
-                    <div class="id-card" style="height:100%">
-                        <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
-                        <div class="reasoning-text" style="font-size:1.1rem; border:none;" id="pdf-reasoning-text"></div>
-                        <div style="margin-top:auto; font-size:0.8rem; opacity:0.6; color:#0f0; border-top:1px dashed #0f0; padding-top:10px;">Neo-Seoul Bio-Quantum Research Lab / DNA Mapping Vol.12</div>
+                <div class="pdf-page">
+                    <div class="card-header"><div class="card-title" style="font-size:1.5rem;">[ TACTICAL ANALYSIS ]</div></div>
+                    <div class="reasoning-text" style="font-size:1.1rem; border:none;" id="pdf-reasoning-text"></div>
+                    <div style="margin-top:auto; font-size:0.8rem; opacity:0.6; color:#0f0; border-top:1px dashed #0f0; padding-top:10px;">
+                        Bio-Quantum Logic Sync: COMPLETE <br>
+                        Reference: DNA Mapping Vol.12, Neo-Seoul Quantum Lab
                     </div>
+                    <div class="confidential-stamp" style="border-color:#0f0; color:#0f0; right:auto; left:20px;">VERIFIED</div>
                 </div>
             </div>
         `;
@@ -241,7 +269,7 @@ class FateResult extends HTMLElement {
         const lang = localStorage.getItem('language') || 'ko';
         const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
         const l = translations[lang].quantum_logic;
-        const reason = lang === 'ko' ? `[분석 근거 요약] \n\n귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
+        const reason = lang === 'ko' ? `분석 결과, 귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : `Analysis shows that your bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
         
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; pdfText.textContent = reason; };
         closeBtn.onclick = () => { modal.classList.remove('modal-active'); };
@@ -249,11 +277,10 @@ class FateResult extends HTMLElement {
         pdfBtn.onclick = () => {
             const element = this.shadowRoot.getElementById('pdf-export-wrapper');
             const opt = { 
-                margin: 0, 
-                filename: `NeoSeoul_Agent_${lastInputs.name}.pdf`, 
+                margin: 0, filename: `NeoSeoul_Log_${lastInputs.name}.pdf`, 
                 image: { type: 'jpeg', quality: 1 }, 
-                html2canvas: { scale: 2, backgroundColor: '#000', useCORS: true }, 
-                jsPDF: { unit: 'px', format: [1000, 562.5], orientation: 'landscape' } 
+                html2canvas: { scale: 1.5, backgroundColor: '#000', useCORS: true }, 
+                jsPDF: { unit: 'px', format: [1280, 720], orientation: 'landscape' } 
             };
             html2pdf().set(opt).from(element).save();
         };
@@ -263,11 +290,8 @@ class FateResult extends HTMLElement {
         const scoreEl = this.shadowRoot.getElementById('id-score');
         let current = 0;
         const interval = setInterval(() => {
-            if (current < targetScore) {
-                current++;
-                if (bar) bar.style.width = `${current}%`;
-                if (scoreEl) scoreEl.textContent = `${current}%`;
-            } else { clearInterval(interval); this.dispatchEvent(new CustomEvent('report-finished')); }
+            if (current < targetScore) { current++; if (bar) bar.style.width = `${current}%`; if (scoreEl) scoreEl.textContent = `${current}%`; }
+            else { clearInterval(interval); this.dispatchEvent(new CustomEvent('report-finished')); }
         }, 30);
     }
 }

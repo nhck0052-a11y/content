@@ -55,55 +55,54 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* body 배경보다 앞에, 콘텐츠보다 뒤에 위치 */
     pointer-events: none;
     overflow: hidden;
     opacity: 0;
     transition: opacity 0.5s ease;
+    display: block;
 }
 
+/* 라이트 모드가 아닐 때 (다크 모드일 때) 배경 보임 */
 body:not(.light-mode) #space-background {
-    opacity: 0.4; /* 다크모드에서만 적절한 밝기로 표시 */
+    opacity: 0.6; /* 가시성을 위해 조금 더 높임 */
 }
 
 .planet {
     position: absolute;
     background-size: contain;
     background-repeat: no-repeat;
-    filter: blur(4px); /* 흐릿하게 처리 */
-    opacity: 0.6;
+    filter: blur(3px); /* 블러를 약간 줄여서 형체가 보이게 함 */
 }
 
 .planet-1 {
-    width: 300px; height: 300px;
-    top: -50px; right: -50px;
+    width: 400px; height: 400px;
+    top: -100px; right: -100px;
     background-image: url('https://public-chocolate-xyp8geevnx.edgeone.app/%E1%86%AC%E1%84%80%E1%85%A5%E1%86%BC%E1%84%89%E1%85%A5%E1%86%BC%E1%84%8C%E1%85%A1%E1%84%85%E1%85%B3%E1%84%80%E1%85%B5.png');
     transform: rotate(15deg);
 }
 
 .planet-2 {
-    width: 200px; height: 200px;
-    bottom: 10%; left: -30px;
+    width: 300px; height: 300px;
+    bottom: 5%; left: -50px;
     background-image: url('https://public-chocolate-xyp8geevnx.edgeone.app/%E1%86%AC%E1%84%80%E1%85%A5%E1%86%BC%E1%84%89%E1%85%A5%E1%86%BC%E1%84%8C%E1%85%A1%E1%84%85%E1%85%B3%E1%84%80%E1%85%B5%20%E1%84%92%E1%85%AA%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B3.png');
     transform: rotate(-20deg);
 }
 
 .planet-3 {
-    width: 150px; height: 150px;
-    top: 40%; right: 15%;
+    width: 250px; height: 250px;
+    top: 30%; right: 10%;
     background-image: url('https://public-chocolate-xyp8geevnx.edgeone.app/%E1%86%AC%E1%84%80%E1%85%A5%E1%86%BC%E1%84%89%E1%85%A5%E1%86%BC%E1%84%8C%E1%85%A1%E1%84%85%E1%85%B3%E1%84%80%E1%85%B5.png');
-    filter: blur(8px);
-    opacity: 0.3;
+    opacity: 0.4;
 }
 
 .planet-4 {
-    width: 100px; height: 100px;
-    top: 10%; left: 20%;
+    width: 180px; height: 180px;
+    top: 15%; left: 15%;
     background-image: url('https://public-chocolate-xyp8geevnx.edgeone.app/%E1%86%AC%E1%84%80%E1%85%A5%E1%86%BC%E1%84%89%E1%85%A5%E1%86%BC%E1%84%8C%E1%85%A1%E1%84%85%E1%85%B3%E1%84%80%E1%85%B5%20%E1%84%92%E1%85%AA%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B3.png');
-    filter: blur(2px);
-    opacity: 0.4;
+    opacity: 0.5;
 }
 
 .container {

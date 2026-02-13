@@ -143,6 +143,7 @@ const translations = {
 
 let lastInputs = null;
 let currentResonanceScore = 0;
+let cyberTime = new Date(2150, 2, 1, 0, 0, 0); // 2150년 3월 1일 00:00:00
 
 class FateResult extends HTMLElement {
     constructor() {
@@ -460,11 +461,16 @@ function initCharacters() {
 window.addEventListener('load', initCharacters);
 
 function updateTime() {
-    const now = new Date();
-    const f = new Date(now.getFullYear() + 126, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
+    cyberTime.setSeconds(cyberTime.getSeconds() + 1);
     const futureTimeElement = document.getElementById('future-time');
     if (futureTimeElement) {
-        futureTimeElement.textContent = `2150 CYBERNETIC ERA - ${f.getFullYear()}-${String(f.getMonth()+1).padStart(2,'0')}-${String(f.getDate()).padStart(2,'0')} ${String(f.getHours()).padStart(2,'0')}:${String(f.getMinutes()).padStart(2,'0')}:${String(f.getSeconds()).padStart(2,'0')}`;
+        const y = cyberTime.getFullYear();
+        const m = String(cyberTime.getMonth() + 1).padStart(2, '0');
+        const d = String(cyberTime.getDate()).padStart(2, '0');
+        const hh = String(cyberTime.getHours()).padStart(2, '0');
+        const mm = String(cyberTime.getMinutes()).padStart(2, '0');
+        const ss = String(cyberTime.getSeconds()).padStart(2, '0');
+        futureTimeElement.textContent = `2150 CYBERNETIC ERA - ${y}-${m}-${d} ${hh}:${mm}:${ss}`;
     }
 }
 setInterval(updateTime, 1000); updateTime();

@@ -152,23 +152,24 @@ class FateResult extends HTMLElement {
         style.textContent = `
             :host {
                 display: block;
-                padding: 2rem;
+                padding: 1.2rem;
                 border: 2px solid var(--border-color);
-                border-radius: 15px;
+                border-radius: 12px;
                 background: var(--report-bg);
                 color: var(--report-text);
                 font-family: 'DungGeunMo', monospace;
                 text-align: left;
-                box-shadow: 0 0 30px var(--box-shadow-color);
+                box-shadow: 0 0 20px var(--box-shadow-color);
                 animation: scanline 6s linear infinite;
+                margin-top: 1rem;
             }
-            .report-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; text-align: center; }
-            .report-title { font-size: 1.4rem; color: var(--report-text); text-shadow: 0 0 10px var(--box-shadow-color); }
-            .section { margin-bottom: 1.2rem; }
-            .label { color: #888; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
-            .content { font-size: 1.1rem; line-height: 1.5; color: var(--report-text); }
-            .job-highlight { color: var(--job-color); font-size: 1.3rem; font-weight: bold; }
-            .comment { font-style: italic; border-top: 1px dashed #444; padding-top: 1rem; margin-top: 1rem; }
+            .report-header { border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1rem; text-align: center; }
+            .report-title { font-size: 1.1rem; color: var(--report-text); text-shadow: 0 0 8px var(--box-shadow-color); }
+            .section { margin-bottom: 1rem; }
+            .label { color: #888; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 0.2rem; display: block; }
+            .content { font-size: 0.95rem; line-height: 1.4; color: var(--report-text); }
+            .job-highlight { color: var(--job-color); font-size: 1.1rem; font-weight: bold; }
+            .comment { font-style: italic; border-top: 1px dashed #444; padding-top: 0.8rem; margin-top: 0.8rem; font-size: 0.9rem; }
         `;
         this.shadowRoot.appendChild(style);
     }

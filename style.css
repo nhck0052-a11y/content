@@ -12,12 +12,12 @@
     --text-color: #0f0;
     --border-color: #0f0;
     --box-shadow-color: #0f0;
-    --container-bg: rgba(0, 0, 0, 0.7);
+    --container-bg: rgba(0, 0, 0, 0.85);
     --input-bg: #010;
     --button-bg: #030;
     --button-hover-bg: #0f0;
     --button-hover-color: #000;
-    --report-bg: rgba(0, 20, 0, 0.9);
+    --report-bg: rgba(0, 25, 0, 0.95);
     --report-text: #0f0;
     --job-color: #ff0;
 }
@@ -27,7 +27,7 @@
     --text-color: #343A40;
     --border-color: #007BFF;
     --box-shadow-color: rgba(0, 123, 255, 0.2);
-    --container-bg: rgba(255, 255, 255, 0.95);
+    --container-bg: rgba(255, 255, 255, 0.98);
     --input-bg: #F8F9FA;
     --button-bg: #007BFF;
     --button-hover-bg: #0056B3;
@@ -40,28 +40,26 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'DungGeunMo', 'Noto Color Emoji', sans-serif;
+    font-family: 'DungGeunMo', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* height 대신 min-height 사용 */
+    min-height: 100vh;
     margin: 0;
     transition: background-color 0.3s ease, color 0.3s ease;
-    overflow-x: hidden; /* 가로 스크롤 방지 */
+    overflow-x: hidden;
 }
 
 .container {
     text-align: center;
-    padding: 1.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 15px;
-    box-shadow: 0 0 20px var(--box-shadow-color);
+    padding: 1.2rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 0 15px var(--box-shadow-color);
     background-color: var(--container-bg);
-    width: 90%;
-    max-width: 500px;
-    margin: 2rem auto;
+    width: 92%;
+    max-width: 380px; /* 크기를 더 줄임 */
     box-sizing: border-box;
-    position: relative;
     z-index: 10;
 }
 
@@ -70,170 +68,144 @@ body {
     top: 1rem;
     background: var(--container-bg);
     border: 1px solid var(--border-color);
-    padding: 0.4rem 0.8rem;
+    padding: 0.3rem 0.6rem;
     font-family: 'DungGeunMo', monospace;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     cursor: pointer;
     color: var(--text-color);
-    transition: all 0.3s ease;
     z-index: 1000;
     border-radius: 4px;
 }
 
-#theme-toggle { right: 5.5rem; }
+#theme-toggle { right: 5rem; }
 #lang-toggle { right: 1rem; }
 
 #future-time {
     position: fixed;
-    top: 1.2rem;
+    top: 1.1rem;
     left: 1rem;
-    color: #0f0;
+    color: var(--text-color);
     font-family: 'DungGeunMo', monospace;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     z-index: 1000;
-    text-shadow: 0 0 5px #0f0;
-}
-
-.light-mode #future-time {
-    color: #007BFF;
-    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    opacity: 0.8;
 }
 
 h1 {
-    font-size: 1.8rem;
-    margin-top: 0.5rem;
-    text-shadow: 0 0 10px var(--box-shadow-color);
-    word-break: keep-all; /* 모바일에서 단어 잘림 방지 */
+    font-size: 1.4rem; /* 폰트 크기 축소 */
+    margin: 0.5rem 0 1rem;
+    text-shadow: 0 0 8px var(--box-shadow-color);
+    line-height: 1.2;
 }
 
 p {
-    font-size: 1rem;
+    font-size: 0.85rem;
     line-height: 1.4;
-    margin-bottom: 1.5rem;
-    word-break: keep-all;
+    margin-bottom: 1.2rem;
+    color: var(--text-color);
+    opacity: 0.9;
 }
 
 .input-container {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
-    width: 100%;
+    gap: 0.6rem;
 }
 
 .input-row {
     display: flex;
-    gap: 0.8rem;
-    width: 100%;
-}
-
-/* 모바일 화면에서 input-row를 세로로 정렬 */
-@media (max-width: 480px) {
-    .input-row {
-        flex-direction: column;
-        gap: 0.8rem;
-    }
-    
-    h1 { font-size: 1.5rem; }
-    #theme-toggle, #lang-toggle { top: auto; bottom: 1rem; } /* 모바일에서 버튼을 아래로 이동해 시간과 겹침 방지 */
-    #theme-toggle { right: 5rem; }
-    
-    .container {
-        padding: 1rem;
-        margin: 4rem auto 2rem; /* 시간 표시 공간 확보 */
-    }
+    gap: 0.6rem;
 }
 
 #name-input, select {
     background-color: var(--input-bg);
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     color: var(--text-color);
-    padding: 0.6rem;
-    font-size: 0.9rem;
+    padding: 0.5rem;
+    font-size: 0.8rem;
     border-radius: 4px;
     font-family: 'DungGeunMo', monospace;
-    height: 3.2rem;
+    height: 2.8rem;
     box-sizing: border-box;
     width: 100%;
-    transition: all 0.3s ease;
 }
 
 #extract-button {
     background-color: var(--button-bg);
     border: 2px solid var(--border-color);
     color: var(--text-color);
-    padding: 1rem;
-    font-size: 1.1rem;
+    padding: 0.8rem;
+    font-size: 1rem;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 6px;
     font-family: 'DungGeunMo', monospace;
-    margin-top: 0.5rem;
+    margin-top: 0.4rem;
     width: 100%;
+    transition: all 0.2s ease;
+}
+
+#extract-button:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-color);
 }
 
 #analysis-status {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: var(--text-color);
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    font-style: italic;
 }
 
 .pixel-character, .light-pixel-character {
     position: absolute;
     image-rendering: pixelated;
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     z-index: 1;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.5;
 }
 
-.pixel-character { mix-blend-mode: screen; }
-.light-pixel-character { mix-blend-mode: multiply; filter: brightness(1.05); }
-
-.light-mode .pixel-character { display: none; }
-.light-mode .light-pixel-character { display: block; }
-body:not(.light-mode) .light-pixel-character { display: none; }
-
-#synergy-container { margin-top: 1.5rem; width: 100%; }
-#synergy-score {
-    font-size: 1.2rem;
-    margin-bottom: 0.8rem;
-}
+#synergy-container { margin-top: 1rem; }
+#synergy-score { font-size: 1.1rem; margin-bottom: 0.5rem; }
 
 .health-bar-container {
     width: 100%;
-    height: 20px;
-    border: 2px solid var(--border-color);
+    height: 16px;
+    border: 1px solid var(--border-color);
     background-color: var(--input-bg);
+    border-radius: 2px;
 }
 
 .health-bar {
     width: 0%;
     height: 100%;
-    background-color: #0f0;
-    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
-    background-size: 10px 100%;
-}
-
-.light-mode .health-bar { background-color: #007BFF; }
-
-#global-home-button-container {
-    margin-top: 2rem;
-    width: 100%;
+    background-color: var(--border-color);
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 8px 100%;
 }
 
 .home-button-global {
     width: 100%;
-    padding: 0.8rem;
-    font-size: 1rem;
+    margin-top: 1.5rem;
+    padding: 0.7rem;
+    font-size: 0.9rem;
     background: var(--button-bg);
     color: var(--text-color);
     border: 2px solid var(--border-color);
-    font-family: 'DungGeunMo', monospace;
+    border-radius: 4px;
     cursor: pointer;
+    font-family: 'DungGeunMo', monospace;
+}
+
+@media (max-width: 480px) {
+    .input-row { flex-direction: column; gap: 0.6rem; }
+    h1 { font-size: 1.2rem; }
+    .container { margin-top: 3.5rem; }
+    #theme-toggle, #lang-toggle { top: auto; bottom: 1rem; }
 }
 
 .glitch-effect { animation: shine 0.4s ease-in-out; }
 @keyframes shine {
     0%, 100% { filter: hue-rotate(0deg) brightness(1); }
-    50% { filter: hue-rotate(180deg) brightness(1.3); }
+    50% { filter: hue-rotate(180deg) brightness(1.2); }
 }

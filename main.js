@@ -276,7 +276,16 @@ document.getElementById('extract-button').addEventListener('click', () => {
     if (!Object.values(inputs).every(v => v)) { alert(translations[lang].alert_message); return; }
     lastInputs = inputs; const btn = document.getElementById('extract-button'), status = document.getElementById('analysis-status'), inputCont = document.querySelector('.input-container'), resCont = document.getElementById('result-container');
     btn.disabled = true; status.textContent = translations[lang].please_wait; status.style.display = 'block';
-    setTimeout(() => { inputCont.style.display = 'none'; status.style.display = 'none'; resCont.innerHTML = ''; const report = document.createElement('fate-result'); resCont.appendChild(report); report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender)); const homeCont = document.getElementById('global-home-button-container'); homeCont.innerHTML = `<button class="home-button-global" onclick="location.reload()">${translations[lang].home_button_text}</button>`; }, 2000);
+    setTimeout(() => { 
+        inputCont.style.display = 'none'; 
+        status.style.display = 'none'; 
+        resCont.innerHTML = ''; 
+        const report = document.createElement('fate-result'); 
+        resCont.appendChild(report); 
+        report.displayFate(generateFate(inputs.mbti, inputs.blood, inputs.gender)); 
+        const homeCont = document.getElementById('global-home-button-container'); 
+        homeCont.innerHTML = `<button class="home-button-global" data-key="home_button_text" onclick="location.reload()">${translations[lang].home_button_text}</button>`; 
+    }, 2000);
 });
 function generateFate(mbtiStr, blood, gender) {
     const lang = localStorage.getItem('language') || 'ko', mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' : mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' : mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP', l = translations[lang].quantum_logic;

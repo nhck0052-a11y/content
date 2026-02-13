@@ -256,17 +256,23 @@ body:not(.light-mode) .light-pixel-character { opacity: 0; }
 .home-button-global { width: 100%; margin-top: 2rem; padding: 1rem; font-size: 1.1rem; background: var(--button-bg); color: var(--text-color); border: 2px solid var(--border-color); border-radius: 4px; cursor: pointer; font-family: 'DungGeunMo', monospace; }
 
 @media (max-width: 480px) {
-    .container { padding: 0.8rem; max-width: 85%; margin-top: 3.5rem; border-width: 1px; }
-    h1 { font-size: 1.1rem; margin-bottom: 0.5rem; line-height: 1.2; }
-    p { font-size: 0.75rem; margin-bottom: 1rem; padding: 0 0.5rem; }
-    .input-container { gap: 0.5rem; }
-    .input-row { flex-direction: row; gap: 0.3rem; }
-    #name-input { height: 2.6rem; font-size: 0.85rem; padding: 0.4rem; }
-    select { height: 2.4rem; font-size: 0.75rem; padding: 0.2rem; }
-    #extract-button { padding: 0.7rem; font-size: 1rem; margin-top: 0.2rem; }
+    .container { 
+        padding: 0.7rem; 
+        width: 82%; 
+        max-width: none; 
+        margin: 3.5rem auto 0 auto; 
+        border-width: 1px; 
+    }
+    h1 { font-size: 1.05rem; margin-bottom: 0.4rem; line-height: 1.2; }
+    p { font-size: 0.7rem; margin-bottom: 0.8rem; padding: 0 0.3rem; }
+    .input-container { gap: 0.4rem; }
+    .input-row { flex-direction: row; gap: 0.25rem; }
+    #name-input { height: 2.4rem; font-size: 0.8rem; padding: 0.3rem; }
+    select { height: 2.2rem; font-size: 0.7rem; padding: 0.1rem; }
+    #extract-button { padding: 0.6rem; font-size: 0.95rem; margin-top: 0.2rem; }
     
     /* 결과 카드 모바일 최적화 */
-    fate-result { margin-top: 1rem; }
+    fate-result { margin-top: 0.8rem; }
     
     /* 모바일 상단 바 최적화 */
     #top-controls { 

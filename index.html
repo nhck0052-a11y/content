@@ -1,133 +1,181 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-key="app_title">2150 AI 생존 시뮬레이션</title>
+    
+    <!-- SEO 기본 메타 태그 -->
+    <title data-key="app_title">2150 AI 생존 시뮬레이션 - 당신의 미래 AI 파트너 찾기</title>
+    <meta name="description" content="2150년, AI가 지배하는 세상에서 당신의 생존 전략은? MBTI와 생체 데이터를 분석하여 최적의 22세기 직업과 AI 파트너를 매칭해 드립니다.">
+    <meta name="keywords" content="AI 시뮬레이션, 미래 직업, MBTI 테스트, 2150년, AI 파트너, 생존 시뮬레이션, 네오서울, 심리테스트">
+    <meta name="author" content="Neo-Seoul Lab">
+    <link rel="canonical" href="https://2150-ai-survival.netlify.app/">
+
+    <!-- Open Graph (Facebook, Kakao, Naver) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="2150 AI 생존 시뮬레이션">
+    <meta property="og:description" content="당신은 AI 세상을 지배할 것인가, 공존할 것인가? 미래의 당신을 확인하세요.">
+    <meta property="og:image" content="https://concontent.edgeone.app/IMG_5501.jpg">
+    <meta property="og:url" content="https://2150-ai-survival.netlify.app/">
+    <meta property="og:site_name" content="2150 AI Survival">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="2150 AI 생존 시뮬레이션">
+    <meta name="twitter:description" content="MBTI 기반 22세기 직업 및 AI 파트너 매칭 시뮬레이션">
+    <meta name="twitter:image" content="https://concontent.edgeone.app/IMG_5501.jpg">
+
+    <!-- 구조화된 데이터 (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "2150 AI Survival Simulation",
+      "operatingSystem": "Web Browser",
+      "applicationCategory": "GameApplication, Simulation",
+      "description": "A survival simulation that matches users with 22nd-century careers and AI partners based on MBTI and biological data.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KRW"
+      }
+    }
+    </script>
+
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="space-background">
-        <div class="planet p-1"></div>
-        <div class="planet p-2"></div>
-        <div class="planet p-3"></div>
-        <div class="planet p-4"></div>
-        <div class="planet p-5"></div>
-        <div class="planet p-star-1"></div>
-        <div class="planet p-star-2"></div>
-        <div class="planet p-star-3"></div>
-        <div class="planet p-star-4"></div>
+    <header style="display:none;">
+        <h1>2150 AI 생존 시뮬레이션 - 미래 직업 및 AI 파트너 매칭</h1>
+    </header>
 
-        <!-- 라이트 모드 전용 하얀 우주 행성/별 -->
-        <div class="light-planet lp-1"></div>
-        <div class="light-planet lp-2"></div>
-        <div class="light-planet lp-3"></div>
-        <div class="light-planet lp-4"></div>
-        <div class="light-planet lp-5"></div>
-        <div class="light-planet lp-6"></div>
-        <div class="light-planet lp-7"></div>
-        <div class="light-planet lp-8"></div>
-        <div class="light-planet lp-9"></div>
-        <div class="light-planet lp-10"></div>
-        <div class="light-planet lp-11"></div>
-        <div class="light-planet lp-12"></div>
-        <div class="light-planet lp-13"></div>
-        <div class="light-planet lp-14"></div>
-        <div class="light-planet lp-15"></div>
-    </div>
+    <main>
+        <div id="space-background" aria-hidden="true">
+            <div class="planet p-1"></div>
+            <div class="planet p-2"></div>
+            <div class="planet p-3"></div>
+            <div class="planet p-4"></div>
+            <div class="planet p-5"></div>
+            <div class="planet p-star-1"></div>
+            <div class="planet p-star-2"></div>
+            <div class="planet p-star-3"></div>
+            <div class="planet p-star-4"></div>
 
-    <!-- 상단 컨트롤 바 -->
-    <div id="top-controls">
-        <button id="share-toggle" title="Share Network">📡 SHARE</button>
-        <button id="theme-toggle" aria-label="Toggle theme">🌞</button>
-        <button id="lang-toggle" aria-label="Toggle language">🇰🇷</button>
-    </div>
-
-    <!-- 접이식 공유 메뉴 -->
-    <div id="share-menu" class="collapsed">
-        <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-            <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
-            <a class="a2a_button_facebook"></a>
-            <a class="a2a_button_mastodon"></a>
-            <a class="a2a_button_email"></a>
-            <a class="a2a_button_threads"></a>
-            <a class="a2a_button_telegram"></a>
-            <a class="a2a_button_reddit"></a>
-            <a class="a2a_button_bluesky"></a>
+            <!-- 라이트 모드 전용 하얀 우주 행성/별 -->
+            <div class="light-planet lp-1"></div>
+            <div class="light-planet lp-2"></div>
+            <div class="light-planet lp-3"></div>
+            <div class="light-planet lp-4"></div>
+            <div class="light-planet lp-5"></div>
+            <div class="light-planet lp-6"></div>
+            <div class="light-planet lp-7"></div>
+            <div class="light-planet lp-8"></div>
+            <div class="light-planet lp-9"></div>
+            <div class="light-planet lp-10"></div>
+            <div class="light-planet lp-11"></div>
+            <div class="light-planet lp-12"></div>
+            <div class="light-planet lp-13"></div>
+            <div class="light-planet lp-14"></div>
+            <div class="light-planet lp-15"></div>
         </div>
-    </div>
 
-    <span id="future-time"></span>
-    <div class="container">
-        <h1 data-key="main_title">[2150년 생존 시뮬레이션] 당신의 AI 파트너를 찾아드립니다.</h1>
-        <p data-key="tagline">AI가 지배하는 세상, 당신은 지배할 것인가, 공존할 것인가? 당신의 성향을 분석해 22세기 최적의 직업과 파트너(AI)를 매칭해 드립니다.</p>
-        <div class="input-container">
-            <input type="text" id="name-input" placeholder="이름을 입력하세요" data-key="name_input_placeholder">
-            <div class="input-row">
-                <select id="mbti-select">
-                    <option value="" disabled selected data-key="mbti_placeholder">MBTI</option>
-                    <option value="INTJ">INTJ</option><option value="INTP">INTP</option><option value="ENTJ">ENTJ</option><option value="ENTP">ENTP</option>
-                    <option value="INFJ">INFJ</option><option value="INFP">INFP</option><option value="ENFJ">ENFJ</option><option value="ENFP">ENFP</option>
-                    <option value="ISTJ">ISTJ</option><option value="ISFJ">ISFJ</option><option value="ESTJ">ESTJ</option><option value="ESFJ">ESFJ</option>
-                    <option value="ISTP">ISTP</option><option value="ISFP">ISFP</option><option value="ESTP">ESTP</option><option value="ESFP">ESFP</option>
-                </select>
-                <select id="age-select">
-                    <option value="" disabled selected data-key="age_placeholder">가동 연한 (나이)</option>
-                    <option value="10" data-key="age_10">10s (Generation Beta)</option>
-                    <option value="20" data-key="age_20">20s (Neural Pioneers)</option>
-                    <option value="30" data-key="age_30">30s (Cyber Settlers)</option>
-                    <option value="40" data-key="age_40">40s (Legacy Humans)</option>
-                    <option value="50" data-key="age_50">50+ (Ancient Data)</option>
-                </select>
+        <!-- 상단 컨트롤 바 -->
+        <nav id="top-controls">
+            <button id="share-toggle" title="Share Network">📡 SHARE</button>
+            <button id="theme-toggle" aria-label="Toggle theme">🌞</button>
+            <button id="lang-toggle" aria-label="Toggle language">🇰🇷</button>
+        </nav>
+
+        <!-- 접이식 공유 메뉴 -->
+        <div id="share-menu" class="collapsed">
+            <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+                <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                <a class="a2a_button_facebook"></a>
+                <a class="a2a_button_mastodon"></a>
+                <a class="a2a_button_email"></a>
+                <a class="a2a_button_threads"></a>
+                <a class="a2a_button_telegram"></a>
+                <a class="a2a_button_reddit"></a>
+                <a class="a2a_button_bluesky"></a>
             </div>
-            <div class="input-row">
-                <select id="gender-select">
-                    <option value="" disabled selected data-key="gender_placeholder">성별 프로토콜</option>
-                    <option value="M" data-key="gender_m">XY (남자)</option>
-                    <option value="F" data-key="gender_f">XX (여자)</option>
-                    <option value="N" data-key="gender_n">논바이너리 코드</option>
-                </select>
-                <select id="blood-select">
-                    <option value="" disabled selected data-key="blood_placeholder">에너지 유닛 (혈액형)</option>
-                    <option value="A" data-key="blood_a">Type A (Stable)</option>
-                    <option value="B" data-key="blood_b">Type B (Flux)</option>
-                    <option value="AB" data-key="blood_ab">Type AB (Dual)</option>
-                    <option value="O" data-key="blood_o">Type O (Radiant)</option>
-                </select>
-            </div>
-            <select id="interest-select">
-                <option value="" disabled selected data-key="interest_select_placeholder">관심 분야 선택</option>
-                <option value="art" data-key="interest_art">예술</option>
-                <option value="engineering" data-key="interest_engineering">공학</option>
-                <option value="business" data-key="interest_business">경영</option>
-                <option value="psychology" data-key="interest_psychology">심리</option>
-            </select>
-            <button id="extract-button" data-key="extract_button_text">운명 추출</button>
         </div>
-        <div id="analysis-status" data-key="analysis_status_preparing" style="display: none;">분석 준비 중...</div>
-        <div id="result-container"></div>
-        <div id="global-home-button-container"></div>
-    </div>
-    <script src="main.js"></script>
-    <!-- 이미지 저장 라이브러리 추가 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
-    <div id="pixel-characters">
-        <img src="https://concontent.edgeone.app/IMG_5501.jpg" alt="Pixel Character 1" class="pixel-character" id="char-1">
-        <img src="https://concontent.edgeone.app/IMG_5502.jpg" alt="Pixel Character 2" class="pixel-character" id="char-2">
-        <img src="https://concontent.edgeone.app/IMG_5503.jpg" alt="Pixel Character 3" class="pixel-character" id="char-3">
-        <img src="https://concontent.edgeone.app/IMG_5504.jpg" alt="Pixel Character 4" class="pixel-character" id="char-4">
-        <img src="https://ghkdlxmzhsxpsxm.edgeone.app/스크린샷%202026-02-12%20오후%2010.09.59.png" alt="Light Mode Character 1" class="light-pixel-character" id="char-5">
-        <img src="https://ghkdlxmzhsxpsxm.edgeone.app/스크린샷%202026-02-12%20오후%2010.10.03.png" alt="Light Mode Character 2" class="light-pixel-character" id="char-6">
-        <img src="https://ghkdlxmzhsxpsxm.edgeone.app/스크린샷%202026-02-12%20오후%2010.10.08.png" alt="Light Mode Character 3" class="light-pixel-character" id="char-7">
-        <img src="https://ghkdlxmzhsxpsxm.edgeone.app/스크린샷%202026-02-12%20오후%2010.10.11.png" alt="Light Mode Character 4" class="light-pixel-character" id="char-8">
+
+        <span id="future-time"></span>
+        
+        <article class="container">
+            <h1 data-key="main_title">[2150년 생존 시뮬레이션] 당신의 AI 파트너를 찾아드립니다.</h1>
+            <p data-key="tagline">AI가 지배하는 세상, 당신은 지배할 것인가, 공존할 것인가? 당신의 성향을 분석해 22세기 최적의 직업과 파트너(AI)를 매칭해 드립니다.</p>
+            
+            <section class="input-container">
+                <label for="name-input" style="display:none;">이름(ID)</label>
+                <input type="text" id="name-input" placeholder="이름을 입력하세요" data-key="name_input_placeholder">
+                
+                <div class="input-row">
+                    <select id="mbti-select" aria-label="MBTI 선택">
+                        <option value="" disabled selected data-key="mbti_placeholder">MBTI</option>
+                        <option value="INTJ">INTJ</option><option value="INTP">INTP</option><option value="ENTJ">ENTJ</option><option value="ENTP">ENTP</option>
+                        <option value="INFJ">INFJ</option><option value="INFP">INFP</option><option value="ENFJ">ENFJ</option><option value="ENFP">ENFP</option>
+                        <option value="ISTJ">ISTJ</option><option value="ISFJ">ISFJ</option><option value="ESTJ">ESTJ</option><option value="ESFJ">ESFJ</option>
+                        <option value="ISTP">ISTP</option><option value="ISFP">ISFP</option><option value="ESTP">ESTP</option><option value="ESFP">ESFP</option>
+                    </select>
+                    <select id="age-select" aria-label="가동 연한(나이) 선택">
+                        <option value="" disabled selected data-key="age_placeholder">가동 연한 (나이)</option>
+                        <option value="10" data-key="age_10">10s (Generation Beta)</option>
+                        <option value="20" data-key="age_20">20s (Neural Pioneers)</option>
+                        <option value="30" data-key="age_30">30s (Cyber Settlers)</option>
+                        <option value="40" data-key="age_40">40s (Legacy Humans)</option>
+                        <option value="50" data-key="age_50">50+ (Ancient Data)</option>
+                    </select>
+                </div>
+                
+                <div class="input-row">
+                    <select id="gender-select" aria-label="성별 프로토콜 선택">
+                        <option value="" disabled selected data-key="gender_placeholder">성별 프로토콜</option>
+                        <option value="M" data-key="gender_m">XY (남자)</option>
+                        <option value="F" data-key="gender_f">XX (여자)</option>
+                        <option value="N" data-key="gender_n">논바이너리 코드</option>
+                    </select>
+                    <select id="blood-select" aria-label="에너지 유닛(혈액형) 선택">
+                        <option value="" disabled selected data-key="blood_placeholder">에너지 유닛 (혈액형)</option>
+                        <option value="A" data-key="blood_a">Type A (Stable)</option>
+                        <option value="B" data-key="blood_b">Type B (Flux)</option>
+                        <option value="AB" data-key="blood_ab">Type AB (Dual)</option>
+                        <option value="O" data-key="blood_o">Type O (Radiant)</option>
+                    </select>
+                </div>
+                
+                <select id="interest-select" aria-label="핵심 관심 분야 선택">
+                    <option value="" disabled selected data-key="interest_select_placeholder">관심 분야 선택</option>
+                    <option value="art" data-key="interest_art">예술</option>
+                    <option value="engineering" data-key="interest_engineering">공학</option>
+                    <option value="business" data-key="interest_business">경영</option>
+                    <option value="psychology" data-key="interest_psychology">심리</option>
+                </select>
+                
+                <button id="extract-button" data-key="extract_button_text">운명 추출</button>
+            </section>
+
+            <div id="analysis-status" data-key="analysis_status_preparing" style="display: none;">분석 준비 중...</div>
+            <div id="result-container"></div>
+            <div id="global-home-button-container"></div>
+        </article>
+    </main>
+
+    <div id="pixel-characters" aria-hidden="true">
+        <img src="https://concontent.edgeone.app/IMG_5501.jpg" alt="미래 에이전트 캐릭터 1" class="pixel-character" id="char-1">
+        <img src="https://concontent.edgeone.app/IMG_5502.jpg" alt="미래 에이전트 캐릭터 2" class="pixel-character" id="char-2">
+        <img src="https://concontent.edgeone.app/IMG_5503.jpg" alt="미래 에이전트 캐릭터 3" class="pixel-character" id="char-3">
+        <img src="https://concontent.edgeone.app/IMG_5504.jpg" alt="미래 에이전트 캐릭터 4" class="pixel-character" id="char-4">
+        <img src="https://ghkdlxmzhsxpsxm.edgeone.app/스크린샷%202026-02-12%20오후%2010.09.59.png" alt="밝은 미래 캐릭터 1" class="light-pixel-character" id="char-5">
+        <img src="https://ghkdlxmzhsxpsxm.edgeone.app/스크린샷%202026-02-12%20오후%2010.10.03.png" alt="밝은 미래 캐릭터 2" class="light-pixel-character" id="char-6">
+        <img src="https://ghkdlxmzhsxpsxm.edgeone.app/스크린샷%202026-02-12%20오후%2010.10.08.png" alt="밝은 미래 캐릭터 3" class="light-pixel-character" id="char-7">
+        <img src="https://ghkdlxmzhsxpsxm.edgeone.app/스크린샷%202026-02-12%20오후%2010.10.11.png" alt="밝은 미래 캐릭터 4" class="light-pixel-character" id="char-8">
     </div>
 
-    <!-- AddToAny 공유 위젯 (기본 숨김, 결과 시 노출) -->
-    <div id="share-container" style="display: none; margin-top: 1.5rem; justify-content: center; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+    <!-- AddToAny 공유 위젯 -->
+    <aside id="share-container" style="display: none; margin-top: 1.5rem; justify-content: center; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
         <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
             <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
             <a class="a2a_button_facebook"></a>
@@ -143,7 +191,11 @@
             <a class="a2a_button_whatsapp"></a>
             <a class="a2a_button_bluesky"></a>
         </div>
-    </div>
+    </aside>
+
+    <script src="main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script defer src="https://static.addtoany.com/menu/page.js"></script>
 </body>
 </html>

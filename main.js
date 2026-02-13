@@ -160,7 +160,7 @@ class FateResult extends HTMLElement {
             
             /* Export specific text adjustments */
             .export-job { color: var(--job-color) !important; font-size: 1.8rem !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 900; font-family: sans-serif; }
-        `;`;
+        `;
     }
     displayFate(data) {
         const lang = localStorage.getItem('language') || 'ko';

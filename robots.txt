@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Sitemap: https://2150-ai-survival.netlify.app/sitemap.xml (추후 생성 시 활성화)

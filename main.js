@@ -120,7 +120,7 @@ class FateResult extends HTMLElement {
             .bar-fill { height: 100%; background: var(--border-color); width: 0%; }
             .bar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 0.8rem; line-height: 20px; color: var(--report-text); mix-blend-mode: difference; }
             .hint-container { margin-top: 2rem; text-align: center; animation: bounce 1.5s infinite; }
-            .hint-text { color: #ffff00; font-size: 0.8rem; text-shadow: 0 0 5px rgba(255, 255, 0, 0.5); margin-bottom: 0.5rem; display: block; }
+            .hint-text { color: var(--text-color); font-size: 0.8rem; text-shadow: 0 0 5px var(--box-shadow-color); margin-bottom: 0.5rem; display: block; }
             @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
             .download-btn { width: 100%; padding: 0.8rem; background: var(--button-bg); color: var(--button-hover-color); border: 2px solid var(--border-color); cursor: pointer; font-family: 'DungGeunMo', monospace; border-radius: 4px; font-size: 1rem; }
             .download-btn:hover { background: var(--button-hover-bg); color: var(--button-hover-color); }

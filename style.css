@@ -187,8 +187,8 @@ body:not(.light-mode) .light-pixel-character { opacity: 0; }
 
 @media (max-width: 480px) {
     .container {
-        padding: 0.8rem 0.6rem;
-        max-width: 80%;
+        padding: 0.7rem 0.5rem;
+        max-width: 75%;
         margin-top: 1rem;
         border-width: 1px;
     }

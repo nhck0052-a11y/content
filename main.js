@@ -12,9 +12,10 @@ const translations = {
         extract_button_text: "Extract Destiny",
         analysis_status_preparing: "Synchronizing Bio-Quantum Field...",
         please_wait: "Analyzing Data... Please wait...",
-        analysis_report_title: "BIO-QUANTUM ANALYSIS REPORT",
-        synergy_score_label: "Quantum Resonance Index:",
+        analysis_report_title: "NEO-SEOUL AGENT ID CARD",
+        synergy_score_label: "Quantum Resonance:",
         home_button_text: "Reboot System",
+        download_button_text: "Download ID Card",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -34,8 +35,9 @@ const translations = {
         interest_psychology: "Psychology",
         labels: {
             analysis: "Field Analysis",
-            job: "Recommended Class",
-            comment: "System Prophecy"
+            job: "Assigned Class",
+            comment: "System Prophecy",
+            origin: "Quantum Thesis"
         },
         quantum_logic: {
             blood: {
@@ -81,9 +83,10 @@ const translations = {
         interest_select_placeholder: "핵심 관심 분야 선택",
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
+        download_button_text: "시민증 다운로드",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
-        analysis_report_title: "생체 양자 분석 리포트 (QH-NPM)",
+        analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
         synergy_score_label: "양자 공명 지수:",
         alert_message: "모든 생체 데이터 프로토콜을 입력해주세요!",
         gender_m: "XY (남자)",
@@ -104,8 +107,9 @@ const translations = {
         interest_psychology: "심리",
         labels: {
             analysis: "필드 분석",
-            job: "권장 직업 클래스",
-            comment: "시스템 예언"
+            job: "할당 직업 클래스",
+            comment: "시스템 예언",
+            origin: "양자 논문 출처"
         },
         quantum_logic: {
             blood: {
@@ -143,132 +147,161 @@ const translations = {
 
 let lastInputs = null;
 let currentResonanceScore = 0;
-let cyberTime = new Date(2150, 2, 1, 0, 0, 0); // 2150년 3월 1일 00:00:00
+let cyberTime = new Date(2150, 2, 1, 0, 0, 0);
 
 class FateResult extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-        const style = document.createElement('style');
-        style.textContent = `
-            :host {
-                display: block;
-                padding: 1.2rem;
-                border: 2px solid var(--border-color);
-                border-radius: 12px;
-                background: var(--report-bg);
-                color: var(--report-text);
-                font-family: 'DungGeunMo', monospace;
-                text-align: left;
-                box-shadow: 0 0 20px var(--box-shadow-color);
-                animation: scanline 6s linear infinite;
-                margin-top: 1rem;
-            }
-            .report-header { border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1rem; text-align: center; }
-            .report-title { font-size: 1.1rem; color: var(--report-text); text-shadow: 0 0 8px var(--box-shadow-color); }
-            .section { margin-bottom: 1rem; }
-            .label { color: #888; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 0.2rem; display: block; }
-            .content { font-size: 0.95rem; line-height: 1.4; color: var(--report-text); }
-            .job-highlight { color: var(--job-color); font-size: 1.1rem; font-weight: bold; }
-            .comment { font-style: italic; border-top: 1px dashed #444; padding-top: 0.8rem; margin-top: 0.8rem; font-size: 0.9rem; }
-            
-            /* Synergy inside box */
-            #box-synergy-container { margin-top: 1.2rem; display: none; padding-top: 1rem; border-top: 1px solid var(--border-color); }
-            #box-synergy-score { font-size: 1rem; margin-bottom: 0.5rem; text-align: center; }
-            .box-health-bar-container { width: 100%; height: 14px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.3); }
-            .box-health-bar { width: 0%; height: 100%; background: var(--border-color); transition: width 0.05s linear; }
-        `;
-        this.shadowRoot.appendChild(style);
     }
 
-    updateLanguage() {
-        if (!lastInputs) return;
-        const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
-        this.renderContent(fateData, false);
-        const synergyBox = this.shadowRoot.getElementById('box-synergy-container');
-        if (synergyBox && synergyBox.style.display === 'block') {
-            const lang = localStorage.getItem('language') || 'ko';
-            this.shadowRoot.getElementById('box-synergy-score').textContent = `${translations[lang].synergy_score_label} ${currentResonanceScore}%`;
-        }
+    getStyle() {
+        return `
+            :host {
+                display: block;
+                padding: 2px;
+                background: var(--border-color);
+                border-radius: 8px;
+                box-shadow: 0 0 30px var(--box-shadow-color);
+                margin-top: 1rem;
+                overflow: hidden;
+            }
+            .id-card {
+                background: var(--report-bg);
+                color: var(--report-text);
+                padding: 1.5rem;
+                border-radius: 6px;
+                font-family: 'DungGeunMo', monospace;
+                position: relative;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+            }
+            .card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 2px solid var(--border-color);
+                padding-bottom: 0.8rem;
+                margin-bottom: 1rem;
+            }
+            .card-title { font-size: 1rem; font-weight: bold; }
+            .agent-photo {
+                width: 80px;
+                height: 80px;
+                border: 2px solid var(--border-color);
+                float: right;
+                margin-left: 1rem;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+            }
+            .section { margin-bottom: 1.2rem; clear: both; }
+            .label { color: var(--border-color); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.3rem; display: block; opacity: 0.8; }
+            .content { font-size: 1rem; line-height: 1.4; }
+            .job-highlight { color: var(--job-color); font-size: 1.2rem; font-weight: bold; text-shadow: 0 0 5px var(--job-color); }
+            
+            .synergy-box { margin-top: 1.5rem; }
+            .bar-container { width: 100%; height: 20px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.4); position: relative; }
+            .bar-fill { height: 100%; background: var(--border-color); width: 0%; transition: width 0.05s linear; }
+            .bar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 0.8rem; line-height: 20px; color: #fff; mix-blend-mode: difference; }
+
+            .thesis-origin { 
+                margin-top: 1.5rem; 
+                font-size: 0.7rem; 
+                opacity: 0.6; 
+                border-top: 1px dashed var(--border-color); 
+                padding-top: 0.8rem;
+            }
+
+            .download-btn {
+                width: 100%;
+                margin-top: 1.5rem;
+                padding: 0.8rem;
+                background: var(--button-bg);
+                color: var(--text-color);
+                border: 2px solid var(--border-color);
+                cursor: pointer;
+                font-family: 'DungGeunMo', monospace;
+                border-radius: 4px;
+            }
+            .download-btn:hover { background: var(--button-hover-bg); color: var(--button-hover-color); }
+
+            .scanline {
+                width: 100%;
+                height: 2px;
+                background: rgba(0, 255, 0, 0.1);
+                position: absolute;
+                top: 0;
+                left: 0;
+                animation: scan 4s linear infinite;
+                pointer-events: none;
+            }
+            @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        `;
     }
 
     displayFate(data) {
-        this.renderContent(data, true);
-    }
-
-    renderContent(data, useTypewriter) {
         const lang = localStorage.getItem('language') || 'ko';
         this.shadowRoot.innerHTML = `
-            <style>${this.shadowRoot.querySelector('style').textContent}</style>
-            <div class="report-header">
-                <div class="report-title">${translations[lang].analysis_report_title}</div>
-                <div style="font-size: 0.7rem; color: #666; margin-top: 0.5rem;">Neo-Seoul Bio-Quantum Lab / Dr. Seo</div>
-            </div>
-            <div class="section">
-                <span class="label">${translations[lang].labels.analysis}</span>
-                <div class="content" id="analysis-text">${useTypewriter ? '' : data.analysis}</div>
-            </div>
-            <div class="section">
-                <span class="label">${translations[lang].labels.job}</span>
-                <div class="content job-highlight" id="job-text">${useTypewriter ? '' : data.job}</div>
-            </div>
-            <div class="section">
-                <span class="label">${translations[lang].labels.comment}</span>
-                <div class="content comment" id="comment-text">${useTypewriter ? '' : data.comment}</div>
-            </div>
-            <div id="box-synergy-container">
-                <div id="box-synergy-score">${translations[lang].synergy_score_label} 0%</div>
-                <div class="box-health-bar-container"><div class="box-health-bar" id="box-bar"></div></div>
+            <style>${this.getStyle()}</style>
+            <div class="id-card">
+                <div class="scanline"></div>
+                <div class="card-header">
+                    <div class="card-title">${translations[lang].analysis_report_title}</div>
+                    <div style="font-size: 0.7rem;">NO. ${Math.random().toString(36).substr(2, 9).toUpperCase()}</div>
+                </div>
+                
+                <div class="agent-photo">👤</div>
+                
+                <div class="section">
+                    <span class="label">AGENT NAME</span>
+                    <div class="content">${lastInputs.name}</div>
+                </div>
+
+                <div class="section">
+                    <span class="label">${translations[lang].labels.job}</span>
+                    <div class="content job-highlight">${data.job}</div>
+                </div>
+
+                <div class="section">
+                    <span class="label">${translations[lang].labels.analysis}</span>
+                    <div class="content">${data.analysis}</div>
+                </div>
+
+                <div class="synergy-box">
+                    <span class="label">${translations[lang].synergy_score_label}</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" id="id-bar"></div>
+                        <div class="bar-text" id="id-score">0%</div>
+                    </div>
+                </div>
+
+                <div class="thesis-origin">
+                    <span class="label">${translations[lang].labels.origin}</span>
+                    <div>Dr. Seo et al. (2148), "Quantum Neural Mapping of Legacy Human DNA," <i>Neo-Seoul Journal of Bio-Cybernetics</i>, Vol. 12.</div>
+                </div>
+
+                <button class="download-btn" onclick="alert('Citizenship data encrypted and sent to your neural link.')">${translations[lang].download_button_text}</button>
             </div>
         `;
-
-        if (useTypewriter) {
-            this.typeEffect('analysis-text', data.analysis, 20, () => {
-                this.typeEffect('job-text', data.job, 40, () => {
-                    this.typeEffect('comment-text', data.comment, 30, () => {
-                        this.animateSynergy(data.score);
-                    });
-                });
-            });
-        } else {
-            this.shadowRoot.getElementById('box-synergy-container').style.display = 'block';
-            this.shadowRoot.getElementById('box-bar').style.width = `${currentResonanceScore}%`;
-        }
+        this.animateSynergy(data.score);
     }
 
     animateSynergy(targetScore) {
-        const container = this.shadowRoot.getElementById('box-synergy-container');
-        const scoreEl = this.shadowRoot.getElementById('box-synergy-score');
-        const bar = this.shadowRoot.getElementById('box-bar');
-        const lang = localStorage.getItem('language') || 'ko';
-        
-        container.style.display = 'block';
-        currentResonanceScore = 0;
+        const bar = this.shadowRoot.getElementById('id-bar');
+        const scoreEl = this.shadowRoot.getElementById('id-score');
+        let current = 0;
         const interval = setInterval(() => {
-            if (currentResonanceScore < targetScore) {
-                currentResonanceScore++;
-                bar.style.width = `${currentResonanceScore}%`;
-                scoreEl.textContent = `${translations[lang].synergy_score_label} ${currentResonanceScore}%`;
+            if (current < targetScore) {
+                current++;
+                bar.style.width = `${current}%`;
+                scoreEl.textContent = `${current}%`;
             } else {
                 clearInterval(interval);
                 this.dispatchEvent(new CustomEvent('report-finished'));
             }
-        }, 30);
-    }
-
-    typeEffect(id, text, speed, callback) {
-        const el = this.shadowRoot.getElementById(id);
-        if (!el) return;
-        let i = 0;
-        const timer = setInterval(() => {
-            if (i < text.length) {
-                el.textContent += text.charAt(i);
-                i++;
-            } else {
-                clearInterval(timer);
-                if (callback) callback();
-            }
-        }, speed);
+        }, 25);
     }
 }
 
@@ -321,7 +354,10 @@ function setLanguage(lang) {
     });
 
     const report = document.querySelector('fate-result');
-    if (report) report.updateLanguage();
+    if (report && lastInputs) {
+        const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
+        report.displayFate(fateData);
+    }
 
     const analysisStatus = document.getElementById('analysis-status');
     if (analysisStatus && analysisStatus.style.display !== 'none') {

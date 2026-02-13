@@ -212,7 +212,7 @@ class FateResult extends HTMLElement {
                     <span class="label">${translations[lang].labels.origin}</span>
                     <div>Dr. Seo et al. (2148), "Quantum Mapping," <i>Neo-Seoul Journal</i>.</div>
                 </div>
-                <button class="download-btn">${translations[lang].download_button_text}</button>
+                <button class="download-btn" onclick="alert('Encrypted data saved.')">${translations[lang].download_button_text}</button>
             </div>
         `;
         this.animateSynergy(data.score);
@@ -241,22 +241,18 @@ const body = document.body;
 const themeToggle = document.getElementById('theme-toggle');
 const langToggle = document.getElementById('lang-toggle');
 
-// 테마 설정 함수 정밀화
 function setTheme(theme) {
     if (theme === 'light') {
         body.classList.add('light-mode');
-        themeToggle.textContent = '🌑 DARK'; // 라이트 모드일 때 "다크로 가기" 표시
+        themeToggle.textContent = '[ DARK ]';
     } else {
         body.classList.remove('light-mode');
-        themeToggle.textContent = '☀️ LIGHT'; // 다크 모드일 때 "라이트로 가기" 표시
+        themeToggle.textContent = '[ LIGHT ]';
     }
     localStorage.setItem('theme', theme);
 }
 
-// 초기 테마 로드
-const savedTheme = localStorage.getItem('theme') || 'dark';
-setTheme(savedTheme);
-
+setTheme(localStorage.getItem('theme') || 'dark');
 themeToggle.addEventListener('click', () => {
     const newTheme = body.classList.contains('light-mode') ? 'dark' : 'light';
     setTheme(newTheme);
@@ -264,7 +260,6 @@ themeToggle.addEventListener('click', () => {
     setTimeout(() => body.classList.remove('glitch-effect'), 300);
 });
 
-// 언어 설정 함수 정밀화
 function setLanguage(lang) {
     localStorage.setItem('language', lang);
     document.querySelectorAll('[data-key]').forEach(el => {
@@ -275,7 +270,6 @@ function setLanguage(lang) {
         }
     });
     
-    // Select 요소 한글화
     ['interest-select', 'mbti-select', 'age-select', 'gender-select', 'blood-select'].forEach(id => {
         const select = document.getElementById(id);
         if (select) {
@@ -290,13 +284,10 @@ function setLanguage(lang) {
         }
     });
 
-    langToggle.textContent = lang === 'ko' ? '🇺🇸 EN' : '🇰🇷 KO';
+    langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
 }
 
-// 초기 언어 로드
-const savedLang = localStorage.getItem('language') || 'ko';
-setLanguage(savedLang);
-
+setLanguage(localStorage.getItem('language') || 'ko');
 langToggle.addEventListener('click', () => {
     const newLang = localStorage.getItem('language') === 'ko' ? 'en' : 'ko';
     setLanguage(newLang);
@@ -304,7 +295,6 @@ langToggle.addEventListener('click', () => {
     setTimeout(() => body.classList.remove('glitch-effect'), 300);
 });
 
-// 결과 생성 로직
 function generateFate(mbtiStr, blood, gender) {
     const lang = localStorage.getItem('language') || 'ko';
     const mbtiGroup = mbtiStr.includes('N') && mbtiStr.includes('T') ? 'NT' : mbtiStr.includes('N') && mbtiStr.includes('F') ? 'NF' : mbtiStr.includes('S') && mbtiStr.includes('J') ? 'SJ' : 'SP';
@@ -347,7 +337,6 @@ document.getElementById('extract-button').addEventListener('click', () => {
     }, 2000);
 });
 
-// 캐릭터 및 배경 행성 초기화
 function triggerGlitch(el) { el.classList.add('char-glitch'); setTimeout(() => el.classList.remove('char-glitch'), 300); }
 
 function initCharacters() {

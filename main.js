@@ -244,9 +244,32 @@ function setLanguage(lang) {
     localStorage.setItem('language', lang);
     document.querySelectorAll('[data-key]').forEach(el => { const key = el.dataset.key; if (translations[lang][key]) { if (el.tagName === 'INPUT') el.placeholder = translations[lang][key]; else el.textContent = translations[lang][key]; } });
     shareToggle.textContent = translations[lang].share_btn; langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
+    
+    const report = document.querySelector('fate-result');
+    if (report && lastInputs) {
+        const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
+        report.displayFate(fateData);
+    }
 }
+
+function toggleLanguage() {
+    body.classList.add('glitch-effect');
+    setTimeout(() => body.classList.remove('glitch-effect'), 300);
+    const currentLang = localStorage.getItem('language') || 'ko';
+    setLanguage(currentLang === 'ko' ? 'en' : 'ko');
+}
+
 setLanguage(localStorage.getItem('language') || 'ko');
-langToggle.addEventListener('click', () => { body.classList.add('glitch-effect'); setTimeout(() => body.classList.remove('glitch-effect'), 300); setLanguage(localStorage.getItem('language') === 'ko' ? 'en' : 'ko'); });
+
+langToggle.addEventListener('click', toggleLanguage);
+
+// 한영키 및 언어 전환 단축키 지원
+window.addEventListener('keydown', (e) => {
+    // e.code 'HangulMode'는 일반적인 한영키, 'AltRight'는 일부 환경에서의 한영키
+    if (e.code === 'HangulMode' || e.key === 'HangulMode') {
+        toggleLanguage();
+    }
+});
 document.getElementById('extract-button').addEventListener('click', () => {
     const inputs = { name: document.getElementById('name-input').value, mbti: document.getElementById('mbti-select').value, blood: document.getElementById('blood-select').value, gender: document.getElementById('gender-select').value, age: document.getElementById('age-select').value, interest: document.getElementById('interest-select').value };
     const lang = localStorage.getItem('language') || 'ko';

@@ -152,8 +152,16 @@ p {
     height: 60px;
     z-index: 1;
     pointer-events: none;
-    opacity: 0.6;
+    transition: opacity 0.3s ease;
 }
+
+.pixel-character { opacity: 0.6; mix-blend-mode: screen; }
+.light-pixel-character { opacity: 0; mix-blend-mode: multiply; filter: brightness(1.05); }
+
+/* 테마별 가시성 제어 */
+.light-mode .pixel-character { opacity: 0; }
+.light-mode .light-pixel-character { opacity: 0.6; }
+body:not(.light-mode) .light-pixel-character { opacity: 0; }
 
 #synergy-container { margin-top: 1.5rem; }
 #synergy-score { font-size: 1.4rem; margin-bottom: 0.8rem; }

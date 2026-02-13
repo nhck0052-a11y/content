@@ -15,8 +15,7 @@ const translations = {
         analysis_report_title: "NEO-SEOUL AGENT ID CARD",
         synergy_score_label: "AI Job Suitability (Resonance Index):",
         home_button_text: "Reboot System",
-        view_report_button: "View Analysis Report",
-        download_button_text: "Save Official ID (PDF)",
+        view_report_button: "Issue Official ID (PDF)",
         img_button_text: "Save Tactical Report (PNG)",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
@@ -63,7 +62,7 @@ const translations = {
         interest_select_placeholder: "핵심 관심 분야 선택",
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
-        download_button_text: "시민증 정식 발급 (PDF)",
+        view_report_button: "시민증 정식 발급 (PDF)",
         img_button_text: "전술 보고서 사진 저장 (PNG)",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
@@ -107,7 +106,6 @@ const translations = {
 let lastInputs = null;
 let cyberTime = new Date(2150, 2, 1, 0, 0, 0);
 
-// 전역 에러 핸들러 추가
 window.onerror = function(message, source, lineno, colno, error) {
     console.error("System Error Detected:", message, "at", source, ":", lineno);
     return false; 
@@ -180,13 +178,12 @@ class FateResult extends HTMLElement {
                     <span class="label">${translations[lang].synergy_score_label}</span>
                     <div class="bar-container"><div class="bar-fill" id="id-bar"></div><div class="bar-text" id="id-score">0%</div></div>
                 </div>
-                <div class="hint-container"><span class="hint-text">${translations[lang].click_hint}</span><button class="download-btn" id="open-reasoning">${translations[lang].download_button_text}</button></div>
+                <div class="hint-container"><span class="hint-text">${translations[lang].click_hint}</span><button class="download-btn" id="open-reasoning">${translations[lang].view_report_button}</button></div>
             </div>
             <div id="reasoning-modal">
                 <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
                 <div class="reasoning-text" id="reasoning-content"></div>
                 <div style="margin-top: auto; display:flex; flex-direction:column; gap:0.5rem;">
-                    <button class="download-btn" id="save-pdf-internal">${translations[lang].download_button_text}</button>
                     <button class="download-btn" id="save-image">${translations[lang].img_button_text}</button>
                     <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
                 </div>
@@ -222,7 +219,6 @@ class FateResult extends HTMLElement {
               openBtn = this.shadowRoot.getElementById('open-reasoning'), 
               closeBtn = this.shadowRoot.getElementById('close-reasoning'), 
               imgBtn = this.shadowRoot.getElementById('save-image'), 
-              pdfBtn = this.shadowRoot.getElementById('save-pdf-internal'),
               content = this.shadowRoot.getElementById('reasoning-content'), 
               exportText = this.shadowRoot.getElementById('export-reasoning-text'), 
               lang = localStorage.getItem('language') || 'ko';
@@ -233,7 +229,17 @@ class FateResult extends HTMLElement {
         const l = translations[lang].quantum_logic;
         const reason = lang === 'ko' ? `분석 결과, 귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
         
-        openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; exportText.textContent = reason; };
+        // 카드 버튼을 누르면 모달을 여는 것과 동시에 PDF 다운로드도 자동으로 실행하도록 설정 (선택사항)
+        // 여기서는 사용자 요청대로 모달 내부 버튼만 삭제하는 것에 집중합니다.
+        openBtn.onclick = async () => { 
+            modal.classList.add('modal-active'); 
+            content.textContent = reason; 
+            exportText.textContent = reason;
+            
+            // 모달을 열 때 자동으로 PDF를 다운로드하고 싶다면 아래 주석을 해제하세요.
+            // await this.downloadPdf();
+        };
+
         closeBtn.onclick = () => modal.classList.remove('modal-active');
         
         const generateImage = async () => {
@@ -270,21 +276,32 @@ class FateResult extends HTMLElement {
                 }
             } catch (err) { console.error('Save failed:', err); } finally { imgBtn.textContent = originalText; imgBtn.disabled = false; }
         };
-
-        pdfBtn.onclick = async () => {
-            const originalText = pdfBtn.textContent;
-            pdfBtn.textContent = translations[lang].generating_text;
-            pdfBtn.disabled = true;
-            try {
-                const canvas = await generateImage();
-                const imgData = canvas.toDataURL('image/png');
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('l', 'px', [1280, 720]);
-                pdf.addImage(imgData, 'PNG', 0, 0, 1280, 720);
-                pdf.save(`NeoSeoul_ID_${lastInputs.name}.pdf`);
-            } catch (err) { console.error('PDF Save failed:', err); } finally { pdfBtn.textContent = originalText; pdfBtn.disabled = false; }
-        };
     }
+
+    // PDF 다운로드 전용 메서드 분리
+    async downloadPdf() {
+        const lang = localStorage.getItem('language') || 'ko';
+        try {
+            const wrapper = this.shadowRoot.getElementById('image-export-wrapper');
+            const isLight = document.body.classList.contains('light-mode');
+            const canvas = await html2canvas(wrapper, { 
+                scale: 2, 
+                backgroundColor: isLight ? '#FFFFFF' : '#000000', 
+                useCORS: true,
+                logging: false,
+                onclone: (clonedDoc) => {
+                    const el = clonedDoc.getElementById('image-export-wrapper');
+                    if (el) el.style.position = 'static';
+                }
+            });
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('l', 'px', [1280, 720]);
+            pdf.addImage(imgData, 'PNG', 0, 0, 1280, 720);
+            pdf.save(`NeoSeoul_ID_${lastInputs.name}.pdf`);
+        } catch (err) { console.error('PDF Save failed:', err); }
+    }
+
     animateSynergy(targetScore) {
         const bar = this.shadowRoot.getElementById('id-bar'), scoreEl = this.shadowRoot.getElementById('id-score');
         let current = 0; 
@@ -302,7 +319,6 @@ class FateResult extends HTMLElement {
 }
 customElements.define('fate-result', FateResult);
 
-// 메인 앱 로직
 const body = document.body, 
       themeToggle = document.getElementById('theme-toggle'), 
       langToggle = document.getElementById('lang-toggle'), 

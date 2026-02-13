@@ -15,7 +15,7 @@ const translations = {
         analysis_report_title: "NEO-SEOUL AGENT ID CARD",
         synergy_score_label: "AI Job Suitability:",
         home_button_text: "Reboot System",
-        download_button_text: "Download ID Card",
+        download_button_text: "View Suitability Analysis",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -40,36 +40,14 @@ const translations = {
             origin: "Quantum Thesis"
         },
         quantum_logic: {
-            blood: {
-                A: "High-precision Stable Wave",
-                B: "Anomalous Creative Wave",
-                O: "Radiant Diffusion Wave",
-                AB: "Dual Resonance Analysis Wave"
-            },
-            gender: {
-                M: "Vector Breakthrough Energy",
-                F: "Matrix Connection Energy",
-                N: "Superposition Hybrid Energy"
-            },
-            mbti: {
-                NT: "Strategic Thinking Circuit",
-                NF: "Empathy Neural Net",
-                SJ: "Data Archiving Instinct",
-                SP: "Real-time Response Sensor"
-            },
-            keywords: {
-                A: "Precision", B: "Freedom", O: "Affinity", AB: "Cool-headedness",
-                M: "Power", F: "Connectivity", N: "Flexibility",
-                NT: "Command", NF: "Empathy", SJ: "Management", SP: "Adaptability"
-            },
-            jobs: {
-                'NT+A+M': 'Interstellar Highway Design Supervisor',
-                'NF+B+F': 'Endangered Alien Psychologist',
-                'SP+AB+M': 'Android Black Market Mechanic',
-                'SJ+O+F': 'Galactic Data Security Deputy Director',
-                'default': 'Inter-dimensional Resource Manager'
-            }
-        }
+            blood: { A: "High-precision Stable Wave", B: "Anomalous Creative Wave", O: "Radiant Diffusion Wave", AB: "Dual Resonance Analysis Wave" },
+            gender: { M: "Vector Breakthrough Energy", F: "Matrix Connection Energy", N: "Superposition Hybrid Energy" },
+            mbti: { NT: "Strategic Thinking Circuit", NF: "Empathy Neural Net", SJ: "Data Archiving Instinct", SP: "Real-time Response Sensor" },
+            keywords: { A: "Precision", B: "Freedom", O: "Affinity", AB: "Cool-headedness", M: "Power", F: "Connectivity", N: "Flexibility", NT: "Command", NF: "Empathy", SJ: "Management", SP: "Adaptability" },
+            jobs: { 'NT+A+M': 'Interstellar Highway Design Supervisor', 'NF+B+F': 'Endangered Alien Psychologist', 'SP+AB+M': 'Android Black Market Mechanic', 'SJ+O+F': 'Galactic Data Security Deputy Director', 'default': 'Inter-dimensional Resource Manager' }
+        },
+        deep_analysis_title: "BIO-QUANTUM REASONING REPORT",
+        close_button: "Return to ID"
     },
     ko: {
         app_title: "2150 AI 생존 시뮬레이션",
@@ -83,7 +61,7 @@ const translations = {
         interest_select_placeholder: "핵심 관심 분야 선택",
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
-        download_button_text: "시민증 다운로드",
+        download_button_text: "적합도 근거 분석",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
@@ -112,36 +90,14 @@ const translations = {
             origin: "양자 논문 출처"
         },
         quantum_logic: {
-            blood: {
-                A: "고정밀 안정 파동",
-                B: "변칙적 창의 파동",
-                O: "방사형 확산 파동",
-                AB: "이중 공명 분석 파동"
-            },
-            gender: {
-                M: "직진성 돌파 에너지",
-                F: "네트워크 연결 에너지",
-                N: "중첩 상태 하이브리드 에너지"
-            },
-            mbti: {
-                NT: "전략적 사고 회로",
-                NF: "공감각 뉴런망",
-                SJ: "데이터 보존 본능",
-                SP: "실시간 반응 센서"
-            },
-            keywords: {
-                A: "정밀함", B: "자유로움", O: "친화력", AB: "냉철함",
-                M: "돌파력", F: "연결성", N: "유연성",
-                NT: "지휘력", NF: "공감 능력", SJ: "관리력", SP: "적응력"
-            },
-            jobs: {
-                'NT+A+M': '행성 간 고속도로 설계 총괄자',
-                'NF+B+F': '멸종 위기 외계 생물 심리 치료사',
-                'SP+AB+M': '안드로이드 암시장 수리공',
-                'SJ+O+F': '은하 연합 데이터 보안 아카이브 부국장',
-                'default': '차원 간 자원 관리 전문가'
-            }
-        }
+            blood: { A: "고정밀 안정 파동", B: "변칙적 창의 파동", O: "방사형 확산 파동", AB: "이중 공명 분석 파동" },
+            gender: { M: "직진성 돌파 에너지", F: "네트워크 연결 에너지", N: "중첩 상태 하이브리드 에너지" },
+            mbti: { NT: "전략적 사고 회로", NF: "공감각 뉴런망", SJ: "데이터 보존 본능", SP: "실시간 반응 센서" },
+            keywords: { A: "정밀함", B: "자유로움", O: "친화력", AB: "냉철함", M: "돌파력", F: "연결성", N: "유연성", NT: "지휘력", NF: "공감 능력", SJ: "관리력", SP: "적응력" },
+            jobs: { 'NT+A+M': '행성 간 고속도로 설계 총괄자', 'NF+B+F': '멸종 위기 외계 생물 심리 치료사', 'SP+AB+M': '안드로이드 암시장 수리공', 'SJ+O+F': '은하 연합 데이터 보안 아카이브 부국장', 'default': '차원 간 자원 관리 전문가' }
+        },
+        deep_analysis_title: "생체 양자 역학적 직업 적합도 근거",
+        close_button: "ID 카드로 돌아가기"
     }
 };
 
@@ -153,7 +109,7 @@ class FateResult extends HTMLElement {
     constructor() { super(); this.attachShadow({ mode: 'open' }); }
     getStyle() {
         return `
-            :host { display: block; padding: 2px; background: var(--border-color); border-radius: 8px; box-shadow: 0 0 30px var(--box-shadow-color); margin-top: 1.5rem; overflow: hidden; }
+            :host { display: block; padding: 2px; background: var(--border-color); border-radius: 8px; box-shadow: 0 0 30px var(--box-shadow-color); margin-top: 1.5rem; overflow: hidden; position: relative; }
             .id-card { background: var(--report-bg); color: var(--report-text); padding: 1.5rem; border-radius: 6px; font-family: 'DungGeunMo', monospace; position: relative; border: 2px solid rgba(255, 255, 255, 0.1); }
             .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1rem; }
             .card-title { font-size: 1rem; font-weight: bold; }
@@ -171,6 +127,13 @@ class FateResult extends HTMLElement {
             .download-btn:hover { background: var(--button-hover-bg); color: var(--button-hover-color); }
             .scanline { width: 100%; height: 2px; background: rgba(0, 255, 0, 0.1); position: absolute; top: 0; left: 0; animation: scan 4s linear infinite; pointer-events: none; }
             @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+            /* Detailed Modal Style */
+            #reasoning-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--report-bg); z-index: 100; padding: 1.5rem; box-sizing: border-box; flex-direction: column; overflow-y: auto; }
+            .modal-active { display: flex !important; animation: fadeIn 0.3s ease; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+            .reasoning-text { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; margin-bottom: 1.5rem; }
+            .academic-tag { font-size: 0.7rem; color: var(--border-color); font-style: italic; margin-top: 1rem; }
         `;
     }
     displayFate(data) {
@@ -207,11 +170,38 @@ class FateResult extends HTMLElement {
                     <span class="label">${translations[lang].labels.origin}</span>
                     <div>Dr. Seo et al. (2148), "Quantum Mapping," <i>Neo-Seoul Journal</i>.</div>
                 </div>
-                <button class="download-btn" onclick="alert('Encrypted data saved.')">${translations[lang].download_button_text}</button>
+                <button class="download-btn" id="open-reasoning">${translations[lang].download_button_text}</button>
+            </div>
+            
+            <div id="reasoning-modal">
+                <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
+                <div class="reasoning-text" id="reasoning-content"></div>
+                <div class="academic-tag">[Source: Unified Theory of Legacy Human Neural Patterns, Neo-Seoul Quantum Lab]</div>
+                <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
             </div>
         `;
         this.animateSynergy(data.score);
+        this.setupModal(data);
     }
+
+    setupModal(data) {
+        const modal = this.shadowRoot.getElementById('reasoning-modal');
+        const openBtn = this.shadowRoot.getElementById('open-reasoning');
+        const closeBtn = this.shadowRoot.getElementById('close-reasoning');
+        const content = this.shadowRoot.getElementById('reasoning-content');
+        const lang = localStorage.getItem('language') || 'ko';
+
+        const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
+        const l = translations[lang].quantum_logic;
+
+        const reason = lang === 'ko' ? 
+            `분석 결과, 귀하의 생체 데이터는 ${l.blood[lastInputs.blood]} 특성과 ${l.mbti[mbtiGroup]}의 사고 회로가 결합된 드문 케이스입니다. \n\n논문 'Quantum Neural Mapping(2148)'에 따르면, ${l.keywords[lastInputs.blood]}의 파동을 가진 개체는 ${l.keywords[mbtiGroup]}의 환경에서 최적의 양자 효율을 보입니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 성별 프로토콜과 98.2% 일치함이 확인되었습니다. 이는 2150년 네오-서울 생존 시뮬레이션에서 귀하가 AI 파트너와 가장 높은 공명 지수를 유지할 수 있는 핵심 근거입니다.` :
+            `Analysis shows that your bio-data is a rare synergy of ${l.blood[lastInputs.blood]} and ${l.mbti[mbtiGroup]} thinking circuits. \n\nAccording to 'Quantum Neural Mapping(2148)', individuals with ${l.keywords[lastInputs.blood]} waves show optimal quantum efficiency in ${l.keywords[mbtiGroup]} environments. \n\nSpecifically, the ${l.keywords[lastInputs.gender]} energy required for the '${data.job}' class matches your gender protocol by 98.2%. This is the primary evidence for maintaining the highest resonance with AI partners in the 2150 simulation.`;
+
+        openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; };
+        closeBtn.onclick = () => { modal.classList.remove('modal-active'); };
+    }
+
     animateSynergy(targetScore) {
         const bar = this.shadowRoot.getElementById('id-bar');
         const scoreEl = this.shadowRoot.getElementById('id-score');
@@ -237,8 +227,6 @@ setTheme(localStorage.getItem('theme') || 'dark');
 themeToggle.addEventListener('click', () => setTheme(body.classList.contains('light-mode') ? 'dark' : 'light'));
 
 function setLanguage(lang) {
-    body.classList.add('glitch-effect');
-    setTimeout(() => body.classList.remove('glitch-effect'), 300);
     localStorage.setItem('language', lang);
     document.querySelectorAll('[data-key]').forEach(el => {
         const key = el.dataset.key;

@@ -15,7 +15,7 @@ const translations = {
         analysis_report_title: "NEO-SEOUL AGENT ID CARD",
         synergy_score_label: "AI Job Suitability:",
         home_button_text: "Reboot System",
-        download_button_text: "View Suitability Analysis",
+        download_button_text: "Issue Official ID",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -46,8 +46,8 @@ const translations = {
             keywords: { A: "Precision", B: "Freedom", O: "Affinity", AB: "Cool-headedness", M: "Power", F: "Connectivity", N: "Flexibility", NT: "Command", NF: "Empathy", SJ: "Management", SP: "Adaptability" },
             jobs: { 'NT+A+M': 'Interstellar Highway Design Supervisor', 'NF+B+F': 'Endangered Alien Psychologist', 'SP+AB+M': 'Android Black Market Mechanic', 'SJ+O+F': 'Galactic Data Security Deputy Director', 'default': 'Inter-dimensional Resource Manager' }
         },
-        deep_analysis_title: "BIO-QUANTUM REASONING REPORT",
-        close_button: "Return to ID"
+        deep_analysis_title: "OFFICIAL SUITABILITY REPORT",
+        close_button: "Return to Main"
     },
     ko: {
         app_title: "2150 AI 생존 시뮬레이션",
@@ -61,7 +61,7 @@ const translations = {
         interest_select_placeholder: "핵심 관심 분야 선택",
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
-        download_button_text: "적합도 근거 분석",
+        download_button_text: "시민증 정식 발급",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
@@ -96,8 +96,8 @@ const translations = {
             keywords: { A: "정밀함", B: "자유로움", O: "친화력", AB: "냉철함", M: "돌파력", F: "연결성", N: "유연성", NT: "지휘력", NF: "공감 능력", SJ: "관리력", SP: "적응력" },
             jobs: { 'NT+A+M': '행성 간 고속도로 설계 총괄자', 'NF+B+F': '멸종 위기 외계 생물 심리 치료사', 'SP+AB+M': '안드로이드 암시장 수리공', 'SJ+O+F': '은하 연합 데이터 보안 아카이브 부국장', 'default': '차원 간 자원 관리 전문가' }
         },
-        deep_analysis_title: "생체 양자 역학적 직업 적합도 근거",
-        close_button: "ID 카드로 돌아가기"
+        deep_analysis_title: "정식 직업 적합도 보고서",
+        close_button: "시민증으로 돌아가기"
     }
 };
 
@@ -128,12 +128,12 @@ class FateResult extends HTMLElement {
             .scanline { width: 100%; height: 2px; background: rgba(0, 255, 0, 0.1); position: absolute; top: 0; left: 0; animation: scan 4s linear infinite; pointer-events: none; }
             @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-            /* Detailed Modal Style */
+            /* Integrated Report View */
             #reasoning-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--report-bg); z-index: 100; padding: 1.5rem; box-sizing: border-box; flex-direction: column; overflow-y: auto; }
-            .modal-active { display: flex !important; animation: fadeIn 0.3s ease; }
-            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-            .reasoning-text { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; margin-bottom: 1.5rem; }
-            .academic-tag { font-size: 0.7rem; color: var(--border-color); font-style: italic; margin-top: 1rem; }
+            .modal-active { display: flex !important; animation: slideUp 0.4s ease-out; }
+            @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+            .reasoning-text { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; margin-top: 1rem; border-top: 1px solid rgba(0,255,0,0.2); padding-top: 1rem; }
+            .summary-info { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding: 0.8rem; border: 1px solid var(--border-color); background: rgba(0,255,0,0.05); }
         `;
     }
     displayFate(data) {
@@ -175,9 +175,21 @@ class FateResult extends HTMLElement {
             
             <div id="reasoning-modal">
                 <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
+                
+                <div class="summary-info">
+                    <div style="font-size: 1.5rem;">👤</div>
+                    <div>
+                        <div style="font-size: 0.9rem; font-weight: bold;">${lastInputs.name} 요원</div>
+                        <div style="font-size: 0.75rem; color: var(--job-color);">${data.job}</div>
+                    </div>
+                </div>
+
                 <div class="reasoning-text" id="reasoning-content"></div>
-                <div class="academic-tag">[Source: Unified Theory of Legacy Human Neural Patterns, Neo-Seoul Quantum Lab]</div>
-                <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
+                
+                <div style="margin-top: auto; padding-top: 1rem;">
+                    <div style="font-size: 0.65rem; opacity: 0.5; margin-bottom: 1rem;">* 본 보고서는 네오-서울 중앙 컴퓨터의 생체 양자 분석 알고리즘에 의해 자동 생성되었습니다.</div>
+                    <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
+                </div>
             </div>
         `;
         this.animateSynergy(data.score);
@@ -195,8 +207,8 @@ class FateResult extends HTMLElement {
         const l = translations[lang].quantum_logic;
 
         const reason = lang === 'ko' ? 
-            `분석 결과, 귀하의 생체 데이터는 ${l.blood[lastInputs.blood]} 특성과 ${l.mbti[mbtiGroup]}의 사고 회로가 결합된 드문 케이스입니다. \n\n논문 'Quantum Neural Mapping(2148)'에 따르면, ${l.keywords[lastInputs.blood]}의 파동을 가진 개체는 ${l.keywords[mbtiGroup]}의 환경에서 최적의 양자 효율을 보입니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 성별 프로토콜과 98.2% 일치함이 확인되었습니다. 이는 2150년 네오-서울 생존 시뮬레이션에서 귀하가 AI 파트너와 가장 높은 공명 지수를 유지할 수 있는 핵심 근거입니다.` :
-            `Analysis shows that your bio-data is a rare synergy of ${l.blood[lastInputs.blood]} and ${l.mbti[mbtiGroup]} thinking circuits. \n\nAccording to 'Quantum Neural Mapping(2148)', individuals with ${l.keywords[lastInputs.blood]} waves show optimal quantum efficiency in ${l.keywords[mbtiGroup]} environments. \n\nSpecifically, the ${l.keywords[lastInputs.gender]} energy required for the '${data.job}' class matches your gender protocol by 98.2%. This is the primary evidence for maintaining the highest resonance with AI partners in the 2150 simulation.`;
+            `[분석 근거 요약] \n\n귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n논문 'Legacy Human Mapping(2148)'의 제 4장에 따르면, 이러한 결합은 '${data.job}' 클래스가 요구하는 고도의 ${l.keywords[mbtiGroup]}와(과) ${l.keywords[lastInputs.blood]}의 조화를 완벽하게 충족합니다. \n\n성별 프로토콜 기반의 ${l.keywords[lastInputs.gender]} 에너지 또한 해당 직무 수행 시 필요한 AI 공명 지수를 극대화하는 핵심 요소로 분석되었습니다. 따라서 귀하는 2150년 네오-서울의 생존 시뮬레이션에서 해당 직업군으로 활동할 때 가장 높은 생존율과 효율을 보장받습니다.` :
+            `[Analysis Evidence Summary] \n\nYour biological energy unit (Type ${lastInputs.blood}) exhibits ${l.blood[lastInputs.blood]} characteristics, which generate the most stable quantum leaps when combined with the ${l.mbti[mbtiGroup]} thinking circuit. \n\nAccording to Chapter 4 of 'Legacy Human Mapping (2148)', this combination perfectly meets the harmony of ${l.keywords[mbtiGroup]} and ${l.keywords[lastInputs.blood]} required by the '${data.job}' class. \n\nThe ${l.keywords[lastInputs.gender]} energy based on the gender protocol was also analyzed as a key factor in maximizing the AI resonance index required for this job. Therefore, you are guaranteed the highest survival rate and efficiency when active in this career group in the 2150 Neo-Seoul simulation.`;
 
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; };
         closeBtn.onclick = () => { modal.classList.remove('modal-active'); };

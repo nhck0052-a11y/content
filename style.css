@@ -152,13 +152,26 @@ p {
     z-index: 1;
     pointer-events: none;
     transition: opacity 0.3s ease;
+    /* 배경 제거 효과: 중앙은 선명하게, 가장자리는 부드럽게 날림 */
+    mask-image: radial-gradient(circle at center, black 50%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle at center, black 50%, transparent 100%);
 }
 
-.pixel-character { opacity: 0.6; mix-blend-mode: screen; }
-.light-pixel-character { opacity: 0; mix-blend-mode: multiply; filter: brightness(1.05); }
+.pixel-character { 
+    opacity: 0.9; 
+    mix-blend-mode: screen; 
+    /* 검은 배경을 더 확실하게 제거하기 위해 대비 조정 */
+    filter: contrast(1.3) brightness(1.1);
+}
+.light-pixel-character { 
+    opacity: 0.9; 
+    mix-blend-mode: multiply; 
+    /* 흰 배경을 더 확실하게 제거하기 위해 밝기/대비 조정 */
+    filter: brightness(1.1) contrast(1.1); 
+}
 
 .light-mode .pixel-character { opacity: 0; }
-.light-mode .light-pixel-character { opacity: 0.6; }
+.light-mode .light-pixel-character { opacity: 0.9; }
 body:not(.light-mode) .light-pixel-character { opacity: 0; }
 
 /* Body 전용 글리치: 레이아웃에 영향을 주지 않도록 transform 제외 */

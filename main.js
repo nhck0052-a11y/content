@@ -170,6 +170,12 @@ class FateResult extends HTMLElement {
             .content { font-size: 0.95rem; line-height: 1.4; color: var(--report-text); }
             .job-highlight { color: var(--job-color); font-size: 1.1rem; font-weight: bold; }
             .comment { font-style: italic; border-top: 1px dashed #444; padding-top: 0.8rem; margin-top: 0.8rem; font-size: 0.9rem; }
+            
+            /* Synergy inside box */
+            #box-synergy-container { margin-top: 1.2rem; display: none; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+            #box-synergy-score { font-size: 1rem; margin-bottom: 0.5rem; text-align: center; }
+            .box-health-bar-container { width: 100%; height: 14px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.3); }
+            .box-health-bar { width: 0%; height: 100%; background: var(--border-color); transition: width 0.05s linear; }
         `;
         this.shadowRoot.appendChild(style);
     }
@@ -178,6 +184,11 @@ class FateResult extends HTMLElement {
         if (!lastInputs) return;
         const fateData = generateFate(lastInputs.mbti, lastInputs.blood, lastInputs.gender);
         this.renderContent(fateData, false);
+        const synergyBox = this.shadowRoot.getElementById('box-synergy-container');
+        if (synergyBox && synergyBox.style.display === 'block') {
+            const lang = localStorage.getItem('language') || 'ko';
+            this.shadowRoot.getElementById('box-synergy-score').textContent = `${translations[lang].synergy_score_label} ${currentResonanceScore}%`;
+        }
     }
 
     displayFate(data) {
@@ -204,17 +215,44 @@ class FateResult extends HTMLElement {
                 <span class="label">${translations[lang].labels.comment}</span>
                 <div class="content comment" id="comment-text">${useTypewriter ? '' : data.comment}</div>
             </div>
+            <div id="box-synergy-container">
+                <div id="box-synergy-score">${translations[lang].synergy_score_label} 0%</div>
+                <div class="box-health-bar-container"><div class="box-health-bar" id="box-bar"></div></div>
+            </div>
         `;
 
         if (useTypewriter) {
             this.typeEffect('analysis-text', data.analysis, 20, () => {
                 this.typeEffect('job-text', data.job, 40, () => {
                     this.typeEffect('comment-text', data.comment, 30, () => {
-                        this.dispatchEvent(new CustomEvent('report-finished'));
+                        this.animateSynergy(data.score);
                     });
                 });
             });
+        } else {
+            this.shadowRoot.getElementById('box-synergy-container').style.display = 'block';
+            this.shadowRoot.getElementById('box-bar').style.width = `${currentResonanceScore}%`;
         }
+    }
+
+    animateSynergy(targetScore) {
+        const container = this.shadowRoot.getElementById('box-synergy-container');
+        const scoreEl = this.shadowRoot.getElementById('box-synergy-score');
+        const bar = this.shadowRoot.getElementById('box-bar');
+        const lang = localStorage.getItem('language') || 'ko';
+        
+        container.style.display = 'block';
+        currentResonanceScore = 0;
+        const interval = setInterval(() => {
+            if (currentResonanceScore < targetScore) {
+                currentResonanceScore++;
+                bar.style.width = `${currentResonanceScore}%`;
+                scoreEl.textContent = `${translations[lang].synergy_score_label} ${currentResonanceScore}%`;
+            } else {
+                clearInterval(interval);
+                this.dispatchEvent(new CustomEvent('report-finished'));
+            }
+        }, 30);
     }
 
     typeEffect(id, text, speed, callback) {
@@ -289,12 +327,6 @@ function setLanguage(lang) {
         analysisStatus.textContent = translations[lang].please_wait;
     }
 
-    const synergyContainer = document.getElementById('synergy-container');
-    const synergyScoreEl = document.getElementById('synergy-score');
-    if (synergyContainer && synergyContainer.style.display !== 'none' && synergyScoreEl) {
-        synergyScoreEl.textContent = `${translations[lang].synergy_score_label} ${currentResonanceScore}%`;
-    }
-
     langToggle.textContent = lang === 'ko' ? '[ EN ]' : '[ KO ]';
 }
 
@@ -363,23 +395,7 @@ document.getElementById('extract-button').addEventListener('click', () => {
         report.displayFate(fateData);
         
         report.addEventListener('report-finished', () => {
-            const synergyContainer = document.getElementById('synergy-container');
-            const synergyScoreEl = document.getElementById('synergy-score');
-            const healthBar = document.querySelector('.health-bar');
-            
-            synergyContainer.style.display = 'block';
-            currentResonanceScore = 0;
-            const interval = setInterval(() => {
-                if (currentResonanceScore < fateData.score) {
-                    currentResonanceScore++;
-                    healthBar.style.width = `${currentResonanceScore}%`;
-                    const curLang = localStorage.getItem('language') || 'ko';
-                    synergyScoreEl.textContent = `${translations[curLang].synergy_score_label} ${currentResonanceScore}%`;
-                } else {
-                    clearInterval(interval);
-                    showHomeButton();
-                }
-            }, 30);
+            showHomeButton();
         });
     }, 2000);
 });
@@ -410,7 +426,6 @@ function initCharacters() {
             let s1 = states[i];
             s1.x += s1.vx; s1.y += s1.vy;
 
-            // Wall Collision
             if (s1.x + s1.width > window.innerWidth || s1.x < 0) {
                 s1.vx *= -1;
                 triggerGlitch(s1.element);
@@ -420,7 +435,6 @@ function initCharacters() {
                 triggerGlitch(s1.element);
             }
 
-            // Character Collision
             for (let j = i + 1; j < states.length; j++) {
                 let s2 = states[j];
                 const dx = (s1.x + s1.width/2) - (s2.x + s2.width/2);

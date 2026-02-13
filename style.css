@@ -50,7 +50,6 @@ body {
     overflow-x: hidden;
 }
 
-/* 데스크탑 기본 스타일 (기존 크기 유지) */
 .container {
     text-align: center;
     padding: 2rem;
@@ -59,7 +58,7 @@ body {
     box-shadow: 0 0 20px var(--box-shadow-color);
     background-color: var(--container-bg);
     width: 90%;
-    max-width: 500px; /* 데스크탑에서는 다시 크게 설정 */
+    max-width: 500px;
     box-sizing: border-box;
     z-index: 10;
 }
@@ -158,27 +157,19 @@ p {
 .pixel-character { opacity: 0.6; mix-blend-mode: screen; }
 .light-pixel-character { opacity: 0; mix-blend-mode: multiply; filter: brightness(1.05); }
 
-/* 테마별 가시성 제어 */
 .light-mode .pixel-character { opacity: 0; }
 .light-mode .light-pixel-character { opacity: 0.6; }
 body:not(.light-mode) .light-pixel-character { opacity: 0; }
 
-#synergy-container { margin-top: 1.5rem; }
-#synergy-score { font-size: 1.4rem; margin-bottom: 0.8rem; }
+.glitch-effect { animation: retro-glitch 0.3s ease-out; }
 
-.health-bar-container {
-    width: 100%;
-    height: 24px;
-    border: 2px solid var(--border-color);
-    background-color: var(--input-bg);
-}
-
-.health-bar {
-    width: 0%;
-    height: 100%;
-    background-color: var(--border-color);
-    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
-    background-size: 12px 100%;
+/* 캐릭터 실루엣만 번쩍이도록 drop-shadow 기반 글리치 */
+@keyframes retro-glitch {
+    0% { filter: hue-rotate(0deg) brightness(1) drop-shadow(0 0 0 transparent); }
+    20% { filter: hue-rotate(90deg) brightness(2.5) drop-shadow(3px 0 #f0f) drop-shadow(-3px 0 #0ff); }
+    40% { filter: hue-rotate(180deg) brightness(1.8) drop-shadow(-4px 0 #ff0); }
+    60% { filter: hue-rotate(270deg) brightness(2.5) drop-shadow(4px 0 #0f0); }
+    100% { filter: hue-rotate(360deg) brightness(1) drop-shadow(0 0 0 transparent); }
 }
 
 .home-button-global {
@@ -194,37 +185,19 @@ body:not(.light-mode) .light-pixel-character { opacity: 0; }
     font-family: 'DungGeunMo', monospace;
 }
 
-/* 모바일 전용 스타일 (480px 이하) */
 @media (max-width: 480px) {
     .container {
         padding: 1.2rem;
-        max-width: 380px; /* 모바일에서만 작게 설정 */
+        max-width: 380px;
         margin-top: 4rem;
     }
-    
     h1 { font-size: 1.4rem; margin-bottom: 1rem; }
     p { font-size: 0.85rem; margin-bottom: 1.2rem; }
-    
     .input-row { flex-direction: column; gap: 0.6rem; }
     #name-input, select { height: 2.8rem; font-size: 0.85rem; }
-    
     #extract-button { padding: 0.8rem; font-size: 1rem; }
     #analysis-status { font-size: 0.85rem; }
-    
     #theme-toggle, #lang-toggle { top: auto; bottom: 1rem; font-size: 0.75rem; }
     #theme-toggle { right: 5rem; }
-    
-    #synergy-score { font-size: 1.1rem; }
-    .health-bar-container { height: 18px; }
     .home-button-global { padding: 0.8rem; font-size: 0.95rem; }
-}
-
-.glitch-effect { animation: retro-glitch 0.3s ease-out; }
-
-@keyframes retro-glitch {
-    0% { filter: hue-rotate(0deg) brightness(1) drop-shadow(0 0 0 transparent); transform: scale(1); }
-    20% { filter: hue-rotate(90deg) brightness(2) drop-shadow(2px 0 #f0f) drop-shadow(-2px 0 #0ff); transform: scale(1.1); }
-    40% { filter: hue-rotate(180deg) brightness(1.5) drop-shadow(-3px 0 #ff0); transform: scale(0.95); }
-    60% { filter: hue-rotate(270deg) brightness(2) drop-shadow(3px 0 #0f0); transform: scale(1.05); }
-    100% { filter: hue-rotate(360deg) brightness(1) drop-shadow(0 0 0 transparent); transform: scale(1); }
 }

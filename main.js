@@ -241,7 +241,22 @@ class FateResult extends HTMLElement {
                 });
 
                 pdf.addImage(imgData, 'PNG', 0, 0, 1280, 720);
-                pdf.save(`NeoSeoul_Tactical_Report_${lastInputs.name}.pdf`);
+                
+                // 모바일 대응을 위한 PDF 출력 방식 변경
+                const pdfBlob = pdf.output('blob');
+                const url = URL.createObjectURL(pdfBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `NeoSeoul_Report_${lastInputs.name}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                
+                // 정리
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }, 100);
+
             } catch (err) {
                 console.error('PDF creation failed:', err);
                 alert('Failed to save PDF. Please try again.');

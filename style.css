@@ -237,4 +237,16 @@ body:not(.light-mode) .light-pixel-character { opacity: 0; }
     #theme-toggle, #lang-toggle { top: 0.5rem; font-size: 0.7rem; padding: 0.3rem 0.5rem; }
     #theme-toggle { right: 5rem; }
     #lang-toggle { right: 0.5rem; }
+
+    /* 모바일 배경 행성 크기 및 위치 조정 */
+    .p-1 { width: 150px; top: -20px; right: -30px; }
+    .p-2 { width: 120px; bottom: 5%; left: -20px; }
+    .p-3 { width: 100px; top: 35%; right: 5%; }
+    .p-4 { width: 80px; top: 10%; left: 5%; }
+    .p-5 { width: 90px; bottom: 15%; right: 10%; }
+    
+    .p-star-1 { width: 50px; top: 5%; left: 30%; }
+    .p-star-2 { width: 40px; bottom: 25%; left: 15%; }
+    .p-star-3 { width: 35px; top: 55%; left: 5%; }
+    .p-star-4 { width: 45px; top: 25%; right: 20%; }
 }

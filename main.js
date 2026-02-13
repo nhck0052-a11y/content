@@ -17,7 +17,7 @@ const translations = {
         home_button_text: "Reboot System",
         download_button_text: "Issue Official ID",
         img_button_text: "Save Tactical Report (PNG)",
-        share_report_button: "Share Tactical Report",
+        share_report_button: "Share",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -46,7 +46,7 @@ const translations = {
         deep_analysis_title: "TACTICAL SUITABILITY LOG",
         close_button: "Return to Main",
         share_btn: "📡 SHARE",
-        click_hint: "Click here to view analysis summary and share! ↓",
+        click_hint: "Click here to view analysis summary and save! ↓",
         notebook_title: "TACTICAL REPORT 2150"
     },
     ko: {
@@ -63,7 +63,7 @@ const translations = {
         home_button_text: "시스템 재부팅",
         download_button_text: "시민증 정식 발급",
         img_button_text: "전술 보고서 사진 저장 (PNG)",
-        share_report_button: "전술 보고서 외부 공유",
+        share_report_button: "공유하기",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
@@ -96,7 +96,7 @@ const translations = {
         deep_analysis_title: "정식 직업 적합도 보고서",
         close_button: "시민증으로 돌아가기",
         share_btn: "📡 공유",
-        click_hint: "이곳을 클릭하여 분석근거 요약을 확인하고 공유해보세요! ↓",
+        click_hint: "이곳을 클릭하여 분석근거 요약을 확인하고 저장해보세요! ↓",
         notebook_title: "전 술 보 고 서 (2150)"
     }
 };
@@ -240,8 +240,7 @@ class FateResult extends HTMLElement {
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         files: [file],
-                        title: '2150 AI 생존 시뮬레이션 결과',
-                        text: `${lastInputs.name} 요원의 전술 보고서입니다. #2150AI #생존시뮬레이션`
+                        title: '2150 AI Survival Simulation'
                     });
                 } else {
                     alert(lang === 'ko' ? '이 브라우저는 이미지 공유를 지원하지 않습니다. 사진 저장 기능을 이용해주세요.' : 'Direct image sharing is not supported on this browser. Please use the Save button.');

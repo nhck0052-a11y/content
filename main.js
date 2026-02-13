@@ -15,7 +15,7 @@ const translations = {
         analysis_report_title: "NEO-SEOUL AGENT ID CARD",
         synergy_score_label: "AI Job Suitability (Resonance Index):",
         home_button_text: "Reboot System",
-        download_button_text: "Issue Official ID",
+        download_button_text: "Issue Official ID (PDF)",
         img_button_text: "Save Tactical Report (PNG)",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
@@ -62,7 +62,7 @@ const translations = {
         interest_select_placeholder: "핵심 관심 분야 선택",
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
-        download_button_text: "시민증 정식 발급",
+        download_button_text: "시민증 정식 발급 (PDF)",
         img_button_text: "전술 보고서 사진 저장 (PNG)",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
@@ -106,7 +106,7 @@ const translations = {
 let lastInputs = null;
 let cyberTime = new Date(2150, 2, 1, 0, 0, 0);
 
-// 전역 에러 핸들러 추가 (Preventative Measure)
+// 전역 에러 핸들러 추가
 window.onerror = function(message, source, lineno, colno, error) {
     console.error("System Error Detected:", message, "at", source, ":", lineno);
     return false; 
@@ -140,7 +140,6 @@ class FateResult extends HTMLElement {
             @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
             .reasoning-text { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem; color: var(--report-text); }
             
-            /* EXPORT STYLES */
             #image-export-wrapper {
                 width: 1280px; height: 720px;
                 background: var(--bg-color);
@@ -163,9 +162,8 @@ class FateResult extends HTMLElement {
             .binder-ring { width: 30px; height: 8px; background: #333; border-radius: 4px; border: 1px solid var(--border-color); }
             .notebook-title { position: absolute; top: -35px; left: 20px; font-size: 1.2rem; color: var(--border-color); background: var(--bg-color); padding: 0 10px; font-weight: bold; }
             .confidential-seal { position: absolute; bottom: 30px; right: 30px; border: 4px double #f00; color: #f00; padding: 10px 20px; font-size: 1.5rem; font-weight: bold; transform: rotate(-12deg); opacity: 0.7; border-radius: 10px; }
-            
-            /* Export specific text adjustments */
             .export-job { color: var(--job-color) !important; font-size: 1.8rem !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 900; font-family: sans-serif; }
+            .export-score-text { font-size: 1.2rem; font-weight: bold; color: var(--text-color); }
         `;
     }
     displayFate(data) {
@@ -187,6 +185,7 @@ class FateResult extends HTMLElement {
                 <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
                 <div class="reasoning-text" id="reasoning-content"></div>
                 <div style="margin-top: auto; display:flex; flex-direction:column; gap:0.5rem;">
+                    <button class="download-btn" id="save-pdf-internal">${translations[lang].download_button_text}</button>
                     <button class="download-btn" id="save-image">${translations[lang].img_button_text}</button>
                     <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
                 </div>
@@ -202,7 +201,7 @@ class FateResult extends HTMLElement {
                             <div class="section"><span class="label" style="font-size:1rem;">ASSIGNED CLASS</span><div class="export-job">${data.job}</div></div>
                         </div>
                     </div>
-                    <div class="synergy-box"><span class="label" style="font-size:1rem;">${lang === 'ko' ? 'AI 직업 적합도 (공명 지수)' : 'AI RESONANCE INDEX'}</span><div class="bar-container" style="height:40px; background:rgba(0,0,0,0.1)"><div class="bar-fill" style="width:${data.score}%; background:var(--border-color)"></div><div class="bar-text" style="line-height:40px; font-size:1.2rem; color:var(--text-color)">${data.score}%</div></div></div>
+                    <div class="synergy-box"><span class="label" style="font-size:1rem;">${lang === 'ko' ? 'AI 직업 적합도 (공명 지수)' : 'AI RESONANCE INDEX'}</span><div class="bar-container" style="height:40px; background:rgba(0,0,0,0.1)"><div class="bar-fill" style="width:${data.score}%; background:var(--border-color)"></div><div class="bar-text" style="line-height:40px; font-size:1.2rem; color:var(--text-color); font-weight:bold;">${data.score}%</div></div></div>
                     <div class="confidential-seal">NEO-SEOUL</div>
                 </div>
                 <div class="notebook-page" style="border-left:none; border-radius:0 15px 15px 0;">
@@ -222,6 +221,7 @@ class FateResult extends HTMLElement {
               openBtn = this.shadowRoot.getElementById('open-reasoning'), 
               closeBtn = this.shadowRoot.getElementById('close-reasoning'), 
               imgBtn = this.shadowRoot.getElementById('save-image'), 
+              pdfBtn = this.shadowRoot.getElementById('save-pdf-internal'),
               content = this.shadowRoot.getElementById('reasoning-content'), 
               exportText = this.shadowRoot.getElementById('export-reasoning-text'), 
               lang = localStorage.getItem('language') || 'ko';
@@ -242,7 +242,11 @@ class FateResult extends HTMLElement {
                 scale: 2, 
                 backgroundColor: isLight ? '#FFFFFF' : '#000000', 
                 useCORS: true,
-                logging: false
+                logging: false,
+                onclone: (clonedDoc) => {
+                    const el = clonedDoc.getElementById('image-export-wrapper');
+                    if (el) el.style.position = 'static';
+                }
             });
         };
 
@@ -250,36 +254,34 @@ class FateResult extends HTMLElement {
             const originalText = imgBtn.textContent;
             imgBtn.textContent = translations[lang].generating_text;
             imgBtn.disabled = true;
-
             try {
                 const canvas = await generateImage();
                 const dataUrl = canvas.toDataURL('image/png');
                 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
                 if (isMobile) {
                     const newWindow = window.open();
-                    newWindow.document.write(`
-                        <body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;">
-                            <img src="${dataUrl}" style="width:100%; max-width:100%;">
-                            <p style="color:#fff; font-family:sans-serif; margin-top:20px; text-align:center;">${translations[lang].mobile_save_notice}</p>
-                            <button onclick="window.close()" style="margin-top:20px; padding:10px 20px; background:#fff; border:none; border-radius:5px;">Close</button>
-                        </body>
-                    `);
+                    newWindow.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;"><img src="${dataUrl}" style="width:100%; max-width:100%;"><p style="color:#fff; font-family:sans-serif; margin-top:20px; text-align:center;">${translations[lang].mobile_save_notice}</p><button onclick="window.close()" style="margin-top:20px; padding:10px 20px; background:#fff; border:none; border-radius:5px;">Close</button></body>`);
                 } else {
                     const link = document.createElement('a'); 
                     link.download = `NeoSeoul_Report_${lastInputs.name}.png`; 
                     link.href = dataUrl; 
-                    document.body.appendChild(link);
                     link.click();
-                    document.body.removeChild(link);
                 }
-            } catch (err) {
-                console.error('Save failed:', err);
-                alert('Save failed. Please try again.');
-            } finally {
-                imgBtn.textContent = originalText;
-                imgBtn.disabled = false;
-            }
+            } catch (err) { console.error('Save failed:', err); } finally { imgBtn.textContent = originalText; imgBtn.disabled = false; }
+        };
+
+        pdfBtn.onclick = async () => {
+            const originalText = pdfBtn.textContent;
+            pdfBtn.textContent = translations[lang].generating_text;
+            pdfBtn.disabled = true;
+            try {
+                const canvas = await generateImage();
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('l', 'px', [1280, 720]);
+                pdf.addImage(imgData, 'PNG', 0, 0, 1280, 720);
+                pdf.save(`NeoSeoul_ID_${lastInputs.name}.pdf`);
+            } catch (err) { console.error('PDF Save failed:', err); } finally { pdfBtn.textContent = originalText; pdfBtn.disabled = false; }
         };
     }
     animateSynergy(targetScore) {

@@ -46,7 +46,9 @@ const translations = {
         close_button: "Return to Main",
         share_btn: "📡 SHARE",
         click_hint: "Click here to view analysis summary and save! ↓",
-        notebook_title: "TACTICAL REPORT 2150"
+        notebook_title: "TACTICAL REPORT 2150",
+        generating_text: "Generating...",
+        mobile_save_notice: "If download doesn't start, long-press the image to save!"
     },
     ko: {
         app_title: "2150 AI 생존 시뮬레이션",
@@ -95,7 +97,9 @@ const translations = {
         close_button: "시민증으로 돌아가기",
         share_btn: "📡 공유",
         click_hint: "이곳을 클릭하여 분석근거 요약을 확인하고 저장해보세요! ↓",
-        notebook_title: "전 술 보 고 서 (2150)"
+        notebook_title: "전 술 보 고 서 (2150)",
+        generating_text: "이미지 생성 중...",
+        mobile_save_notice: "다운로드가 시작되지 않으면 이미지를 길게 눌러 저장해주세요!"
     }
 };
 
@@ -215,19 +219,50 @@ class FateResult extends HTMLElement {
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; exportText.textContent = reason; };
         closeBtn.onclick = () => modal.classList.remove('modal-active');
         
-        const generateImageFile = async () => {
+        const generateImage = async () => {
             const wrapper = this.shadowRoot.getElementById('image-export-wrapper');
             const isLight = document.body.classList.contains('light-mode');
-            const canvas = await html2canvas(wrapper, { scale: 2, backgroundColor: isLight ? '#FFFFFF' : '#000000', useCORS: true });
-            return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            return html2canvas(wrapper, { 
+                scale: 2, 
+                backgroundColor: isLight ? '#FFFFFF' : '#000000', 
+                useCORS: true,
+                logging: false
+            });
         };
 
         imgBtn.onclick = async () => {
-            const blob = await generateImageFile();
-            const link = document.createElement('a'); 
-            link.download = `NeoSeoul_Tactical_Report_${lastInputs.name}.png`; 
-            link.href = URL.createObjectURL(blob); 
-            link.click();
+            const originalText = imgBtn.textContent;
+            imgBtn.textContent = translations[lang].generating_text;
+            imgBtn.disabled = true;
+
+            try {
+                const canvas = await generateImage();
+                const dataUrl = canvas.toDataURL('image/png');
+                
+                // 모바일 환경 체크
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // 모바일용: 새 창으로 이미지를 열어 길게 눌러 저장 유도
+                    const newWindow = window.open();
+                    newWindow.document.write(`<img src="${dataUrl}" style="width:100%;">`);
+                    newWindow.document.write(`<p style="text-align:center; font-family:sans-serif;">${translations[lang].mobile_save_notice}</p>`);
+                } else {
+                    // 데스크탑용: 자동 다운로드
+                    const link = document.createElement('a'); 
+                    link.download = `NeoSeoul_Report_${lastInputs.name}.png`; 
+                    link.href = dataUrl; 
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            } catch (err) {
+                console.error('Save failed:', err);
+                alert('Save failed. Please try again.');
+            } finally {
+                imgBtn.textContent = originalText;
+                imgBtn.disabled = false;
+            }
         };
     }
     animateSynergy(targetScore) {

@@ -54,10 +54,8 @@ body {
 /* 우주 배경 스타일 */
 #space-background {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     z-index: 1;
     pointer-events: none;
     overflow: hidden;
@@ -71,19 +69,22 @@ body:not(.light-mode) #space-background {
 
 .planet {
     position: absolute;
-    mix-blend-mode: screen; /* 검은색 배경 완벽 제거 */
+    mix-blend-mode: screen; /* JPG 검은 배경 제거 */
     pointer-events: none;
+    filter: brightness(1.1);
 }
 
-.planet-1 { width: 300px; top: -50px; right: -50px; transform: rotate(15deg); opacity: 0.8; }
-.planet-2 { width: 250px; bottom: 10%; left: -30px; transform: rotate(-10deg); opacity: 0.7; }
-.planet-3 { width: 200px; top: 40%; right: 10%; opacity: 0.6; filter: blur(1px); }
-.planet-4 { width: 180px; top: 15%; left: 15%; opacity: 0.7; }
-.planet-5 { width: 220px; bottom: 20%; right: 20%; opacity: 0.5; transform: rotate(45deg); }
-.planet-6 { width: 80px; top: 10%; right: 30%; opacity: 0.9; }
-.planet-7 { width: 100px; bottom: 30%; left: 20%; opacity: 0.8; }
-.planet-8 { width: 60px; top: 60%; left: 10%; opacity: 0.7; transform: scaleX(-1); }
-.planet-9 { width: 90px; top: 5%; left: 40%; opacity: 0.6; filter: blur(2px); }
+/* 개별 이미지 배치 (7개 원본 + 추가 별) */
+.p-1 { width: 350px; top: -50px; right: -50px; transform: rotate(15deg); opacity: 0.8; }
+.p-2 { width: 300px; bottom: 10%; left: -50px; transform: rotate(-10deg); opacity: 0.7; }
+.p-3 { width: 250px; top: 40%; right: 5%; opacity: 0.6; filter: blur(1px); }
+.p-4 { width: 220px; top: 15%; left: 10%; opacity: 0.7; }
+.p-5 { width: 280px; bottom: 15%; right: 15%; opacity: 0.6; transform: rotate(30deg); }
+
+.p-star-1 { width: 120px; top: 5%; left: 40%; opacity: 0.9; }
+.p-star-2 { width: 100px; bottom: 35%; left: 20%; opacity: 0.8; }
+.p-star-3 { width: 80px; top: 60%; left: 5%; opacity: 0.7; transform: scaleX(-1); }
+.p-star-4 { width: 110px; top: 30%; right: 30%; opacity: 0.6; filter: blur(2px); }
 
 .container {
     text-align: center;
@@ -184,7 +185,9 @@ p { font-size: 1.1rem; line-height: 1.5; margin-bottom: 2rem; }
 .light-mode .light-pixel-character { opacity: 0.9; }
 body:not(.light-mode) .light-pixel-character { opacity: 0; }
 
-/* 캐릭터 전용 글리치 - 위치 이동 최소화하여 잔상 방지 */
+.glitch-effect { animation: body-glitch 0.2s ease-out; }
+@keyframes body-glitch { 0% { filter: hue-rotate(0deg) brightness(1); } 50% { filter: hue-rotate(180deg) brightness(1.2); } 100% { filter: hue-rotate(360deg) brightness(1); } }
+
 .char-glitch { animation: char-glitch-ani 0.2s ease-out; }
 @keyframes char-glitch-ani {
     0% { transform: translate(0); filter: hue-rotate(0deg); }

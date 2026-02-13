@@ -16,7 +16,7 @@ const translations = {
         synergy_score_label: "AI Job Suitability:",
         home_button_text: "Reboot System",
         download_button_text: "Issue Official ID",
-        img_button_text: "Save Tactical Report (PNG)",
+        img_button_text: "Save Tactical Report (PDF)",
         alert_message: "Please synchronize all biological data protocols!",
         gender_m: "XY (Man)",
         gender_f: "XX (Woman)",
@@ -47,8 +47,7 @@ const translations = {
         share_btn: "📡 SHARE",
         click_hint: "Click here to view analysis summary and save! ↓",
         notebook_title: "TACTICAL REPORT 2150",
-        generating_text: "Generating...",
-        mobile_save_notice: "If download doesn't start, long-press the image to save!"
+        generating_text: "Generating PDF..."
     },
     ko: {
         app_title: "2150 AI 생존 시뮬레이션",
@@ -63,7 +62,7 @@ const translations = {
         extract_button_text: "운명 추출",
         home_button_text: "시스템 재부팅",
         download_button_text: "시민증 정식 발급",
-        img_button_text: "전술 보고서 사진 저장 (PNG)",
+        img_button_text: "전술 보고서 PDF 저장",
         analysis_status_preparing: "생체 양자 필드 동기화 중...",
         please_wait: "잠시만 기다려주세요 ...",
         analysis_report_title: "네오-서울 요원 시민증 (QH-NPM)",
@@ -98,8 +97,7 @@ const translations = {
         share_btn: "📡 공유",
         click_hint: "이곳을 클릭하여 분석근거 요약을 확인하고 저장해보세요! ↓",
         notebook_title: "전 술 보 고 서 (2150)",
-        generating_text: "이미지 생성 중...",
-        mobile_save_notice: "다운로드가 시작되지 않으면 이미지를 길게 눌러 저장해주세요!"
+        generating_text: "PDF 생성 중..."
     }
 };
 
@@ -181,7 +179,7 @@ class FateResult extends HTMLElement {
                 <div class="card-header"><div class="card-title">${translations[lang].deep_analysis_title}</div></div>
                 <div class="reasoning-text" id="reasoning-content"></div>
                 <div style="margin-top: auto; display:flex; flex-direction:column; gap:0.5rem;">
-                    <button class="download-btn" id="save-image">${translations[lang].img_button_text}</button>
+                    <button class="download-btn" id="save-pdf">${translations[lang].img_button_text}</button>
                     <button class="download-btn" id="close-reasoning">${translations[lang].close_button}</button>
                 </div>
             </div>
@@ -212,56 +210,44 @@ class FateResult extends HTMLElement {
         this.setupModal(data);
     }
     setupModal(data) {
-        const modal = this.shadowRoot.getElementById('reasoning-modal'), openBtn = this.shadowRoot.getElementById('open-reasoning'), closeBtn = this.shadowRoot.getElementById('close-reasoning'), imgBtn = this.shadowRoot.getElementById('save-image'), content = this.shadowRoot.getElementById('reasoning-content'), exportText = this.shadowRoot.getElementById('export-reasoning-text'), lang = localStorage.getItem('language') || 'ko';
+        const modal = this.shadowRoot.getElementById('reasoning-modal'), openBtn = this.shadowRoot.getElementById('open-reasoning'), closeBtn = this.shadowRoot.getElementById('close-reasoning'), pdfBtn = this.shadowRoot.getElementById('save-pdf'), content = this.shadowRoot.getElementById('reasoning-content'), exportText = this.shadowRoot.getElementById('export-reasoning-text'), lang = localStorage.getItem('language') || 'ko';
         const mbtiGroup = lastInputs.mbti.includes('N') && lastInputs.mbti.includes('T') ? 'NT' : lastInputs.mbti.includes('N') && lastInputs.mbti.includes('F') ? 'NF' : lastInputs.mbti.includes('S') && lastInputs.mbti.includes('J') ? 'SJ' : 'SP';
         const l = translations[lang].quantum_logic;
         const reason = lang === 'ko' ? `분석 결과, 귀하의 생체 에너지 유닛(${lastInputs.blood}형)은 ${l.blood[lastInputs.blood]} 특성을 띄고 있으며, 이는 ${l.mbti[mbtiGroup]} 사고 회로와 만났을 때 가장 안정적인 양자 도약을 발생시킵니다. \n\n특히 '${data.job}' 클래스에 필요한 ${l.keywords[lastInputs.gender]} 에너지가 귀하의 프로토콜과 98.2% 일치함을 확인했습니다. 2150년 시뮬레이션에서 AI 파트너와의 높은 공명 지수가 보장됩니다.` : `[Analysis Evidence Summary] \n\nYour bio-unit (Type ${lastInputs.blood}) combined with the ${l.mbti[mbtiGroup]} circuit creates the most stable quantum leaps. \n\nThe ${l.keywords[lastInputs.gender]} energy for the '${data.job}' class matches your protocol by 98.2%. High resonance with AI partners is guaranteed.`;
         openBtn.onclick = () => { modal.classList.add('modal-active'); content.textContent = reason; exportText.textContent = reason; };
         closeBtn.onclick = () => modal.classList.remove('modal-active');
         
-        const generateImage = async () => {
-            const wrapper = this.shadowRoot.getElementById('image-export-wrapper');
-            const isLight = document.body.classList.contains('light-mode');
-            return html2canvas(wrapper, { 
-                scale: 2, 
-                backgroundColor: isLight ? '#FFFFFF' : '#000000', 
-                useCORS: true,
-                logging: false
-            });
-        };
-
-        imgBtn.onclick = async () => {
-            const originalText = imgBtn.textContent;
-            imgBtn.textContent = translations[lang].generating_text;
-            imgBtn.disabled = true;
+        pdfBtn.onclick = async () => {
+            const originalText = pdfBtn.textContent;
+            pdfBtn.textContent = translations[lang].generating_text;
+            pdfBtn.disabled = true;
 
             try {
-                const canvas = await generateImage();
-                const dataUrl = canvas.toDataURL('image/png');
+                const wrapper = this.shadowRoot.getElementById('image-export-wrapper');
+                const isLight = document.body.classList.contains('light-mode');
+                const canvas = await html2canvas(wrapper, { 
+                    scale: 2, 
+                    backgroundColor: isLight ? '#FFFFFF' : '#000000', 
+                    useCORS: true,
+                    logging: false
+                });
                 
-                // 모바일 환경 체크
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                
-                if (isMobile) {
-                    // 모바일용: 새 창으로 이미지를 열어 길게 눌러 저장 유도
-                    const newWindow = window.open();
-                    newWindow.document.write(`<img src="${dataUrl}" style="width:100%;">`);
-                    newWindow.document.write(`<p style="text-align:center; font-family:sans-serif;">${translations[lang].mobile_save_notice}</p>`);
-                } else {
-                    // 데스크탑용: 자동 다운로드
-                    const link = document.createElement('a'); 
-                    link.download = `NeoSeoul_Report_${lastInputs.name}.png`; 
-                    link.href = dataUrl; 
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'px',
+                    format: [1280, 720]
+                });
+
+                pdf.addImage(imgData, 'PNG', 0, 0, 1280, 720);
+                pdf.save(`NeoSeoul_Tactical_Report_${lastInputs.name}.pdf`);
             } catch (err) {
-                console.error('Save failed:', err);
-                alert('Save failed. Please try again.');
+                console.error('PDF creation failed:', err);
+                alert('Failed to save PDF. Please try again.');
             } finally {
-                imgBtn.textContent = originalText;
-                imgBtn.disabled = false;
+                pdfBtn.textContent = originalText;
+                pdfBtn.disabled = false;
             }
         };
     }
@@ -309,9 +295,7 @@ setLanguage(localStorage.getItem('language') || 'ko');
 
 langToggle.addEventListener('click', toggleLanguage);
 
-// 한영키 및 언어 전환 단축키 지원
 window.addEventListener('keydown', (e) => {
-    // e.code 'HangulMode'는 일반적인 한영키, 'AltRight'는 일부 환경에서의 한영키
     if (e.code === 'HangulMode' || e.key === 'HangulMode') {
         toggleLanguage();
     }

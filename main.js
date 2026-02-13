@@ -118,7 +118,7 @@ class FateResult extends HTMLElement {
             .section { margin-bottom: 1.2rem; clear: both; }
             .label { color: var(--border-color); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.3rem; display: block; opacity: 0.8; }
             .content { font-size: 1rem; line-height: 1.4; color: var(--report-text); }
-            .job-highlight { color: var(--job-color); font-size: 1.2rem; font-weight: bold; text-shadow: 0 0 5px var(--job-color); }
+            .job-highlight { color: var(--job-color); font-size: 1.3rem; font-weight: 900; font-family: sans-serif; }
             .synergy-box { margin-top: 1.5rem; }
             .bar-container { width: 100%; height: 20px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.1); position: relative; }
             .bar-fill { height: 100%; background: var(--border-color); width: 0%; }
@@ -159,8 +159,8 @@ class FateResult extends HTMLElement {
             .confidential-seal { position: absolute; bottom: 30px; right: 30px; border: 4px double #f00; color: #f00; padding: 10px 20px; font-size: 1.5rem; font-weight: bold; transform: rotate(-12deg); opacity: 0.7; border-radius: 10px; }
             
             /* Export specific text adjustments */
-            .export-job { color: var(--job-color) !important; font-size: 1.6rem !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; }
-        `;
+            .export-job { color: var(--job-color) !important; font-size: 1.8rem !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 900; font-family: sans-serif; }
+        `;`;
     }
     displayFate(data) {
         const lang = localStorage.getItem('language') || 'ko';

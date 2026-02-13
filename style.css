@@ -12,7 +12,7 @@
     --text-color: #0f0;
     --border-color: #0f0;
     --box-shadow-color: #0f0;
-    --container-bg: rgba(0, 0, 0, 0.5);
+    --container-bg: rgba(0, 0, 0, 0.7);
     --input-bg: #010;
     --button-bg: #030;
     --button-hover-bg: #0f0;
@@ -23,15 +23,15 @@
 }
 
 .light-mode {
-    --bg-color: #FFFFFF; /* 아주 밝은 흰색 */
-    --text-color: #343A40; /* 어두운 회색 */
-    --border-color: #007BFF; /* 차분한 파란색 */
-    --box-shadow-color: rgba(0, 123, 255, 0.2); /* 파란색 그림자 */
-    --container-bg: rgba(255, 255, 255, 0.9); /* 거의 흰색의 반투명 배경 */
-    --input-bg: #E9ECEF; /* 밝은 회색 입력 필드 */
-    --button-bg: #007BFF; /* 파란색 버튼 */
-    --button-hover-bg: #0056B3; /* 더 진한 파란색 호버 */
-    --button-hover-color: #FFFFFF; /* 흰색 버튼 텍스트 */
+    --bg-color: #FFFFFF;
+    --text-color: #343A40;
+    --border-color: #007BFF;
+    --box-shadow-color: rgba(0, 123, 255, 0.2);
+    --container-bg: rgba(255, 255, 255, 0.95);
+    --input-bg: #F8F9FA;
+    --button-bg: #007BFF;
+    --button-hover-bg: #0056B3;
+    --button-hover-color: #FFFFFF;
     --report-bg: #FFFFFF;
     --report-text: #007BFF;
     --job-color: #0056B3;
@@ -40,26 +40,29 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'DungGeunMo', 'Noto Color Emoji', 'Courier New', Courier, monospace;
+    font-family: 'DungGeunMo', 'Noto Color Emoji', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* height 대신 min-height 사용 */
     margin: 0;
-    background-image: radial-gradient(circle, var(--bg-color) 70%, var(--bg-color));
     transition: background-color 0.3s ease, color 0.3s ease;
-    overflow: hidden;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 .container {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 1px solid var(--border-color);
     border-radius: 15px;
     box-shadow: 0 0 20px var(--box-shadow-color);
     background-color: var(--container-bg);
-    max-height: 90vh;
-    overflow-y: auto;
+    width: 90%;
+    max-width: 500px;
+    margin: 2rem auto;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 10;
 }
 
 #theme-toggle, #lang-toggle {
@@ -67,25 +70,18 @@ body {
     top: 1rem;
     background: var(--container-bg);
     border: 1px solid var(--border-color);
-    padding: 0.3rem 0.6rem;
+    padding: 0.4rem 0.8rem;
     font-family: 'DungGeunMo', monospace;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     cursor: pointer;
     color: var(--text-color);
     transition: all 0.3s ease;
     z-index: 1000;
     border-radius: 4px;
-    box-shadow: 0 0 5px var(--box-shadow-color);
 }
 
-#theme-toggle { right: 6rem; }
+#theme-toggle { right: 5.5rem; }
 #lang-toggle { right: 1rem; }
-
-#theme-toggle:hover, #lang-toggle:hover {
-    background-color: var(--button-hover-bg);
-    color: var(--button-hover-color);
-    box-shadow: 0 0 10px var(--box-shadow-color);
-}
 
 #future-time {
     position: fixed;
@@ -93,8 +89,7 @@ body {
     left: 1rem;
     color: #0f0;
     font-family: 'DungGeunMo', monospace;
-    font-size: 0.8rem;
-    white-space: nowrap;
+    font-size: 0.7rem;
     z-index: 1000;
     text-shadow: 0 0 5px #0f0;
 }
@@ -105,24 +100,24 @@ body {
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
+    margin-top: 0.5rem;
     text-shadow: 0 0 10px var(--box-shadow-color);
+    word-break: keep-all; /* 모바일에서 단어 잘림 방지 */
 }
 
 p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+    word-break: keep-all;
 }
 
 .input-container {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    margin-bottom: 2rem;
     width: 100%;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .input-row {
@@ -131,132 +126,114 @@ p {
     width: 100%;
 }
 
+/* 모바일 화면에서 input-row를 세로로 정렬 */
+@media (max-width: 480px) {
+    .input-row {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    h1 { font-size: 1.5rem; }
+    #theme-toggle, #lang-toggle { top: auto; bottom: 1rem; } /* 모바일에서 버튼을 아래로 이동해 시간과 겹침 방지 */
+    #theme-toggle { right: 5rem; }
+    
+    .container {
+        padding: 1rem;
+        margin: 4rem auto 2rem; /* 시간 표시 공간 확보 */
+    }
+}
+
 #name-input, select {
     background-color: var(--input-bg);
     border: 2px solid var(--border-color);
     color: var(--text-color);
-    padding: 0.5rem;
+    padding: 0.6rem;
     font-size: 0.9rem;
     border-radius: 4px;
     font-family: 'DungGeunMo', monospace;
-    cursor: pointer;
-    height: 3rem;
-    box-shadow: 0 0 5px var(--box-shadow-color);
-    transition: all 0.3s ease;
+    height: 3.2rem;
     box-sizing: border-box;
-    flex: 1;
-}
-
-#name-input:focus, select:focus {
-    outline: none;
-    box-shadow: 0 0 15px var(--box-shadow-color);
-    border-color: var(--button-hover-bg);
+    width: 100%;
+    transition: all 0.3s ease;
 }
 
 #extract-button {
     background-color: var(--button-bg);
     border: 2px solid var(--border-color);
     color: var(--text-color);
-    padding: 0.8rem 1rem;
+    padding: 1rem;
     font-size: 1.1rem;
     cursor: pointer;
     border-radius: 5px;
-    transition: all 0.3s ease;
     font-family: 'DungGeunMo', monospace;
     margin-top: 0.5rem;
+    width: 100%;
 }
 
-#extract-button:hover {
-    background-color: var(--button-hover-bg);
-    color: var(--button-hover-color);
-    box-shadow: 0 0 15px var(--box-shadow-color);
+#analysis-status {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
 }
 
 .pixel-character, .light-pixel-character {
     position: absolute;
     image-rendering: pixelated;
-    width: 60px;
-    height: 60px;
-    z-index: -1;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    width: 50px;
+    height: 50px;
+    z-index: 1;
     pointer-events: none;
+    opacity: 0.6;
 }
 
-.pixel-character { opacity: 1; mix-blend-mode: screen; }
-.light-pixel-character { opacity: 0; mix-blend-mode: multiply; filter: brightness(1.05); }
+.pixel-character { mix-blend-mode: screen; }
+.light-pixel-character { mix-blend-mode: multiply; filter: brightness(1.05); }
 
-.light-mode .pixel-character { opacity: 0; }
-.light-mode .light-pixel-character { opacity: 1; }
+.light-mode .pixel-character { display: none; }
+.light-mode .light-pixel-character { display: block; }
+body:not(.light-mode) .light-pixel-character { display: none; }
 
-.glitch-effect { animation: shine 0.4s ease-in-out; }
-@keyframes shine {
-    0%, 100% { filter: hue-rotate(0deg) brightness(1); }
-    50% { filter: hue-rotate(180deg) brightness(1.3); }
-}
-
-/* Report Scanline Animation */
-@keyframes scanline {
-    0% { background-position: 0 0; }
-    100% { background-position: 0 100%; }
-}
-
-#synergy-container { margin-top: 2rem; display: none; }
+#synergy-container { margin-top: 1.5rem; width: 100%; }
 #synergy-score {
-    font-family: 'DungGeunMo', monospace;
-    font-size: 1.4rem;
-    color: var(--text-color);
-    margin-bottom: 1rem;
-    text-shadow: 0 0 5px var(--box-shadow-color);
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
 }
 
 .health-bar-container {
-    width: 80%;
-    margin: 0 auto;
-    height: 24px;
-    border: 3px solid var(--border-color);
+    width: 100%;
+    height: 20px;
+    border: 2px solid var(--border-color);
     background-color: var(--input-bg);
-    padding: 2px;
-    box-sizing: content-box;
 }
 
 .health-bar {
     width: 0%;
     height: 100%;
     background-color: #0f0;
-    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px);
-    background-size: 12px 100%;
-    box-shadow: 0 0 15px #0f0;
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+    background-size: 10px 100%;
 }
 
-.light-mode .health-bar {
-    background-color: #007BFF;
-    box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
-}
+.light-mode .health-bar { background-color: #007BFF; }
 
 #global-home-button-container {
-    position: fixed;
-    bottom: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
+    margin-top: 2rem;
+    width: 100%;
 }
 
 .home-button-global {
-    background: var(--container-bg);
-    border: 2px solid var(--border-color);
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    background: var(--button-bg);
     color: var(--text-color);
-    padding: 0.6rem 1.5rem;
+    border: 2px solid var(--border-color);
     font-family: 'DungGeunMo', monospace;
-    font-size: 1.2rem;
     cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px var(--box-shadow-color);
-    text-transform: uppercase;
 }
 
-.home-button-global:hover {
-    background-color: var(--button-hover-bg);
-    color: var(--button-hover-color);
-    transform: scale(1.1);
+.glitch-effect { animation: shine 0.4s ease-in-out; }
+@keyframes shine {
+    0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+    50% { filter: hue-rotate(180deg) brightness(1.3); }
 }
